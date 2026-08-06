@@ -109,9 +109,9 @@ def request_json(
     post: bool = False,
     timeout: int = DEFAULT_TIMEOUT_SECONDS,
 ) -> dict[str, Any]:
-    progress_request(url, request_params)
     """Request ArcGIS JSON and raise a useful exception for service-side errors."""
     request_params = _with_token(session, params)
+    progress_request(url, request_params)
     if post:
         response = session.post(
             url, data=request_params, timeout=timeout, verify=VERIFY_SSL
