@@ -16,7 +16,7 @@ from arcgis_rest_geopandas import export_layer_to_geopackage
 # =============================================================================
 # Paste the ArcGIS REST layer URL here. It should usually end in /FeatureServer/<n>
 # or /MapServer/<n>, not the Instant App URL.
-LAYER_URL = ""
+LAYER_URL = "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/341"
 
 # SQL where clause used by the ArcGIS REST API.
 WHERE = "1=1"
