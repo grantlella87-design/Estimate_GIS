@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from collections.abc import Iterable, Sequence
 from concurrent import futures
 from pathlib import Path
@@ -23,7 +24,7 @@ from shapely.geometry import (
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
 DEFAULT_REQUEST_PAGE_SIZE = int(os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000"))
 DEFAULT_OBJECTID_BATCH_SIZE = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "2000"))
-DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "8"))
+DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "1"))
 VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "1").lower() not in {"0", "false", "no"}
 
 PROGRESS_ENABLED = os.environ.get("ESTIMATE_GIS_PROGRESS", "1").lower() not in {"0", "false", "no"}
@@ -142,10 +143,12 @@ def request_json(
         code = error.get("code")
         message = error.get("message", "")
         if code in {498, 499} and attempt < attempts:
-            progress(
-                f"ArcGIS token/auth response on attempt {attempt}/{attempts}: "
-                f"code={code}, message={message}. Retrying same request."
-            )
+            if attempt == 1:
+                progress(
+                    f"ArcGIS auth retry needed for request. code={code}, message={message}. "
+                    f"Retrying up to {attempts} attempts."
+                )
+            time.sleep(min(2 * attempt, 8))
             continue
         break
     raise RuntimeError(json.dumps(last_error, indent=2))
@@ -309,7 +312,8 @@ def fetch_objectid_batch(
         last_id = object_id_batch[-1] if object_id_batch else None
         raise RuntimeError(
             f"Feature batch failed for OBJECTID range {first_id}..{last_id} "
-            f"({len(object_id_batch)} ids): {exc}"
+            f"({len(object_id_batch)} ids). Secured service still returned auth failure after retries. "
+            f"Keep WORKERS=1 or rerun after a fresh portal token. Details: {exc}"
         ) from exc
     return data.get("features") or []
 

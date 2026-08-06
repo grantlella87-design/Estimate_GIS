@@ -12,7 +12,6 @@ from pathlib import Path
 
 import requests
 
-
 def configure_enterprise_ssl() -> None:
     """Use the Windows trust store for corporate TLS interception certificates."""
     try:
@@ -47,7 +46,7 @@ OUT_FIELDS = "*"
 OUT_GPKG = REPO_ROOT / "outputs" / "export.gpkg"
 LAYER_NAME = "export"
 TOKEN_ENV: str | None = "ARCGIS_TOKEN"
-WORKERS = 8
+WORKERS = 1
 BATCH_SIZE = 2000
 # =============================================================================
 
@@ -250,6 +249,7 @@ def call_exporter() -> object:
 def main() -> int:
     os.environ.setdefault("ESTIMATE_GIS_PROGRESS", "1")
     os.environ.setdefault("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", str(BATCH_SIZE))
+    os.environ.setdefault("ESTIMATE_GIS_DOWNLOAD_WORKERS", str(WORKERS))
     os.environ.setdefault("ESTIMATE_GIS_PROGRESS", "1")
     if not LAYER_URL.strip():
         print("Set LAYER_URL at the top of main.py before running.")
