@@ -7,6 +7,18 @@ from concurrent import futures
 from pathlib import Path
 from typing import Any
 
+import geopandas as gpd
+import requests
+from pyproj import CRS
+from shapely.geometry import (
+    LineString,
+    MultiLineString,
+    MultiPolygon,
+    Point,
+    Polygon,
+    shape,
+)
+
 # Estimate_GIS module defaults must exist before function signatures.
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
 DEFAULT_REQUEST_PAGE_SIZE = int(os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000"))
@@ -68,6 +80,28 @@ def progress_response(params: dict[str, object], data: dict[str, object]) -> Non
             )
         else:
             progress(f"Feature batch {PROGRESS_COMPLETED_BATCHES:,}: {object_id_count:,} ids")
+
+def make_session(token: str | None = None) -> requests.Session:
+    """Create a requests session and attach an ArcGIS token for query params."""
+    session = requests.Session()
+    session.headers.update({"User-Agent": "Estimate_GIS/1.0"})
+    if token:
+        session.arcgis_token = token
+    return session
+
+def _with_token(session: requests.Session, params: dict[str, Any] | None = None) -> dict[str, Any]:
+    request_params = dict(params or {})
+    request_params.setdefault("f", "json")
+    token = getattr(session, "arcgis_token", None)
+    if token and "token" not in request_params:
+        request_params["token"] = token
+    return request_params
+
+def _query_url(layer_url: str) -> str:
+    layer_url = layer_url.rstrip("/")
+    if layer_url.lower().endswith("/query"):
+        return layer_url
+    return f"{layer_url}/query"
 
 def request_json(
     session: requests.Session,
