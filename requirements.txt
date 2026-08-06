@@ -4,3 +4,5 @@ requests
 shapely
 pyproj
 fiona
+keyring
+truststore

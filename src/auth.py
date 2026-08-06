@@ -52,15 +52,12 @@ if _PACKAGE_PARENT not in _sys.path:
 
 import config
 
-
 def clean(value):
     if value is None:
         return ""
     return str(value).strip()
 
-
 from output import detail, fail, log, warn
-
 
 def make_session():
     try:
@@ -83,7 +80,6 @@ def make_session():
     session.headers.update({"User-Agent": "HistoricLeakRelocationGeoPandas/1.0"})
     return session
 
-
 def keyring_get(name):
     try:
         return keyring.get_password(config.KEYRING_SERVICE, name)
@@ -91,13 +87,11 @@ def keyring_get(name):
         warn(f"Keyring read failed for {name}: {ex}")
         return None
 
-
 def keyring_set(name, value):
     try:
         keyring.set_password(config.KEYRING_SERVICE, name, str(value))
     except Exception as ex:
         warn(f"Keyring write failed for {name}: {ex}")
-
 
 def cached_access_token():
     token = keyring_get(config.KEYRING_ACCESS_TOKEN_USER)
@@ -120,11 +114,9 @@ def cached_access_token():
     log("Cached ArcGIS Portal access token is expired or inside safety window.")
     return ""
 
-
 def clear_cached_access_token():
     keyring_set(config.KEYRING_ACCESS_TOKEN_USER, "")
     keyring_set(config.KEYRING_ACCESS_TOKEN_EXPIRES_USER, "0")
-
 
 def extract_oauth_code(value):
     value = clean(value)
@@ -150,10 +142,8 @@ def extract_oauth_code(value):
 
     return value
 
-
 def chrome_time_from_epoch(epoch_seconds):
     return int((float(epoch_seconds) + 11644473600) * 1000000)
-
 
 def browser_history_paths():
     local = os.environ.get("LOCALAPPDATA", "")
@@ -200,7 +190,6 @@ def browser_history_paths():
 
     return deduped
 
-
 def try_extract_oob_code_from_browser_history_since(start_epoch_seconds):
     min_chrome_time = chrome_time_from_epoch(start_epoch_seconds)
 
@@ -244,7 +233,6 @@ def try_extract_oob_code_from_browser_history_since(start_epoch_seconds):
 
     return ""
 
-
 def wait_for_fresh_oob_code_from_history(start_epoch_seconds, seconds_to_wait=180):
     for _ in range(seconds_to_wait):
         code = try_extract_oob_code_from_browser_history_since(start_epoch_seconds)
@@ -255,7 +243,6 @@ def wait_for_fresh_oob_code_from_history(start_epoch_seconds, seconds_to_wait=18
         time.sleep(1)
 
     return ""
-
 
 def get_clipboard_text():
     try:
@@ -268,7 +255,6 @@ def get_clipboard_text():
         return clean(value)
     except Exception:
         return ""
-
 
 def get_oob_authorization_code(start_epoch_seconds):
     # Primary path: silently capture a new OOB approval URL from Edge/Chrome history.
@@ -297,7 +283,6 @@ def get_oob_authorization_code(start_epoch_seconds):
         input("Paste ArcGIS authorization code or approval URL: ").strip()
     )
 
-
 LOOPBACK_SUCCESS_PAGE = b"""<!doctype html>
 <html>
 <head>
@@ -317,7 +302,6 @@ setTimeout(function(){
 </body>
 </html>"""
 
-
 def build_authorize_url(redirect_uri):
     """Build the portal authorize URL.
 
@@ -335,7 +319,6 @@ def build_authorize_url(redirect_uri):
         safe=":/",
     )
     return config.PORTAL_AUTHORIZE_URL + "?" + query
-
 
 def authorize_url_is_accepted(session, authorize_url, redirect_uri):
     """Check whether the portal accepts this redirect_uri before opening a browser.
@@ -387,7 +370,6 @@ def authorize_url_is_accepted(session, authorize_url, redirect_uri):
     )
     return False
 
-
 def close_loopback_callback_tab():
     """Best-effort close of the browser tab that displayed the loopback success page."""
     ps_script = r"""
@@ -423,7 +405,6 @@ if ($activated) {
         )
     except Exception as ex:
         detail(f"Could not auto-close loopback browser tab: {ex}")
-
 
 def capture_loopback_authorization_code(authorize_url, timeout_seconds=180):
     """Serve the OAuth redirect on loopback and return the authorization code.
@@ -484,7 +465,6 @@ def capture_loopback_authorization_code(authorize_url, timeout_seconds=180):
     if captured.get("error"):
         fail(f"ArcGIS sign-in failed: {captured['error']}")
     return captured.get("code")
-
 
 def interactive_access_token(session):
     cached = cached_access_token()
@@ -553,11 +533,9 @@ def interactive_access_token(session):
     close_loopback_callback_tab()
     return token
 
-
 def get_arcgis_token(session=None):
     active_session = session if session is not None else requests.Session()
     return interactive_access_token(active_session)
-
 
 def authenticated_count(session, layer_url):
     """Run a minimal authenticated count query against a layer.
@@ -578,7 +556,6 @@ def authenticated_count(session, layer_url):
     if "error" in data:
         raise RuntimeError(json.dumps(data["error"]))
     return int(data.get("count") or 0)
-
 
 def main(argv=None):
     """Run a sign-in session directly: python src/leakrelocation/auth.py
@@ -650,14 +627,12 @@ def main(argv=None):
     log(f"  count returned: {count:,} - the token works")
     return 0
 
-
 if __name__ == "__main__":
     _sys.exit(main())
 
 # ArcGIS returns these codes when a token is rejected. 498 is invalid, 499 is
 # missing or expired.
 TOKEN_REJECTED_CODES = ("498", "499")
-
 
 def request_json(session, url, params=None):
     """GET an ArcGIS REST endpoint as JSON, re-authenticating once if the token

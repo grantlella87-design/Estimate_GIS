@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import os
 import sys
@@ -52,7 +52,7 @@ def main() -> int:
         layer_url=LAYER_URL,
         where=WHERE,
         out_fields=OUT_FIELDS,
-        out_gpkg=OUT_GPKG,
+        output_gpkg=OUT_GPKG,
         layer_name=LAYER_NAME,
         token=token,
         workers=WORKERS,
