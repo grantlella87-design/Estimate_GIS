@@ -7,6 +7,11 @@ from concurrent import futures
 from pathlib import Path
 from typing import Any
 
+# Defaults must be defined before function signatures that reference them.
+DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
+DEFAULT_REQUEST_PAGE_SIZE = int(os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000"))
+VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "1").lower() not in {"0", "false", "no"}
+
 PROGRESS_ENABLED = os.environ.get("ESTIMATE_GIS_PROGRESS", "1").lower() not in {"0", "false", "no"}
 PROGRESS_TOTAL_OBJECTS = 0
 PROGRESS_TOTAL_BATCHES = 0
