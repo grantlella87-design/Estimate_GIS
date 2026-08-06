@@ -1,18 +1,16 @@
-﻿{
-    "python.defaultInterpreterPath":  "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-    "python.analysis.extraPaths":  [
-                                       "${workspaceFolder}/src"
-                                   ],
-    "python.analysis.stubPath":  "${workspaceFolder}/typings",
-    "python.terminal.activateEnvironment":  true,
-    "python.envFile":  "${workspaceFolder}/.env",
-    "terminal.integrated.cwd":  "${workspaceFolder}",
-    "terminal.integrated.splitCwd":  "workspaceRoot",
-    "terminal.integrated.env.windows":  {
-                                            "HTTP_PROXY":  "http://zscaler.nationalgrid.com:80",
-                                            "HTTPS_PROXY":  "http://zscaler.nationalgrid.com:80",
-                                            "http_proxy":  "http://zscaler.nationalgrid.com:80",
-                                            "https_proxy":  "http://zscaler.nationalgrid.com:80",
-                                            "RUFF_CACHE_DIR":  "${workspaceFolder}\\.ruff_cache"
-                                        }
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/src"
+  ],
+  "python.analysis.stubPath": "${workspaceFolder}/typings",
+  "python.terminal.activateEnvironment": true,
+  "python.envFile": "${workspaceFolder}/.env",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.splitCwd": "workspaceRoot",
+  "terminal.integrated.env.windows": {
+    "RUFF_CACHE_DIR": "${workspaceFolder}\\.ruff_cache",
+    "NO_PROXY": "gis.nationalgrid.com,.nationalgrid.com,localhost,127.0.0.1",
+    "no_proxy": "gis.nationalgrid.com,.nationalgrid.com,localhost,127.0.0.1"
+  }
 }

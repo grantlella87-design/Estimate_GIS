@@ -22,10 +22,29 @@ OUT_GPKG = REPO_ROOT / "outputs" / "export.gpkg"
 LAYER_NAME = "export"
 TOKEN_ENV: str | None = None
 WORKERS = 8
-BATCH_SIZE = 1000
+BATCH_SIZE = 2000
 # =============================================================================
 
+def disable_explicit_proxy_for_arcgis() -> None:
+    """Avoid forcing National Grid ArcGIS traffic through an explicit proxy."""
+    for key in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"):
+        os.environ.pop(key, None)
+    no_proxy_hosts = [
+        "gis.nationalgrid.com",
+        ".nationalgrid.com",
+        "localhost",
+        "127.0.0.1",
+    ]
+    existing = os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or ""
+    combined = [item for item in existing.split(",") if item]
+    for host in no_proxy_hosts:
+        if host not in combined:
+            combined.append(host)
+    os.environ["NO_PROXY"] = ",".join(combined)
+    os.environ["no_proxy"] = os.environ["NO_PROXY"]
+
 def call_exporter() -> object:
+    disable_explicit_proxy_for_arcgis()
     token = os.environ.get(TOKEN_ENV) if TOKEN_ENV else None
     candidate_kwargs = {
         "layer_url": LAYER_URL,
