@@ -1,0 +1,6 @@
+geopandas
+pandas
+requests
+shapely
+pyproj
+fiona
