@@ -11,11 +11,19 @@ Authentication, configuration and console output come from the shared
 `leakrelocation` package, so signing in once serves both projects.
 """
 import argparse
+import importlib
 import csv
 import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+auth = importlib.import_module("auth")
+config = importlib.import_module("config")
+output = importlib.import_module("output")
+fail = output.fail
+log = output.log
+warn = output.warn
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SRC = REPO_ROOT / "src"

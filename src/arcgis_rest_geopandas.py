@@ -1,28 +1,13 @@
-
-"""
-Fast ArcGIS REST to GeoPandas utilities for Estimate_GIS.
-
-This is intentionally modeled after the fast leak_relocation_geopandas pattern:
-- Read layer metadata first so OBJECTID, maxRecordCount, fields, and native CRS come from the MapServer layer.
-- Ask the server for the matching OBJECTIDs for the exact WHERE clause.
-- Download only those matching OBJECTIDs in threaded batches instead of walking every OBJECTID from an unrelated query.
-- Convert Esri JSON geometries directly into Shapely geometries.
-- Return a GeoDataFrame so downstream code can filter, join, export, or write a GeoPackage.
-"""
 from __future__ import annotations
 
+import json
+import os
 from collections.abc import Iterable, Sequence
 from concurrent import futures
 from pathlib import Path
 from typing import Any
 
 import geopandas as gpd
-import requests
-from pyproj import CRS
-from shapely.geometry import LineString, MultiLineString, MultiPolygon, Point, Polygon, shape
-
-import geopandas as gpd
-import pandas as pd
 import requests
 from pyproj import CRS
 from shapely.geometry import LineString, MultiLineString, MultiPolygon, Point, Polygon, shape

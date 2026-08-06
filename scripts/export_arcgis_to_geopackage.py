@@ -2,16 +2,19 @@
 from __future__ import annotations
 
 import argparse
+import importlib
 import os
 import sys
 from pathlib import Path
+
+export_layer_to_geopackage = importlib.import_module(
+    "arcgis_rest_geopandas"
+).export_layer_to_geopackage
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SRC = REPO_ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-
-from arcgis_rest_geopandas import export_layer_to_geopackage  # noqa: E402
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fast ArcGIS REST export to GeoPackage using GeoPandas.")
