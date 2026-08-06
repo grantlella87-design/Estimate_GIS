@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import os
 import sys
 from pathlib import Path
@@ -19,8 +20,8 @@ def configure_enterprise_ssl() -> None:
         print(f"WARNING: Could not enable Windows trust store: {exc}")
 
 configure_enterprise_ssl()
-import auth  # noqa: E402
-from arcgis_rest_geopandas import export_layer_to_geopackage  # noqa: E402
+import auth
+from arcgis_rest_geopandas import export_layer_to_geopackage
 
 # =============================================================================
 # USER EDIT SECTION

@@ -1,4 +1,3 @@
-# ruff: noqa: BLE001, S110, S112
 # Broad excepts are deliberate here: keyring, browser-history and clipboard
 # access all fail in environment-specific ways, and none of them should stop a
 # sign-in that can still fall back to another route. Moved verbatim from the
@@ -52,12 +51,14 @@ if _PACKAGE_PARENT not in _sys.path:
 
 import config
 
+
 def clean(value):
     if value is None:
         return ""
     return str(value).strip()
 
 from output import detail, fail, log, warn
+
 
 def make_session():
     try:
@@ -683,6 +684,7 @@ def request_json(session, url, params=None):
 def get_token() -> str:
     """Return an ArcGIS access token. Authentication implementation stays in auth.py."""
     import inspect
+
     import requests
     candidates = [
         "get_access_token",
