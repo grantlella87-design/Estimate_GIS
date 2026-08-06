@@ -3,13 +3,15 @@ from __future__ import annotations
 import inspect
 import json
 import os
-import webbrowser
-import urllib.parse
-import threading
-import requests
 import sys
-from pathlib import Path
+import threading
+import urllib.parse
+import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
+
+import requests
+
 
 def configure_enterprise_ssl() -> None:
     """Use the Windows trust store for corporate TLS interception certificates."""
@@ -199,7 +201,7 @@ def resolve_token() -> str | None:
         if callable(func):
             try:
                 token = call_auth_function(func)
-            except Exception as exc:
+            except (OSError, RuntimeError, ValueError, requests.RequestException) as exc:
                 print(f"Token function {function_name} failed: {exc}")
                 continue
             if token:
@@ -207,7 +209,7 @@ def resolve_token() -> str | None:
                 return token
     try:
         token = interactive_loopback_access_token()
-    except Exception as exc:
+    except (OSError, RuntimeError, ValueError, requests.RequestException) as exc:
         print(f"Interactive ArcGIS token flow failed: {exc}")
         token = None
     if token:

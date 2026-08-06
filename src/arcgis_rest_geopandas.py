@@ -11,6 +11,7 @@ from typing import Any
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
 DEFAULT_REQUEST_PAGE_SIZE = int(os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000"))
 DEFAULT_OBJECTID_BATCH_SIZE = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "2000"))
+DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "8"))
 VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "1").lower() not in {"0", "false", "no"}
 
 PROGRESS_ENABLED = os.environ.get("ESTIMATE_GIS_PROGRESS", "1").lower() not in {"0", "false", "no"}
