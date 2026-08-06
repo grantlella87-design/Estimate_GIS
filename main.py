@@ -41,7 +41,7 @@ def main() -> int:
     print(f"Layer URL: {LAYER_URL}")
     print(f"Where: {WHERE}")
     print(f"Output: {OUT_GPKG}")
-    token = auth.interactive_access_token()
+    token = auth.get_token()
     print("Using ArcGIS token from src/auth.py")
     gdf = export_layer_to_geopackage(
         layer_url=LAYER_URL,

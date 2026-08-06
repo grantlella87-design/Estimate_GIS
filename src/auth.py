@@ -679,3 +679,38 @@ def request_json(session, url, params=None):
             return data
 
     raise RuntimeError(f"ArcGIS REST error from {url}: {json.dumps(error, indent=2)}")
+
+def get_token() -> str:
+    """Return an ArcGIS access token. Authentication implementation stays in auth.py."""
+    import inspect
+    import requests
+    candidates = [
+        "get_access_token",
+        "access_token",
+        "portal_access_token",
+        "interactive_access_token",
+    ]
+    for name in candidates:
+        function = globals().get(name)
+        if not callable(function):
+            continue
+        signature = inspect.signature(function)
+        required = [
+            parameter_name
+            for parameter_name, parameter in signature.parameters.items()
+            if parameter.default is inspect._empty
+        ]
+        if not required:
+            value = function()
+        elif required == ["session"]:
+            value = function(requests.Session())
+        else:
+            continue
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+        if isinstance(value, dict):
+            for key in ("access_token", "token", "value"):
+                token = value.get(key)
+                if isinstance(token, str) and token.strip():
+                    return token.strip()
+    raise RuntimeError("auth.py could not return an ArcGIS token from its existing token functions.")
