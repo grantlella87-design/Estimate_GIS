@@ -11,6 +11,8 @@
     "HTTP_PROXY": "http://zscaler.nationalgrid.com:80",
     "HTTPS_PROXY": "http://zscaler.nationalgrid.com:80",
     "http_proxy": "http://zscaler.nationalgrid.com:80",
-    "https_proxy": "http://zscaler.nationalgrid.com:80"
-  }
+    "https_proxy": "http://zscaler.nationalgrid.com:80",
+    "RUFF_CACHE_DIR": "${workspaceFolder}\\.ruff_cache"
+  },
+  "python.analysis.stubPath": "${workspaceFolder}/typings"
 }

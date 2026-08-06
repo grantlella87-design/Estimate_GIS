@@ -10,24 +10,48 @@ from typing import Any
 import geopandas as gpd
 import requests
 from pyproj import CRS
-from shapely.geometry import LineString, MultiLineString, MultiPolygon, Point, Polygon, shape
+from shapely.geometry import (
+    LineString,
+    MultiLineString,
+    MultiPolygon,
+    Point,
+    Polygon,
+    shape,
+)
 
-DEFAULT_REQUEST_PAGE_SIZE = int(os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000"))
-DEFAULT_OBJECTID_BATCH_SIZE = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "500"))
+DEFAULT_REQUEST_PAGE_SIZE = int(
+    os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000")
+)
+DEFAULT_OBJECTID_BATCH_SIZE = int(
+    os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "500")
+)
 DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "8"))
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
-VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "true").strip().lower() not in {"0", "false", "no"}
+VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "true").strip().lower() not in {
+    "0",
+    "false",
+    "no",
+}
+
 
 def make_session(token: str | None = None) -> requests.Session:
     """Create a requests session and attach an ArcGIS token if one is supplied."""
     session = requests.Session()
-    session._arcgis_access_token = token or os.environ.get("ARCGIS_TOKEN") or os.environ.get("ESTIMATE_GIS_ARCGIS_TOKEN")
+    session._arcgis_access_token = (
+        token
+        or os.environ.get("ARCGIS_TOKEN")
+        or os.environ.get("ESTIMATE_GIS_ARCGIS_TOKEN")
+    )
     return session
+
 
 def _query_url(layer_url: str) -> str:
     return layer_url.rstrip("/") + "/query"
 
-def _with_token(session: requests.Session, params: dict[str, Any] | None) -> dict[str, Any]:
+
+def _with_token(
+    session: requests.Session, params: dict[str, Any] | None
+) -> dict[str, Any]:
     request_params = dict(params or {})
     request_params.setdefault("f", "json")
     token = getattr(session, "_arcgis_access_token", None)
@@ -35,28 +59,56 @@ def _with_token(session: requests.Session, params: dict[str, Any] | None) -> dic
         request_params["token"] = token
     return request_params
 
-def request_json(session: requests.Session, url: str, params: dict[str, Any] | None = None, *, post: bool = False, timeout: int = DEFAULT_TIMEOUT_SECONDS) -> dict[str, Any]:
+
+def request_json(
+    session: requests.Session,
+    url: str,
+    params: dict[str, Any] | None = None,
+    *,
+    post: bool = False,
+    timeout: int = DEFAULT_TIMEOUT_SECONDS,
+) -> dict[str, Any]:
     """Request ArcGIS JSON and raise a useful exception for service-side errors."""
     request_params = _with_token(session, params)
     if post:
-        response = session.post(url, data=request_params, timeout=timeout, verify=VERIFY_SSL)
+        response = session.post(
+            url, data=request_params, timeout=timeout, verify=VERIFY_SSL
+        )
     else:
-        response = session.get(url, params=request_params, timeout=timeout, verify=VERIFY_SSL)
+        response = session.get(
+            url, params=request_params, timeout=timeout, verify=VERIFY_SSL
+        )
     response.raise_for_status()
     data = response.json()
     if isinstance(data, dict) and data.get("error"):
         raise RuntimeError(json.dumps(data["error"], indent=2))
     return data
 
+
 def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
     """Read layer metadata needed for fast REST querying and GeoDataFrame CRS assignment."""
     data = request_json(session, layer_url, {"f": "json"})
     fields = data.get("fields", []) or []
-    object_id_field = data.get("objectIdField") or next((field.get("name") for field in fields if field.get("type") == "esriFieldTypeOID"), None)
-    spatial_reference = (data.get("extent", {}) or {}).get("spatialReference") or data.get("spatialReference") or {}
+    object_id_field = data.get("objectIdField") or next(
+        (
+            field.get("name")
+            for field in fields
+            if field.get("type") == "esriFieldTypeOID"
+        ),
+        None,
+    )
+    spatial_reference = (
+        (data.get("extent", {}) or {}).get("spatialReference")
+        or data.get("spatialReference")
+        or {}
+    )
     wkid = spatial_reference.get("latestWkid") or spatial_reference.get("wkid")
     max_record_count = int(data.get("maxRecordCount") or DEFAULT_REQUEST_PAGE_SIZE)
-    page_size = min(DEFAULT_REQUEST_PAGE_SIZE, max_record_count) if max_record_count > 0 else DEFAULT_REQUEST_PAGE_SIZE
+    page_size = (
+        min(DEFAULT_REQUEST_PAGE_SIZE, max_record_count)
+        if max_record_count > 0
+        else DEFAULT_REQUEST_PAGE_SIZE
+    )
     return {
         "object_id_field": object_id_field,
         "fields": fields,
@@ -68,6 +120,7 @@ def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
         "name": data.get("name"),
     }
 
+
 def crs_from_metadata(meta: dict[str, Any]) -> CRS | None:
     """Build CRS from service metadata without forcing EPSG:2249 or another default."""
     sr = meta.get("spatial_reference") or {}
@@ -78,16 +131,27 @@ def crs_from_metadata(meta: dict[str, Any]) -> CRS | None:
         return CRS.from_epsg(int(wkid))
     return None
 
+
 def chunk_list(values: Sequence[Any], chunk_size: int) -> Iterable[Sequence[Any]]:
     for index in range(0, len(values), chunk_size):
-        yield values[index:index + chunk_size]
+        yield values[index : index + chunk_size]
+
 
 def query_count(session: requests.Session, layer_url: str, where: str) -> int | None:
-    data = request_json(session, _query_url(layer_url), {"where": where, "returnCountOnly": "true"})
+    data = request_json(
+        session, _query_url(layer_url), {"where": where, "returnCountOnly": "true"}
+    )
     count = data.get("count")
     return int(count) if count is not None else None
 
-def query_object_ids(session: requests.Session, layer_url: str, where: str, *, order_by_fields: str | None = None) -> list[int]:
+
+def query_object_ids(
+    session: requests.Session,
+    layer_url: str,
+    where: str,
+    *,
+    order_by_fields: str | None = None,
+) -> list[int]:
     """Ask the service for OBJECTIDs matching the exact WHERE clause that will be downloaded."""
     params = {"where": where, "returnIdsOnly": "true"}
     if order_by_fields:
@@ -96,17 +160,21 @@ def query_object_ids(session: requests.Session, layer_url: str, where: str, *, o
     object_ids = data.get("objectIds") or []
     return [int(object_id) for object_id in object_ids]
 
+
 def esri_point_to_geom(geometry: dict[str, Any]) -> Point | None:
     if not geometry or "x" not in geometry or "y" not in geometry:
         return None
     return Point(float(geometry["x"]), float(geometry["y"]))
+
 
 def esri_polyline_to_geom(geometry: dict[str, Any]) -> Any | None:
     if not geometry or "paths" not in geometry:
         return None
     lines = []
     for path in geometry.get("paths", []):
-        coords = [(float(point[0]), float(point[1])) for point in path if len(point) >= 2]
+        coords = [
+            (float(point[0]), float(point[1])) for point in path if len(point) >= 2
+        ]
         if len(coords) >= 2:
             lines.append(LineString(coords))
     if not lines:
@@ -115,12 +183,15 @@ def esri_polyline_to_geom(geometry: dict[str, Any]) -> Any | None:
         return lines[0]
     return MultiLineString(lines)
 
+
 def esri_polygon_to_geom(geometry: dict[str, Any]) -> Any | None:
     if not geometry or "rings" not in geometry:
         return None
     polygons = []
     for ring in geometry.get("rings", []):
-        coords = [(float(point[0]), float(point[1])) for point in ring if len(point) >= 2]
+        coords = [
+            (float(point[0]), float(point[1])) for point in ring if len(point) >= 2
+        ]
         if len(coords) >= 4:
             polygons.append(Polygon(coords))
     if not polygons:
@@ -128,6 +199,7 @@ def esri_polygon_to_geom(geometry: dict[str, Any]) -> Any | None:
     if len(polygons) == 1:
         return polygons[0]
     return MultiPolygon(polygons)
+
 
 def esri_geometry_to_shape(geometry: dict[str, Any] | None) -> Any | None:
     if not geometry:
@@ -143,7 +215,10 @@ def esri_geometry_to_shape(geometry: dict[str, Any] | None) -> Any | None:
     except (AttributeError, TypeError, ValueError):
         return None
 
-def features_to_geodataframe(features: list[dict[str, Any]], meta: dict[str, Any]) -> gpd.GeoDataFrame:
+
+def features_to_geodataframe(
+    features: list[dict[str, Any]], meta: dict[str, Any]
+) -> gpd.GeoDataFrame:
     """Convert ArcGIS feature JSON into a GeoDataFrame using the layer native CRS."""
     rows = []
     for feature in features:
@@ -153,7 +228,16 @@ def features_to_geodataframe(features: list[dict[str, Any]], meta: dict[str, Any
     crs = crs_from_metadata(meta)
     return gpd.GeoDataFrame(rows, geometry="geometry", crs=crs)
 
-def fetch_objectid_batch(layer_url: str, object_id_batch: Sequence[int], meta: dict[str, Any], out_fields: str, token: str | None, batch_number: int, batch_total: int) -> list[dict[str, Any]]:
+
+def fetch_objectid_batch(
+    layer_url: str,
+    object_id_batch: Sequence[int],
+    meta: dict[str, Any],
+    out_fields: str,
+    token: str | None,
+    batch_number: int,
+    batch_total: int,
+) -> list[dict[str, Any]]:
     """Download a specific OBJECTID batch. The ids come from query_object_ids for the same WHERE clause."""
     session = make_session(token)
     params = {
@@ -165,6 +249,7 @@ def fetch_objectid_batch(layer_url: str, object_id_batch: Sequence[int], meta: d
     }
     data = request_json(session, _query_url(layer_url), params, post=True)
     return data.get("features") or []
+
 
 def query_layer_to_geodataframe(
     layer_url: str,
@@ -182,7 +267,9 @@ def query_layer_to_geodataframe(
     """
     session = make_session(token)
     meta = layer_metadata(session, layer_url)
-    object_ids = query_object_ids(session, layer_url, where, order_by_fields=order_by_fields)
+    object_ids = query_object_ids(
+        session, layer_url, where, order_by_fields=order_by_fields
+    )
     if not object_ids:
         return features_to_geodataframe([], meta)
     batches = list(chunk_list(object_ids, objectid_batch_size))
@@ -191,10 +278,32 @@ def query_layer_to_geodataframe(
     max_workers = max(1, min(int(workers), len(batches)))
     if max_workers == 1:
         for batch_number, batch in enumerate(batches, start=1):
-            features.extend(fetch_objectid_batch(layer_url, batch, meta, out_fields, token_value, batch_number, len(batches)))
+            features.extend(
+                fetch_objectid_batch(
+                    layer_url,
+                    batch,
+                    meta,
+                    out_fields,
+                    token_value,
+                    batch_number,
+                    len(batches),
+                )
+            )
     else:
         with futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_list = [executor.submit(fetch_objectid_batch, layer_url, batch, meta, out_fields, token_value, index, len(batches)) for index, batch in enumerate(batches, start=1)]
+            future_list = [
+                executor.submit(
+                    fetch_objectid_batch,
+                    layer_url,
+                    batch,
+                    meta,
+                    out_fields,
+                    token_value,
+                    index,
+                    len(batches),
+                )
+                for index, batch in enumerate(batches, start=1)
+            ]
             for future in futures.as_completed(future_list):
                 features.extend(future.result())
     gdf = features_to_geodataframe(features, meta)
@@ -202,6 +311,7 @@ def query_layer_to_geodataframe(
     if object_id_field and object_id_field in gdf.columns:
         gdf = gdf.sort_values(object_id_field).reset_index(drop=True)
     return gdf
+
 
 def export_layer_to_geopackage(
     layer_url: str,

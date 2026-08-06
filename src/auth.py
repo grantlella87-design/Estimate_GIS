@@ -1,4 +1,4 @@
-﻿# ruff: noqa: BLE001, S110, S112
+# ruff: noqa: BLE001, S110, S112
 # Broad excepts are deliberate here: keyring, browser-history and clipboard
 # access all fail in environment-specific ways, and none of them should stop a
 # sign-in that can still fall back to another route. Moved verbatim from the
@@ -20,6 +20,7 @@ Two ways to capture the OAuth authorization code:
 Tokens are cached in the OS credential store through keyring, so most runs need
 no browser at all.
 """
+
 import glob
 import json
 import os
@@ -50,10 +51,14 @@ if _PACKAGE_PARENT not in _sys.path:
     _sys.path.insert(0, _PACKAGE_PARENT)
 
 import config
+
+
 def clean(value):
     if value is None:
         return ""
     return str(value).strip()
+
+
 from output import detail, fail, log, warn
 
 
@@ -356,7 +361,9 @@ def authorize_url_is_accepted(session, authorize_url, redirect_uri):
         payload = response.json()
         error = payload.get("error") or {}
         message = "; ".join(
-            str(part) for part in [error.get("message"), *(error.get("details") or [])] if part
+            str(part)
+            for part in [error.get("message"), *(error.get("details") or [])]
+            if part
         )
     except ValueError:
         # A sign-in page rather than JSON, which means the request was accepted.
@@ -383,7 +390,7 @@ def authorize_url_is_accepted(session, authorize_url, redirect_uri):
 
 def close_loopback_callback_tab():
     """Best-effort close of the browser tab that displayed the loopback success page."""
-    ps_script = r'''
+    ps_script = r"""
 $title = 'ArcGIS Loopback Sign-in Complete'
 $shell = New-Object -ComObject WScript.Shell
 Start-Sleep -Milliseconds 500
@@ -399,7 +406,7 @@ if ($activated) {
     Start-Sleep -Milliseconds 200
     $shell.SendKeys('^w')
 }
-'''
+"""
     try:
         subprocess.Popen(
             [
@@ -498,7 +505,9 @@ def interactive_access_token(session):
     redirect_uri = config.ARCGIS_REDIRECT_URI
     if config.USE_LOOPBACK_OAUTH:
         loopback_url = build_authorize_url(config.LOOPBACK_REDIRECT_URI)
-        if authorize_url_is_accepted(session, loopback_url, config.LOOPBACK_REDIRECT_URI):
+        if authorize_url_is_accepted(
+            session, loopback_url, config.LOOPBACK_REDIRECT_URI
+        ):
             auth_code = capture_loopback_authorization_code(loopback_url)
             if auth_code:
                 redirect_uri = config.LOOPBACK_REDIRECT_URI
@@ -508,7 +517,9 @@ def interactive_access_token(session):
         log("Opening browser for ArcGIS user authentication (out-of-band).")
         detail(f"Redirect URI: {config.ARCGIS_REDIRECT_URI}")
         auth_start_epoch = time.time()
-        webbrowser.open(build_authorize_url(config.ARCGIS_REDIRECT_URI), new=1, autoraise=True)
+        webbrowser.open(
+            build_authorize_url(config.ARCGIS_REDIRECT_URI), new=1, autoraise=True
+        )
         auth_code = get_oob_authorization_code(auth_start_epoch)
         redirect_uri = config.ARCGIS_REDIRECT_URI
     if not auth_code:
@@ -541,6 +552,7 @@ def interactive_access_token(session):
     log("Saved ArcGIS Portal access token to Windows Credential Manager.")
     close_loopback_callback_tab()
     return token
+
 
 def get_arcgis_token(session=None):
     active_session = session if session is not None else requests.Session()
@@ -585,10 +597,16 @@ def main(argv=None):
         prog="auth.py",
         description="Sign in to ArcGIS Portal and verify the token.",
     )
-    parser.add_argument("--force", action="store_true",
-                        help="Ignore the cached token and sign in again.")
-    parser.add_argument("--no-verify", action="store_true",
-                        help="Skip the authenticated count that proves the token works.")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Ignore the cached token and sign in again.",
+    )
+    parser.add_argument(
+        "--no-verify",
+        action="store_true",
+        help="Skip the authenticated count that proves the token works.",
+    )
     args = parser.parse_args(argv)
 
     log("--- Configuration ---")
@@ -635,7 +653,6 @@ def main(argv=None):
 
 if __name__ == "__main__":
     _sys.exit(main())
-
 
 # ArcGIS returns these codes when a token is rejected. 498 is invalid, 499 is
 # missing or expired.
