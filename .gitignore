@@ -21,3 +21,4 @@ dist/
 .git_broken_backup_*/
 *.gpkg-shm
 *.gpkg-wal
+.venv/

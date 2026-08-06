@@ -49,9 +49,12 @@ _PACKAGE_PARENT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 if _PACKAGE_PARENT not in _sys.path:
     _sys.path.insert(0, _PACKAGE_PARENT)
 
-from leakrelocation import config
-from leakrelocation.matching import clean
-from leakrelocation.output import detail, fail, log, warn
+import config
+def clean(value):
+    if value is None:
+        return ""
+    return str(value).strip()
+from output import detail, fail, log, warn
 
 
 def make_session():
