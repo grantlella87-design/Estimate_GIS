@@ -233,6 +233,7 @@ def call_exporter() -> object:
         "max_workers": WORKERS,
         "batch_size": BATCH_SIZE,
         "object_id_batch_size": BATCH_SIZE,
+        "objectid_batch_size": BATCH_SIZE,
     }
     signature = inspect.signature(export_layer_to_geopackage)
     supported_kwargs = {
@@ -245,6 +246,8 @@ def call_exporter() -> object:
     return export_layer_to_geopackage(**supported_kwargs)
 
 def main() -> int:
+    os.environ.setdefault("ESTIMATE_GIS_PROGRESS", "1")
+    os.environ.setdefault("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", str(BATCH_SIZE))
     os.environ.setdefault("ESTIMATE_GIS_PROGRESS", "1")
     if not LAYER_URL.strip():
         print("Set LAYER_URL at the top of main.py before running.")

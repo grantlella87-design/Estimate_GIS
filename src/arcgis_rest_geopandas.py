@@ -8,98 +8,59 @@ from pathlib import Path
 from typing import Any
 
 PROGRESS_ENABLED = os.environ.get("ESTIMATE_GIS_PROGRESS", "1").lower() not in {"0", "false", "no"}
+PROGRESS_TOTAL_OBJECTS = 0
+PROGRESS_TOTAL_BATCHES = 0
+PROGRESS_COMPLETED_BATCHES = 0
 
 def progress(message: str) -> None:
     if PROGRESS_ENABLED:
         print(f"[Estimate_GIS] {message}", flush=True)
 
+def _truthy(value: object) -> bool:
+    return value is True or str(value).lower() == "true"
+
 def progress_request(url: str, params: dict[str, object]) -> None:
     if not PROGRESS_ENABLED:
         return
-    interesting = [
-        "f",
-        "where",
-        "returnIdsOnly",
-        "returnCountOnly",
-        "objectIds",
-        "resultOffset",
-        "resultRecordCount",
-        "outFields",
-    ]
+    if "objectIds" in params:
+        return
+    if _truthy(params.get("returnIdsOnly")):
+        progress(f"Requesting object IDs from {url} where={params.get('where', '1=1')}")
+        return
     preview: dict[str, object] = {}
-    for key in interesting:
+    for key in ("f", "where", "returnCountOnly", "resultOffset", "resultRecordCount", "outFields"):
         if key in params:
-            value = params[key]
-            if key == "objectIds":
-                text_value = str(value)
-                oid_count = len([item for item in text_value.split(",") if item])
-                preview[key] = f"{oid_count} ids"
-            else:
-                preview[key] = value
+            preview[key] = params[key]
     progress(f"GET {url} params={preview}")
 
-def configure_enterprise_ssl() -> None:
-    """Use the Windows trust store for corporate TLS interception certificates."""
-    try:
-        import truststore
-    except ImportError:
+def progress_response(params: dict[str, object], data: dict[str, object]) -> None:
+    global PROGRESS_TOTAL_OBJECTS, PROGRESS_TOTAL_BATCHES, PROGRESS_COMPLETED_BATCHES
+    if not PROGRESS_ENABLED:
         return
-    try:
-        truststore.inject_into_ssl()
-    except (OSError, RuntimeError, ValueError):
+    if _truthy(params.get("returnIdsOnly")):
+        object_ids = data.get("objectIds") or []
+        PROGRESS_TOTAL_OBJECTS = len(object_ids) if isinstance(object_ids, list) else 0
+        batch_size = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "2000"))
+        PROGRESS_TOTAL_BATCHES = (PROGRESS_TOTAL_OBJECTS + batch_size - 1) // batch_size if PROGRESS_TOTAL_OBJECTS else 0
+        PROGRESS_COMPLETED_BATCHES = 0
+        progress(
+            f"Object IDs received: {PROGRESS_TOTAL_OBJECTS:,} total | "
+            f"max {batch_size:,}/request | {PROGRESS_TOTAL_BATCHES:,} feature requests"
+        )
         return
-
-configure_enterprise_ssl()
-
-import geopandas as gpd
-import requests
-from pyproj import CRS
-from shapely.geometry import (
-    LineString,
-    MultiLineString,
-    MultiPolygon,
-    Point,
-    Polygon,
-    shape,
-)
-
-DEFAULT_REQUEST_PAGE_SIZE = int(
-    os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000")
-)
-DEFAULT_OBJECTID_BATCH_SIZE = int(
-    os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "500")
-)
-DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "8"))
-DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
-VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "true").strip().lower() not in {
-
-    "0",
-    "false",
-    "no",
-}
-
-def make_session(token: str | None = None) -> requests.Session:
-    """Create a requests session and attach an ArcGIS token if one is supplied."""
-    session = requests.Session()
-    session._arcgis_access_token = (
-        token
-        or os.environ.get("ARCGIS_TOKEN")
-        or os.environ.get("ESTIMATE_GIS_ARCGIS_TOKEN")
-    )
-    return session
-
-def _query_url(layer_url: str) -> str:
-    return layer_url.rstrip("/") + "/query"
-
-def _with_token(
-    session: requests.Session, params: dict[str, Any] | None
-) -> dict[str, Any]:
-    request_params = dict(params or {})
-    request_params.setdefault("f", "json")
-    token = getattr(session, "_arcgis_access_token", None)
-    if token and "token" not in request_params:
-        request_params["token"] = token
-    return request_params
+    if "objectIds" in params:
+        PROGRESS_COMPLETED_BATCHES += 1
+        object_ids_text = str(params.get("objectIds", ""))
+        object_id_count = len([item for item in object_ids_text.split(",") if item])
+        batch_size = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "2000"))
+        requested = min(PROGRESS_COMPLETED_BATCHES * batch_size, PROGRESS_TOTAL_OBJECTS) if PROGRESS_TOTAL_OBJECTS else PROGRESS_COMPLETED_BATCHES * object_id_count
+        if PROGRESS_TOTAL_BATCHES:
+            progress(
+                f"Feature batch {PROGRESS_COMPLETED_BATCHES:,}/{PROGRESS_TOTAL_BATCHES:,}: "
+                f"{object_id_count:,} ids | requested {requested:,}/{PROGRESS_TOTAL_OBJECTS:,} objects"
+            )
+        else:
+            progress(f"Feature batch {PROGRESS_COMPLETED_BATCHES:,}: {object_id_count:,} ids")
 
 def request_json(
     session: requests.Session,
@@ -122,6 +83,7 @@ def request_json(
         )
     response.raise_for_status()
     data = response.json()
+    progress_response(request_params, data)
     if isinstance(data, dict) and data.get("error"):
         raise RuntimeError(json.dumps(data["error"], indent=2))
     return data
