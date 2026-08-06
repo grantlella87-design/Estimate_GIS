@@ -11,14 +11,15 @@ This is intentionally modeled after the fast leak_relocation_geopandas pattern:
 """
 from __future__ import annotations
 
-import datetime as dt
-import json
-import math
-import os
-import time
+from collections.abc import Iterable, Sequence
 from concurrent import futures
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence
+from typing import Any
+
+import geopandas as gpd
+import requests
+from pyproj import CRS
+from shapely.geometry import LineString, MultiLineString, MultiPolygon, Point, Polygon, shape
 
 import geopandas as gpd
 import pandas as pd
@@ -32,19 +33,16 @@ DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
 VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "true").strip().lower() not in {"0", "false", "no"}
 
-
-def make_session(token: Optional[str] = None) -> requests.Session:
+def make_session(token: str | None = None) -> requests.Session:
     """Create a requests session and attach an ArcGIS token if one is supplied."""
     session = requests.Session()
     session._arcgis_access_token = token or os.environ.get("ARCGIS_TOKEN") or os.environ.get("ESTIMATE_GIS_ARCGIS_TOKEN")
     return session
 
-
 def _query_url(layer_url: str) -> str:
     return layer_url.rstrip("/") + "/query"
 
-
-def _with_token(session: requests.Session, params: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _with_token(session: requests.Session, params: dict[str, Any] | None) -> dict[str, Any]:
     request_params = dict(params or {})
     request_params.setdefault("f", "json")
     token = getattr(session, "_arcgis_access_token", None)
@@ -52,8 +50,7 @@ def _with_token(session: requests.Session, params: Optional[Dict[str, Any]]) -> 
         request_params["token"] = token
     return request_params
 
-
-def request_json(session: requests.Session, url: str, params: Optional[Dict[str, Any]] = None, *, post: bool = False, timeout: int = DEFAULT_TIMEOUT_SECONDS) -> Dict[str, Any]:
+def request_json(session: requests.Session, url: str, params: dict[str, Any] | None = None, *, post: bool = False, timeout: int = DEFAULT_TIMEOUT_SECONDS) -> dict[str, Any]:
     """Request ArcGIS JSON and raise a useful exception for service-side errors."""
     request_params = _with_token(session, params)
     if post:
@@ -66,8 +63,7 @@ def request_json(session: requests.Session, url: str, params: Optional[Dict[str,
         raise RuntimeError(json.dumps(data["error"], indent=2))
     return data
 
-
-def layer_metadata(session: requests.Session, layer_url: str) -> Dict[str, Any]:
+def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
     """Read layer metadata needed for fast REST querying and GeoDataFrame CRS assignment."""
     data = request_json(session, layer_url, {"f": "json"})
     fields = data.get("fields", []) or []
@@ -87,8 +83,7 @@ def layer_metadata(session: requests.Session, layer_url: str) -> Dict[str, Any]:
         "name": data.get("name"),
     }
 
-
-def crs_from_metadata(meta: Dict[str, Any]) -> Optional[CRS]:
+def crs_from_metadata(meta: dict[str, Any]) -> CRS | None:
     """Build CRS from service metadata without forcing EPSG:2249 or another default."""
     sr = meta.get("spatial_reference") or {}
     if sr.get("wkt"):
@@ -98,19 +93,16 @@ def crs_from_metadata(meta: Dict[str, Any]) -> Optional[CRS]:
         return CRS.from_epsg(int(wkid))
     return None
 
-
 def chunk_list(values: Sequence[Any], chunk_size: int) -> Iterable[Sequence[Any]]:
     for index in range(0, len(values), chunk_size):
         yield values[index:index + chunk_size]
 
-
-def query_count(session: requests.Session, layer_url: str, where: str) -> Optional[int]:
+def query_count(session: requests.Session, layer_url: str, where: str) -> int | None:
     data = request_json(session, _query_url(layer_url), {"where": where, "returnCountOnly": "true"})
     count = data.get("count")
     return int(count) if count is not None else None
 
-
-def query_object_ids(session: requests.Session, layer_url: str, where: str, *, order_by_fields: Optional[str] = None) -> List[int]:
+def query_object_ids(session: requests.Session, layer_url: str, where: str, *, order_by_fields: str | None = None) -> list[int]:
     """Ask the service for OBJECTIDs matching the exact WHERE clause that will be downloaded."""
     params = {"where": where, "returnIdsOnly": "true"}
     if order_by_fields:
@@ -119,14 +111,12 @@ def query_object_ids(session: requests.Session, layer_url: str, where: str, *, o
     object_ids = data.get("objectIds") or []
     return [int(object_id) for object_id in object_ids]
 
-
-def esri_point_to_geom(geometry: Dict[str, Any]) -> Optional[Point]:
+def esri_point_to_geom(geometry: dict[str, Any]) -> Point | None:
     if not geometry or "x" not in geometry or "y" not in geometry:
         return None
     return Point(float(geometry["x"]), float(geometry["y"]))
 
-
-def esri_polyline_to_geom(geometry: Dict[str, Any]) -> Optional[Any]:
+def esri_polyline_to_geom(geometry: dict[str, Any]) -> Any | None:
     if not geometry or "paths" not in geometry:
         return None
     lines = []
@@ -140,8 +130,7 @@ def esri_polyline_to_geom(geometry: Dict[str, Any]) -> Optional[Any]:
         return lines[0]
     return MultiLineString(lines)
 
-
-def esri_polygon_to_geom(geometry: Dict[str, Any]) -> Optional[Any]:
+def esri_polygon_to_geom(geometry: dict[str, Any]) -> Any | None:
     if not geometry or "rings" not in geometry:
         return None
     polygons = []
@@ -155,8 +144,7 @@ def esri_polygon_to_geom(geometry: Dict[str, Any]) -> Optional[Any]:
         return polygons[0]
     return MultiPolygon(polygons)
 
-
-def esri_geometry_to_shape(geometry: Optional[Dict[str, Any]]) -> Optional[Any]:
+def esri_geometry_to_shape(geometry: dict[str, Any] | None) -> Any | None:
     if not geometry:
         return None
     if "x" in geometry and "y" in geometry:
@@ -167,11 +155,10 @@ def esri_geometry_to_shape(geometry: Optional[Dict[str, Any]]) -> Optional[Any]:
         return esri_polygon_to_geom(geometry)
     try:
         return shape(geometry)
-    except Exception:
+    except (AttributeError, TypeError, ValueError):
         return None
 
-
-def features_to_geodataframe(features: List[Dict[str, Any]], meta: Dict[str, Any]) -> gpd.GeoDataFrame:
+def features_to_geodataframe(features: list[dict[str, Any]], meta: dict[str, Any]) -> gpd.GeoDataFrame:
     """Convert ArcGIS feature JSON into a GeoDataFrame using the layer native CRS."""
     rows = []
     for feature in features:
@@ -181,8 +168,7 @@ def features_to_geodataframe(features: List[Dict[str, Any]], meta: Dict[str, Any
     crs = crs_from_metadata(meta)
     return gpd.GeoDataFrame(rows, geometry="geometry", crs=crs)
 
-
-def fetch_objectid_batch(layer_url: str, object_id_batch: Sequence[int], meta: Dict[str, Any], out_fields: str, token: Optional[str], batch_number: int, batch_total: int) -> List[Dict[str, Any]]:
+def fetch_objectid_batch(layer_url: str, object_id_batch: Sequence[int], meta: dict[str, Any], out_fields: str, token: str | None, batch_number: int, batch_total: int) -> list[dict[str, Any]]:
     """Download a specific OBJECTID batch. The ids come from query_object_ids for the same WHERE clause."""
     session = make_session(token)
     params = {
@@ -195,15 +181,14 @@ def fetch_objectid_batch(layer_url: str, object_id_batch: Sequence[int], meta: D
     data = request_json(session, _query_url(layer_url), params, post=True)
     return data.get("features") or []
 
-
 def query_layer_to_geodataframe(
     layer_url: str,
     where: str = "1=1",
     out_fields: str = "*",
-    token: Optional[str] = None,
+    token: str | None = None,
     objectid_batch_size: int = DEFAULT_OBJECTID_BATCH_SIZE,
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
-    order_by_fields: Optional[str] = None,
+    order_by_fields: str | None = None,
 ) -> gpd.GeoDataFrame:
     """Fast ArcGIS REST query that returns a GeoDataFrame.
 
@@ -217,7 +202,7 @@ def query_layer_to_geodataframe(
         return features_to_geodataframe([], meta)
     batches = list(chunk_list(object_ids, objectid_batch_size))
     token_value = getattr(session, "_arcgis_access_token", None)
-    features: List[Dict[str, Any]] = []
+    features: list[dict[str, Any]] = []
     max_workers = max(1, min(int(workers), len(batches)))
     if max_workers == 1:
         for batch_number, batch in enumerate(batches, start=1):
@@ -233,14 +218,13 @@ def query_layer_to_geodataframe(
         gdf = gdf.sort_values(object_id_field).reset_index(drop=True)
     return gdf
 
-
 def export_layer_to_geopackage(
     layer_url: str,
     output_gpkg: str | Path,
     layer_name: str = "arcgis_export",
     where: str = "1=1",
     out_fields: str = "*",
-    token: Optional[str] = None,
+    token: str | None = None,
     objectid_batch_size: int = DEFAULT_OBJECTID_BATCH_SIZE,
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
 ) -> gpd.GeoDataFrame:

@@ -47,7 +47,6 @@ CURATED_FIELDS = [
     "PressureSubnetworkName", "SystemSubnetworkName",
 ]
 
-
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -68,7 +67,6 @@ def parse_args(argv=None):
                         help="ObjectIDs per query. Default: 500.")
     return parser.parse_args(argv)
 
-
 def validate_since(value):
     try:
         datetime.strptime(value, "%Y-%m-%d")  # noqa: DTZ007 - a date, not an instant
@@ -76,17 +74,13 @@ def validate_since(value):
         fail(f"--since must be YYYY-MM-DD, got {value!r}")
     return value
 
-
 # --- Layer metadata ---------------------------------------------------------
-
 
 def layer_metadata(session, layer_url):
     return auth.request_json(session, layer_url.rstrip("/"), {"f": "json"})
 
-
 def field_names(metadata):
     return [f.get("name") for f in metadata.get("fields") or [] if f.get("name")]
-
 
 def date_field_names(metadata):
     """Field names the layer reports as dates, so their epoch values get
@@ -96,7 +90,6 @@ def date_field_names(metadata):
         if f.get("name") and str(f.get("type") or "").lower() == "esrifieldtypedate"
     }
 
-
 def first_present(available, preferred):
     """Return the first preferred name the layer actually has, case-insensitively."""
     lookup = {str(name).lower(): name for name in available}
@@ -104,7 +97,6 @@ def first_present(available, preferred):
         if name.lower() in lookup:
             return lookup[name.lower()]
     return None
-
 
 def resolve_date_fields(metadata):
     """Find the install and creation date fields this layer really has.
@@ -129,9 +121,7 @@ def resolve_date_fields(metadata):
         warn(f"No creation date field; filtering on {install} alone.")
     return install, creation
 
-
 # --- Selecting rows ---------------------------------------------------------
-
 
 def where_variants(install_field, creation_field, since_date):
     """WHERE clauses to try, most portable first.
@@ -144,13 +134,11 @@ def where_variants(install_field, creation_field, since_date):
     for literal in (f"TIMESTAMP '{since_date} 00:00:00'", f"DATE '{since_date}'"):
         yield " OR ".join(f"{field} >= {literal}" for field in fields)
 
-
 def count_matching(session, layer_url, where):
     data = auth.request_json(session, f"{layer_url.rstrip('/')}/query", {
         "where": where, "returnCountOnly": "true",
     })
     return int(data.get("count") or 0)
-
 
 def choose_where(session, layer_url, install_field, creation_field, since_date):
     """Pick a WHERE clause the server accepts, preferring one that matches rows.
@@ -181,7 +169,6 @@ def choose_where(session, layer_url, install_field, creation_field, since_date):
     fail("No supported date WHERE syntax worked against the layer.")
     return None, 0  # unreachable; fail() raises
 
-
 def object_ids_matching(session, layer_url, where):
     data = auth.request_json(session, f"{layer_url.rstrip('/')}/query", {
         "where": where, "returnIdsOnly": "true",
@@ -190,9 +177,7 @@ def object_ids_matching(session, layer_url, where):
     log(f"ObjectIDs returned: {len(ids):,}")
     return ids
 
-
 # --- Fetching ---------------------------------------------------------------
-
 
 def resolve_out_fields(metadata, curated):
     """Which fields to request. Curated names are checked against the layer,
@@ -210,12 +195,9 @@ def resolve_out_fields(metadata, curated):
     log(f"Requesting {len(resolved)} curated fields.")
     return ",".join(resolved)
 
-
 def chunked(values, size):
     for index in range(0, len(values), size):
         yield values[index:index + size]
-
-
 
 def post_query_json(session, query_url, params):
     """POST to ArcGIS /query so large requests do not become huge URLs."""
@@ -233,7 +215,6 @@ def post_query_json(session, query_url, params):
     if "error" in data:
         raise RuntimeError(json.dumps(data["error"], indent=2))
     return data
-
 
 def fetch_features_by_where(session, layer_url, where, out_fields, page_size, with_geometry, expected_count):
     """Fetch features directly from the same WHERE clause using server pagination."""
@@ -281,9 +262,7 @@ def fetch_features(session, layer_url, object_ids, out_fields, chunk_size, with_
         warn(f"Requested {total:,} features but received {len(features):,}.")
     return features
 
-
 # --- Writing ----------------------------------------------------------------
-
 
 def epoch_ms_to_iso(value):
     """ArcGIS dates arrive as epoch milliseconds."""
@@ -294,14 +273,12 @@ def epoch_ms_to_iso(value):
     except (TypeError, ValueError, OverflowError, OSError):
         return value
 
-
 def normalize_attributes(attributes, date_fields):
     lowered = {str(name).lower() for name in date_fields}
     return {
         key: (epoch_ms_to_iso(value) if str(key).lower() in lowered else value)
         for key, value in (attributes or {}).items()
     }
-
 
 def column_order(features):
     """Union of attribute names, in the order first seen."""
@@ -312,7 +289,6 @@ def column_order(features):
                 ordered.append(key)
     return ordered
 
-
 def write_csv(features, path, date_fields):
     columns = column_order(features)
     with open(path, "w", newline="", encoding="utf-8-sig") as handle:
@@ -322,7 +298,6 @@ def write_csv(features, path, date_fields):
             writer.writerow(normalize_attributes(feature.get("attributes"), date_fields))
     log(f"Wrote {len(features):,} rows: {path}")
 
-
 def paths_to_geojson_geometry(geometry):
     paths = (geometry or {}).get("paths") or []
     if not paths:
@@ -330,7 +305,6 @@ def paths_to_geojson_geometry(geometry):
     if len(paths) == 1:
         return {"type": "LineString", "coordinates": paths[0]}
     return {"type": "MultiLineString", "coordinates": paths}
-
 
 def write_geojson(features, path, date_fields):
     written = []
@@ -352,9 +326,7 @@ def write_geojson(features, path, date_fields):
         warn(f"{skipped:,} features had no line geometry and are not in the GeoJSON.")
     log(f"Wrote {len(written):,} features: {path}")
 
-
 # --- Entry point ------------------------------------------------------------
-
 
 def main(argv=None):
     args = parse_args(argv)
@@ -399,7 +371,6 @@ def main(argv=None):
 
     log(f"Done. {len(features):,} features exported.")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

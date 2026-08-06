@@ -11,8 +11,7 @@ SRC = REPO_ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from arcgis_rest_geopandas import export_layer_to_geopackage
-
+from arcgis_rest_geopandas import export_layer_to_geopackage  # noqa: E402
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fast ArcGIS REST export to GeoPackage using GeoPandas.")
@@ -39,7 +38,6 @@ def main() -> int:
     print(f"Exported {len(gdf):,} features to {args.out_gpkg} layer {args.layer_name}", flush=True)
     print(f"CRS: {gdf.crs}", flush=True)
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
