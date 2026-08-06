@@ -303,12 +303,9 @@ def fetch_objectid_batch(
     out_fields: str,
     token: str | None,
 ) -> list[dict[str, Any]]:
-    """Download a specific OBJECTID batch. The ids come from query_object_ids for the same WHERE clause."""
+    """Download a specific OBJECTID batch using the already-resolved token."""
     if not token:
-        raise RuntimeError(
-            "Feature batch request has no ArcGIS token. The main runner resolved a token, "
-            "but it was not passed into fetch_objectid_batch."
-        )
+        raise RuntimeError("Feature batch request has no ArcGIS token passed from query_layer_to_geodataframe.")
     session = make_session(token)
     params = {
         "objectIds": ",".join(str(object_id) for object_id in object_id_batch),
@@ -324,8 +321,7 @@ def fetch_objectid_batch(
         last_id = object_id_batch[-1] if object_id_batch else None
         raise RuntimeError(
             f"Feature batch failed for OBJECTID range {first_id}..{last_id} "
-            f"({len(object_id_batch)} ids). Secured service still returned auth failure after retries. "
-            f"Keep WORKERS=1 or rerun after a fresh portal token. Details: {exc}"
+            f"({len(object_id_batch)} ids): {exc}"
         ) from exc
     return data.get("features") or []
 
@@ -338,58 +334,50 @@ def query_layer_to_geodataframe(
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
     order_by_fields: str | None = None,
 ) -> gpd.GeoDataFrame:
+    """Fast ArcGIS REST query that returns a GeoDataFrame."""
     progress(f"Querying layer to GeoDataFrame: {layer_url}")
-    """Fast ArcGIS REST query that returns a GeoDataFrame.
-
-    This avoids offset pagination and avoids pulling OBJECTIDs from a different request scope.
-    The WHERE clause used to request OBJECTIDs is the same WHERE clause that defines the download set.
-    """
     session = make_session(token)
     meta = layer_metadata(session, layer_url)
     object_ids = query_object_ids(
-        session, layer_url, where, order_by_fields=order_by_fields
+        session=session,
+        layer_url=layer_url,
+        where=where,
+        order_by_fields=order_by_fields,
     )
     if not object_ids:
+        progress("No object IDs returned for this query.")
         return features_to_geodataframe([], meta)
-    batches = list(chunk_list(object_ids, objectid_batch_size))
-    token_value = getattr(session, "_arcgis_access_token", None)
+    object_id_batches = list(chunked(object_ids, objectid_batch_size))
+    progress(
+        f"Downloading {len(object_ids):,} objects in {len(object_id_batches):,} "
+        f"feature requests with {workers:,} workers"
+    )
     features: list[dict[str, Any]] = []
-    max_workers = max(1, min(int(workers), len(batches)))
-    if max_workers == 1:
-        for batch_number, batch in enumerate(batches, start=1):
+    if workers <= 1:
+        for object_id_batch in object_id_batches:
             features.extend(
                 fetch_objectid_batch(
-                    layer_url,
-                    batch,
-                    meta,
-                    out_fields,
-                    token_value,
-                    batch_number,
-                    len(batches),
+                    layer_url=layer_url,
+                    object_id_batch=object_id_batch,
+                    out_fields=out_fields,
+                    token=token,
                 )
             )
     else:
-        with futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_list = [
+        with futures.ThreadPoolExecutor(max_workers=workers) as executor:
+            future_to_batch = {
                 executor.submit(
                     fetch_objectid_batch,
-                    layer_url,
-                    batch,
-                    meta,
-                    out_fields,
-                    token_value,
-                    index,
-                    len(batches),
-                )
-                for index, batch in enumerate(batches, start=1)
-            ]
-            for future in futures.as_completed(future_list):
+                    layer_url=layer_url,
+                    object_id_batch=object_id_batch,
+                    out_fields=out_fields,
+                    token=token,
+                ): object_id_batch
+                for object_id_batch in object_id_batches
+            }
+            for future in futures.as_completed(future_to_batch):
                 features.extend(future.result())
-    gdf = features_to_geodataframe(features, meta)
-    object_id_field = meta.get("object_id_field")
-    if object_id_field and object_id_field in gdf.columns:
-        gdf = gdf.sort_values(object_id_field).reset_index(drop=True)
-    return gdf
+    return features_to_geodataframe(features, meta)
 
 def export_layer_to_geopackage(
     layer_url: str,
