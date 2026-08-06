@@ -9,17 +9,9 @@ SRC = REPO_ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-def configure_enterprise_ssl() -> None:
-    try:
-        import truststore
-    except ImportError:
-        return
-    try:
-        truststore.inject_into_ssl()
-    except (OSError, RuntimeError, ValueError) as exc:
-        print(f"WARNING: Could not enable Windows trust store: {exc}")
+from enterprise_network import configure_enterprise_network
 
-configure_enterprise_ssl()
+configure_enterprise_network()
 import auth
 from arcgis_rest_geopandas import export_layer_to_geopackage
 
