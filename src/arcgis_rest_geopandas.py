@@ -86,7 +86,7 @@ def make_session(token: str | None = None) -> requests.Session:
     session = requests.Session()
     session.headers.update({"User-Agent": "Estimate_GIS/1.0"})
     if token:
-        session.arcgis_token = token
+        setattr(session, "arcgis_token", token)
     return session
 
 def _with_token(session: requests.Session, params: dict[str, Any] | None = None) -> dict[str, Any]:
