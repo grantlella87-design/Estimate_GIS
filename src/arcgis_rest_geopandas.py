@@ -212,6 +212,13 @@ def chunk_list(values: Sequence[Any], chunk_size: int) -> Iterable[Sequence[Any]
     for index in range(0, len(values), chunk_size):
         yield values[index : index + chunk_size]
 
+def chunked(values: Sequence[int], chunk_size: int) -> Iterable[Sequence[int]]:
+    """Yield object IDs in ArcGIS query-sized batches."""
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be greater than zero")
+    for index in range(0, len(values), chunk_size):
+        yield values[index : index + chunk_size]
+
 def query_count(session: requests.Session, layer_url: str, where: str) -> int | None:
     data = request_json(
         session, _query_url(layer_url), {"where": where, "returnCountOnly": "true"}
