@@ -7,6 +7,37 @@ from concurrent import futures
 from pathlib import Path
 from typing import Any
 
+PROGRESS_ENABLED = os.environ.get("ESTIMATE_GIS_PROGRESS", "1").lower() not in {"0", "false", "no"}
+
+def progress(message: str) -> None:
+    if PROGRESS_ENABLED:
+        print(f"[Estimate_GIS] {message}", flush=True)
+
+def progress_request(url: str, params: dict[str, object]) -> None:
+    if not PROGRESS_ENABLED:
+        return
+    interesting = [
+        "f",
+        "where",
+        "returnIdsOnly",
+        "returnCountOnly",
+        "objectIds",
+        "resultOffset",
+        "resultRecordCount",
+        "outFields",
+    ]
+    preview: dict[str, object] = {}
+    for key in interesting:
+        if key in params:
+            value = params[key]
+            if key == "objectIds":
+                text_value = str(value)
+                oid_count = len([item for item in text_value.split(",") if item])
+                preview[key] = f"{oid_count} ids"
+            else:
+                preview[key] = value
+    progress(f"GET {url} params={preview}")
+
 def configure_enterprise_ssl() -> None:
     """Use the Windows trust store for corporate TLS interception certificates."""
     try:
@@ -41,6 +72,7 @@ DEFAULT_OBJECTID_BATCH_SIZE = int(
 DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "8"))
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
 VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "true").strip().lower() not in {
+
     "0",
     "false",
     "no",
@@ -77,6 +109,7 @@ def request_json(
     post: bool = False,
     timeout: int = DEFAULT_TIMEOUT_SECONDS,
 ) -> dict[str, Any]:
+    progress_request(url, request_params)
     """Request ArcGIS JSON and raise a useful exception for service-side errors."""
     request_params = _with_token(session, params)
     if post:
@@ -257,6 +290,7 @@ def query_layer_to_geodataframe(
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
     order_by_fields: str | None = None,
 ) -> gpd.GeoDataFrame:
+    progress(f"Querying layer to GeoDataFrame: {layer_url}")
     """Fast ArcGIS REST query that returns a GeoDataFrame.
 
     This avoids offset pagination and avoids pulling OBJECTIDs from a different request scope.
@@ -319,6 +353,7 @@ def export_layer_to_geopackage(
     objectid_batch_size: int = DEFAULT_OBJECTID_BATCH_SIZE,
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
 ) -> gpd.GeoDataFrame:
+    progress(f"Starting export: layer_url={layer_url}, output_gpkg={output_gpkg}, layer_name={layer_name}, where={where}")
     """Query an ArcGIS layer to GeoPandas and write it to a GeoPackage layer."""
     output_path = Path(output_gpkg)
     output_path.parent.mkdir(parents=True, exist_ok=True)

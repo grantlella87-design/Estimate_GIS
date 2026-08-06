@@ -245,6 +245,7 @@ def call_exporter() -> object:
     return export_layer_to_geopackage(**supported_kwargs)
 
 def main() -> int:
+    os.environ.setdefault("ESTIMATE_GIS_PROGRESS", "1")
     if not LAYER_URL.strip():
         print("Set LAYER_URL at the top of main.py before running.")
         return 2
