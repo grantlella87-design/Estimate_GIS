@@ -56,6 +56,8 @@ def progress_response(params: dict[str, object], data: dict[str, object]) -> Non
     global PROGRESS_TOTAL_OBJECTS, PROGRESS_TOTAL_BATCHES, PROGRESS_COMPLETED_BATCHES
     if not PROGRESS_ENABLED:
         return
+    if isinstance(data, dict) and data.get("error"):
+        return
     if _truthy(params.get("returnIdsOnly")):
         object_ids = data.get("objectIds") or []
         PROGRESS_TOTAL_OBJECTS = len(object_ids) if isinstance(object_ids, list) else 0
@@ -107,27 +109,46 @@ def request_json(
     session: requests.Session,
     url: str,
     params: dict[str, Any] | None = None,
-    *,
-    post: bool = False,
     timeout: int = DEFAULT_TIMEOUT_SECONDS,
+    post: bool = False,
 ) -> dict[str, Any]:
-    """Request ArcGIS JSON and raise a useful exception for service-side errors."""
+    """Request ArcGIS JSON and retry transient Token Required responses."""
     request_params = _with_token(session, params)
     progress_request(url, request_params)
-    if post:
-        response = session.post(
-            url, data=request_params, timeout=timeout, verify=VERIFY_SSL
-        )
-    else:
-        response = session.get(
-            url, params=request_params, timeout=timeout, verify=VERIFY_SSL
-        )
-    response.raise_for_status()
-    data = response.json()
-    progress_response(request_params, data)
-    if isinstance(data, dict) and data.get("error"):
-        raise RuntimeError(json.dumps(data["error"], indent=2))
-    return data
+    attempts = int(os.environ.get("ESTIMATE_GIS_REQUEST_RETRIES", "3"))
+    last_error: dict[str, Any] | None = None
+    for attempt in range(1, attempts + 1):
+        if post:
+            response = session.post(
+                url,
+                data=request_params,
+                timeout=timeout,
+                verify=VERIFY_SSL,
+            )
+        else:
+            response = session.get(
+                url,
+                params=request_params,
+                timeout=timeout,
+                verify=VERIFY_SSL,
+            )
+        response.raise_for_status()
+        data = response.json()
+        error = data.get("error") if isinstance(data, dict) else None
+        if not error:
+            progress_response(request_params, data)
+            return data
+        last_error = error
+        code = error.get("code")
+        message = error.get("message", "")
+        if code in {498, 499} and attempt < attempts:
+            progress(
+                f"ArcGIS token/auth response on attempt {attempt}/{attempts}: "
+                f"code={code}, message={message}. Retrying same request."
+            )
+            continue
+        break
+    raise RuntimeError(json.dumps(last_error, indent=2))
 
 def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
     """Read layer metadata needed for fast REST querying and GeoDataFrame CRS assignment."""
@@ -281,7 +302,15 @@ def fetch_objectid_batch(
         "returnZ": "false",
         "returnM": "false",
     }
-    data = request_json(session, _query_url(layer_url), params, post=True)
+    try:
+        data = request_json(session, _query_url(layer_url), params, post=True)
+    except RuntimeError as exc:
+        first_id = object_id_batch[0] if object_id_batch else None
+        last_id = object_id_batch[-1] if object_id_batch else None
+        raise RuntimeError(
+            f"Feature batch failed for OBJECTID range {first_id}..{last_id} "
+            f"({len(object_id_batch)} ids): {exc}"
+        ) from exc
     return data.get("features") or []
 
 def query_layer_to_geodataframe(
