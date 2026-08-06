@@ -19,5 +19,6 @@ Important source folders intentionally kept:
 - `docs/`
 - `.git/`
 
-The bootstrap entry point is `bootstrap_estimate_gis.py`.
+The bootstrap entry point is `scripts/bootstrap_estimate_gis.py`.
 The Zscaler helper is `scripts/network/set_zscaler_proxy_environment.py`.
+

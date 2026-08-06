@@ -1,4 +1,4 @@
-"""
+﻿"""
 Bootstrap Estimate_GIS for VS Code.
 
 What it does:
@@ -193,7 +193,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path.cwd().resolve()
+    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[1]
     requirements_path = (repo_root / args.requirements).resolve()
     log(f"RepoRoot={repo_root}")
     log(f"Requirements={requirements_path}")
@@ -217,3 +217,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

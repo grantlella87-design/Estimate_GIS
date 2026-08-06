@@ -1,4 +1,4 @@
-
+﻿
 from __future__ import annotations
 
 import argparse
@@ -11,7 +11,7 @@ SRC = REPO_ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from estimate_gis.arcgis_rest_geopandas import export_layer_to_geopackage
+from arcgis_rest_geopandas import export_layer_to_geopackage
 
 
 def main() -> int:
@@ -43,3 +43,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
