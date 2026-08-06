@@ -24,7 +24,7 @@ from shapely.geometry import (
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
 DEFAULT_REQUEST_PAGE_SIZE = int(os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000"))
 DEFAULT_OBJECTID_BATCH_SIZE = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "2000"))
-DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "1"))
+DEFAULT_DOWNLOAD_WORKERS = int(os.environ.get("ESTIMATE_GIS_DOWNLOAD_WORKERS", "8"))
 VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "1").lower() not in {"0", "false", "no"}
 
 PROGRESS_ENABLED = os.environ.get("ESTIMATE_GIS_PROGRESS", "1").lower() not in {"0", "false", "no"}
@@ -106,6 +106,14 @@ def _query_url(layer_url: str) -> str:
         return layer_url
     return f"{layer_url}/query"
 
+def _post_query_params(request_params: dict[str, Any]) -> dict[str, Any]:
+    """Keep token/f in the URL query for ArcGIS Server POST feature requests."""
+    post_params: dict[str, Any] = {"f": request_params.get("f", "json")}
+    token = request_params.get("token")
+    if token:
+        post_params["token"] = token
+    return post_params
+
 def request_json(
     session: requests.Session,
     url: str,
@@ -122,6 +130,7 @@ def request_json(
         if post:
             response = session.post(
                 url,
+                params=_post_query_params(request_params),
                 data=request_params,
                 timeout=timeout,
                 verify=VERIFY_SSL,
@@ -145,7 +154,7 @@ def request_json(
         if code in {498, 499} and attempt < attempts:
             if attempt == 1:
                 progress(
-                    f"ArcGIS auth retry needed for request. code={code}, message={message}. "
+                    f"ArcGIS auth retry needed for POST request. code={code}, message={message}. "
                     f"Retrying up to {attempts} attempts."
                 )
             time.sleep(min(2 * attempt, 8))
