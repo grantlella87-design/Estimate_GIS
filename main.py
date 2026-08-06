@@ -5,10 +5,23 @@ import os
 import sys
 from pathlib import Path
 
+def configure_enterprise_ssl() -> None:
+    """Use the Windows trust store for corporate TLS interception certificates."""
+    try:
+        import truststore
+    except ImportError:
+        return
+    try:
+        truststore.inject_into_ssl()
+    except (OSError, RuntimeError, ValueError) as exc:
+        print(f"WARNING: Could not enable Windows trust store: {exc}")
+
 REPO_ROOT = Path(__file__).resolve().parent
 SRC = REPO_ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
+
+configure_enterprise_ssl()
 
 from arcgis_rest_geopandas import export_layer_to_geopackage
 

@@ -7,6 +7,19 @@ from concurrent import futures
 from pathlib import Path
 from typing import Any
 
+def configure_enterprise_ssl() -> None:
+    """Use the Windows trust store for corporate TLS interception certificates."""
+    try:
+        import truststore
+    except ImportError:
+        return
+    try:
+        truststore.inject_into_ssl()
+    except (OSError, RuntimeError, ValueError):
+        return
+
+configure_enterprise_ssl()
+
 import geopandas as gpd
 import requests
 from pyproj import CRS
@@ -33,7 +46,6 @@ VERIFY_SSL = os.environ.get("ESTIMATE_GIS_VERIFY_SSL", "true").strip().lower() n
     "no",
 }
 
-
 def make_session(token: str | None = None) -> requests.Session:
     """Create a requests session and attach an ArcGIS token if one is supplied."""
     session = requests.Session()
@@ -44,10 +56,8 @@ def make_session(token: str | None = None) -> requests.Session:
     )
     return session
 
-
 def _query_url(layer_url: str) -> str:
     return layer_url.rstrip("/") + "/query"
-
 
 def _with_token(
     session: requests.Session, params: dict[str, Any] | None
@@ -58,7 +68,6 @@ def _with_token(
     if token and "token" not in request_params:
         request_params["token"] = token
     return request_params
-
 
 def request_json(
     session: requests.Session,
@@ -83,7 +92,6 @@ def request_json(
     if isinstance(data, dict) and data.get("error"):
         raise RuntimeError(json.dumps(data["error"], indent=2))
     return data
-
 
 def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
     """Read layer metadata needed for fast REST querying and GeoDataFrame CRS assignment."""
@@ -120,7 +128,6 @@ def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
         "name": data.get("name"),
     }
 
-
 def crs_from_metadata(meta: dict[str, Any]) -> CRS | None:
     """Build CRS from service metadata without forcing EPSG:2249 or another default."""
     sr = meta.get("spatial_reference") or {}
@@ -131,11 +138,9 @@ def crs_from_metadata(meta: dict[str, Any]) -> CRS | None:
         return CRS.from_epsg(int(wkid))
     return None
 
-
 def chunk_list(values: Sequence[Any], chunk_size: int) -> Iterable[Sequence[Any]]:
     for index in range(0, len(values), chunk_size):
         yield values[index : index + chunk_size]
-
 
 def query_count(session: requests.Session, layer_url: str, where: str) -> int | None:
     data = request_json(
@@ -143,7 +148,6 @@ def query_count(session: requests.Session, layer_url: str, where: str) -> int | 
     )
     count = data.get("count")
     return int(count) if count is not None else None
-
 
 def query_object_ids(
     session: requests.Session,
@@ -160,12 +164,10 @@ def query_object_ids(
     object_ids = data.get("objectIds") or []
     return [int(object_id) for object_id in object_ids]
 
-
 def esri_point_to_geom(geometry: dict[str, Any]) -> Point | None:
     if not geometry or "x" not in geometry or "y" not in geometry:
         return None
     return Point(float(geometry["x"]), float(geometry["y"]))
-
 
 def esri_polyline_to_geom(geometry: dict[str, Any]) -> Any | None:
     if not geometry or "paths" not in geometry:
@@ -183,7 +185,6 @@ def esri_polyline_to_geom(geometry: dict[str, Any]) -> Any | None:
         return lines[0]
     return MultiLineString(lines)
 
-
 def esri_polygon_to_geom(geometry: dict[str, Any]) -> Any | None:
     if not geometry or "rings" not in geometry:
         return None
@@ -200,7 +201,6 @@ def esri_polygon_to_geom(geometry: dict[str, Any]) -> Any | None:
         return polygons[0]
     return MultiPolygon(polygons)
 
-
 def esri_geometry_to_shape(geometry: dict[str, Any] | None) -> Any | None:
     if not geometry:
         return None
@@ -215,7 +215,6 @@ def esri_geometry_to_shape(geometry: dict[str, Any] | None) -> Any | None:
     except (AttributeError, TypeError, ValueError):
         return None
 
-
 def features_to_geodataframe(
     features: list[dict[str, Any]], meta: dict[str, Any]
 ) -> gpd.GeoDataFrame:
@@ -227,7 +226,6 @@ def features_to_geodataframe(
         rows.append(attributes)
     crs = crs_from_metadata(meta)
     return gpd.GeoDataFrame(rows, geometry="geometry", crs=crs)
-
 
 def fetch_objectid_batch(
     layer_url: str,
@@ -249,7 +247,6 @@ def fetch_objectid_batch(
     }
     data = request_json(session, _query_url(layer_url), params, post=True)
     return data.get("features") or []
-
 
 def query_layer_to_geodataframe(
     layer_url: str,
@@ -311,7 +308,6 @@ def query_layer_to_geodataframe(
     if object_id_field and object_id_field in gdf.columns:
         gdf = gdf.sort_values(object_id_field).reset_index(drop=True)
     return gdf
-
 
 def export_layer_to_geopackage(
     layer_url: str,
