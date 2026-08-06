@@ -300,11 +300,8 @@ def features_to_geodataframe(
 def fetch_objectid_batch(
     layer_url: str,
     object_id_batch: Sequence[int],
-    meta: dict[str, Any],
     out_fields: str,
     token: str | None,
-    batch_number: int,
-    batch_total: int,
 ) -> list[dict[str, Any]]:
     """Download a specific OBJECTID batch. The ids come from query_object_ids for the same WHERE clause."""
     if not token:
