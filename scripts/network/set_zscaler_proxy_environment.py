@@ -6,13 +6,15 @@ Use --scope user or --scope both to persist Windows user variables for new termi
 Use --print-powershell to print commands for the current PowerShell session.
 """
 from __future__ import annotations
+
 import argparse
 import os
 import subprocess
 import sys
+import urllib.error
 import urllib.request
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 
 DEFAULT_PROXY_URL = "http://zscaler.nationalgrid.com:80"
 PRIMARY_ZSCALER_CHECK_URL = "http://ip.zscaler.com"
@@ -51,7 +53,7 @@ def check_url(url: str, proxy_url: str, use_explicit_proxy: bool, timeout_second
             lower = content.lower()
             looks_active = any(marker in lower for marker in ZSCALER_MARKERS)
             return CheckResult(url, use_explicit_proxy, True, int(response.status), looks_active, first_lines(content), "")
-    except Exception as exc:
+    except (OSError, TimeoutError, urllib.error.URLError) as exc:
         return CheckResult(url, use_explicit_proxy, False, None, False, "", str(exc))
 
 def print_check_result(result: CheckResult) -> None:
@@ -128,13 +130,13 @@ def broadcast_environment_change() -> None:
         result = ctypes.c_ulong()
         ctypes.windll.user32.SendMessageTimeoutW(hwnd_broadcast, wm_settingchange, 0, "Environment", smto_abortifhung, 5000, ctypes.byref(result))
         log("Broadcasted Windows Environment setting change.")
-    except Exception as exc:
+    except (AttributeError, OSError) as exc:
         log(f"WARNING: Could not broadcast environment change: {exc}")
 
 def run_command(args: Iterable[str], allow_failure: bool = False) -> int:
     command = list(args)
     log(" ".join(command))
-    completed = subprocess.run(command, text=True, capture_output=True)
+    completed = subprocess.run(command, text=True, capture_output=True, check=False)
     if completed.stdout:
         log(completed.stdout.rstrip())
     if completed.stderr:
@@ -167,8 +169,8 @@ def copy_log_to_clipboard(text: str) -> None:
         return
     try:
         subprocess.run(["clip"], input=text, text=True, check=False)
-    except Exception:
-        pass
+    except OSError as exc:
+        log(f"WARNING: Could not copy log to clipboard: {exc}")
 
 def apply_proxy(scope: str, proxy_url: str, set_git: bool) -> None:
     if scope in {"process", "both"}:
@@ -229,7 +231,7 @@ def main() -> int:
         log(f"HTTP_PROXY={os.environ.get('HTTP_PROXY', '')}")
         log(f"HTTPS_PROXY={os.environ.get('HTTPS_PROXY', '')}")
         return 0
-    except Exception as exc:
+    except (OSError, RuntimeError, ValueError, urllib.error.URLError, subprocess.SubprocessError) as exc:
         log(f"ERROR: {exc}")
         return 1
     finally:

@@ -11,11 +11,12 @@ What it does:
 - Writes .env for Python/debugger environment loading.
 """
 from __future__ import annotations
+
 import argparse
 import json
 import os
 import subprocess
-import sys
+import urllib.error
 import urllib.request
 import venv
 from pathlib import Path
@@ -38,7 +39,7 @@ def read_url(url: str, proxy_url: str | None, timeout: int) -> tuple[bool, str, 
         with opener.open(request, timeout=timeout) as response:
             text = response.read(50000).decode("utf-8", errors="replace")
             return True, text, ""
-    except Exception as exc:
+    except (OSError, TimeoutError, urllib.error.URLError) as exc:
         return False, "", str(exc)
 
 def looks_like_active_zscaler_page(text: str) -> bool:
@@ -62,9 +63,7 @@ def check_zscaler(proxy_url: str, timeout: int, trust_proxy_success: bool) -> bo
         log(f"{mode} check succeeded for {url}")
         if preview:
             log(preview)
-        if looks_like_active_zscaler_page(text):
-            active = True
-        elif proxy and trust_proxy_success:
+        if looks_like_active_zscaler_page(text) or (proxy and trust_proxy_success):
             active = True
     log(f"ZscalerActive={active}")
     return active
@@ -99,7 +98,7 @@ def create_venv(repo_root: Path, venv_dir: str) -> Path:
 
 def run_command(command: list[str], cwd: Path, env: dict[str, str]) -> None:
     log(" ".join(command))
-    completed = subprocess.run(command, cwd=str(cwd), env=env, text=True)
+    completed = subprocess.run(command, cwd=str(cwd), env=env, text=True, check=False)
     if completed.returncode != 0:
         raise RuntimeError(f"Command failed with exit code {completed.returncode}: {' '.join(command)}")
 
@@ -175,8 +174,8 @@ def set_git_proxy(repo_root: Path, proxy_url: str, zscaler_active: bool) -> None
         run_command(["git", "config", "http.proxy", proxy_url], repo_root, os.environ.copy())
         run_command(["git", "config", "https.proxy", proxy_url], repo_root, os.environ.copy())
     else:
-        subprocess.run(["git", "config", "--unset-all", "http.proxy"], cwd=str(repo_root), text=True, capture_output=True)
-        subprocess.run(["git", "config", "--unset-all", "https.proxy"], cwd=str(repo_root), text=True, capture_output=True)
+        subprocess.run(["git", "config", "--unset-all", "http.proxy"], cwd=str(repo_root), text=True, capture_output=True, check=False)
+        subprocess.run(["git", "config", "--unset-all", "https.proxy"], cwd=str(repo_root), text=True, capture_output=True, check=False)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Bootstrap Estimate_GIS Python, pip requirements, VS Code, and Zscaler proxy settings.")
