@@ -3,8 +3,13 @@ from __future__ import annotations
 import inspect
 import json
 import os
+import webbrowser
+import urllib.parse
+import threading
+import requests
 import sys
 from pathlib import Path
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 def configure_enterprise_ssl() -> None:
     """Use the Windows trust store for corporate TLS interception certificates."""
@@ -89,6 +94,88 @@ def call_auth_function(func: object) -> str | None:
             return None
     return extract_token(func(**kwargs))
 
+def capture_loopback_authorization_code(authorize_url: str, port: int = 8080) -> str:
+    result: dict[str, str] = {}
+
+    class CallbackHandler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:
+            parsed_url = urllib.parse.urlparse(self.path)
+            query = urllib.parse.parse_qs(parsed_url.query)
+            code = query.get("code", [""])[0]
+            error = query.get("error", [""])[0]
+            if code:
+                result["code"] = code
+            if error:
+                result["error"] = error
+            html = """
+<html>
+<head><title>ArcGIS OAuth Complete</title></head>
+<body>
+<p>ArcGIS sign-in complete. This tab can close.</p>
+<script>window.open('', '_self'); window.close();</script>
+</body>
+</html>
+""".strip().encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(html)))
+            self.end_headers()
+            self.wfile.write(html)
+
+        def log_message(self, format: str, *args: object) -> None:
+            return
+
+    server = HTTPServer(("localhost", port), CallbackHandler)
+    server.timeout = 300
+    thread = threading.Thread(target=server.handle_request, daemon=True)
+    thread.start()
+    print(f"Opening browser for ArcGIS sign-in on localhost:{port}...")
+    webbrowser.open(authorize_url)
+    thread.join(305)
+    server.server_close()
+    if result.get("error"):
+        raise RuntimeError(f"ArcGIS OAuth error: {result['error']}")
+    if not result.get("code"):
+        raise RuntimeError("ArcGIS OAuth did not return an authorization code.")
+    return result["code"]
+
+def interactive_loopback_access_token() -> str | None:
+    portal_url = os.environ.get("ARCGIS_PORTAL_URL", DEFAULT_PORTAL_URL).rstrip("/")
+    client_id = os.environ.get("ARCGIS_CLIENT_ID", DEFAULT_CLIENT_ID)
+    redirect_uri = os.environ.get("ARCGIS_REDIRECT_URI", DEFAULT_REDIRECT_URI)
+    authorize_params = {
+        "client_id": client_id,
+        "response_type": "code",
+        "redirect_uri": redirect_uri,
+        "expiration": "1440",
+    }
+    authorize_url = (
+        f"{portal_url}/sharing/rest/oauth2/authorize?"
+        + urllib.parse.urlencode(authorize_params)
+    )
+    code = capture_loopback_authorization_code(authorize_url, port=8080)
+    token_url = f"{portal_url}/sharing/rest/oauth2/token"
+    token_response = requests.post(
+        token_url,
+        data={
+            "f": "json",
+            "client_id": client_id,
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": redirect_uri,
+        },
+        timeout=60,
+    )
+    token_response.raise_for_status()
+    token_data = token_response.json()
+    if "error" in token_data:
+        raise RuntimeError(json.dumps(token_data["error"], indent=2))
+    token = token_data.get("access_token") or token_data.get("token")
+    if not token:
+        raise RuntimeError(f"ArcGIS token response did not include a token: {token_data}")
+    os.environ["ARCGIS_TOKEN"] = token
+    return token
+
 def resolve_token() -> str | None:
     env_names = [name for name in (TOKEN_ENV, "ARCGIS_TOKEN", "PORTAL_TOKEN", "GIS_TOKEN") if name]
     for name in env_names:
@@ -118,6 +205,14 @@ def resolve_token() -> str | None:
             if token:
                 print(f"Using token from auth.{function_name}()")
                 return token
+    try:
+        token = interactive_loopback_access_token()
+    except Exception as exc:
+        print(f"Interactive ArcGIS token flow failed: {exc}")
+        token = None
+    if token:
+        print("Using token from interactive OAuth loopback flow")
+        return token
     print("No ArcGIS token was resolved. Set ARCGIS_TOKEN or use auth.py interactive flow.")
     return None
 
