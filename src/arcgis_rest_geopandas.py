@@ -85,11 +85,12 @@ def progress_response(params: dict[str, object], data: dict[str, object]) -> Non
             progress(f"Feature batch {PROGRESS_COMPLETED_BATCHES:,}: {object_id_count:,} ids")
 
 def make_session(token: str | None = None) -> requests.Session:
-    """Create a requests session and attach an ArcGIS token for query params."""
+    """Create a requests session and attach an ArcGIS token for all requests."""
     session = requests.Session()
     session.headers.update({"User-Agent": "Estimate_GIS/1.0"})
     if token:
         setattr(session, "arcgis_token", token)
+        session.params.update({"token": token})
     return session
 
 def _with_token(session: requests.Session, params: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -106,10 +107,10 @@ def _query_url(layer_url: str) -> str:
         return layer_url
     return f"{layer_url}/query"
 
-def _post_query_params(request_params: dict[str, Any]) -> dict[str, Any]:
-    """Keep token/f in the URL query for ArcGIS Server POST feature requests."""
+def _post_query_params(session: requests.Session, request_params: dict[str, Any]) -> dict[str, Any]:
+    """Keep token/f in the URL query for secured ArcGIS Server POST feature requests."""
     post_params: dict[str, Any] = {"f": request_params.get("f", "json")}
-    token = request_params.get("token")
+    token = request_params.get("token") or getattr(session, "arcgis_token", None)
     if token:
         post_params["token"] = token
     return post_params
@@ -130,7 +131,7 @@ def request_json(
         if post:
             response = session.post(
                 url,
-                params=_post_query_params(request_params),
+                params=_post_query_params(session, request_params),
                 data=request_params,
                 timeout=timeout,
                 verify=VERIFY_SSL,
@@ -154,7 +155,7 @@ def request_json(
         if code in {498, 499} and attempt < attempts:
             if attempt == 1:
                 progress(
-                    f"ArcGIS auth retry needed for POST request. code={code}, message={message}. "
+                    f"ArcGIS Server rejected a secured POST feature request even though a cached token is present. code={code}, message={message}. "
                     f"Retrying up to {attempts} attempts."
                 )
             time.sleep(min(2 * attempt, 8))
@@ -306,6 +307,11 @@ def fetch_objectid_batch(
     batch_total: int,
 ) -> list[dict[str, Any]]:
     """Download a specific OBJECTID batch. The ids come from query_object_ids for the same WHERE clause."""
+    if not token:
+        raise RuntimeError(
+            "Feature batch request has no ArcGIS token. The main runner resolved a token, "
+            "but it was not passed into fetch_objectid_batch."
+        )
     session = make_session(token)
     params = {
         "objectIds": ",".join(str(object_id) for object_id in object_id_batch),

@@ -195,7 +195,7 @@ def resolve_token() -> str | None:
     cached_token = read_cached_token()
     if cached_token and validate_token(cached_token):
         os.environ["ARCGIS_TOKEN"] = cached_token
-        print("Using validated ArcGIS token from Windows keyring cache")
+        print("Using validated ArcGIS token from auth/keyring cache")
         return cached_token
     env_names = [name for name in (TOKEN_ENV, "ARCGIS_TOKEN", "PORTAL_TOKEN", "GIS_TOKEN") if name]
     for name in env_names:
