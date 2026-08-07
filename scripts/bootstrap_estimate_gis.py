@@ -1,4 +1,4 @@
-﻿"""
+"""
 Bootstrap Estimate_GIS for VS Code.
 
 What it does:
@@ -24,7 +24,7 @@ from typing import Any
 
 DEFAULT_PROXY_URL = "http://zscaler.nationalgrid.com:80"
 PRIMARY_ZSCALER_CHECK_URL = "http://ip.zscaler.com"
-LEGACY_FALLBACK_CHECK_URL = "http://ip.axaler.com"
+LEGACY_FALLBACK_CHECK_URL = ""
 PROXY_ENV_NAMES = ["HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"]
 POSITIVE_ZSCALER_MARKERS = ["zscaler cloud security", "zscaler", "zscloud", "gateway ip address", "proxy vip", "cloud security"]
 NEGATIVE_ZSCALER_MARKERS = ["didn't come from a zscaler ip", "did not come from a zscaler ip", "not going through the zscaler proxy", "not traversing a zscaler proxy"]
@@ -38,9 +38,9 @@ def read_url(url: str, proxy_url: str | None, timeout: int) -> tuple[bool, str, 
     try:
         with opener.open(request, timeout=timeout) as response:
             text = response.read(50000).decode("utf-8", errors="replace")
-            return True, text, ""
+            return True, text
     except (OSError, TimeoutError, urllib.error.URLError) as exc:
-        return False, "", str(exc)
+        return False, str(exc)
 
 def looks_like_active_zscaler_page(text: str) -> bool:
     lower = text.lower()
