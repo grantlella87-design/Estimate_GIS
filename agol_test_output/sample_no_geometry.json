@@ -1,0 +1,53 @@
+﻿{
+ "displayFieldName": "MapUnit",
+ "fieldAliases": {
+  "OBJECTID": "OBJECTID",
+  "MAPUNIT": "Map Unit"
+ },
+ "fields": [
+  {
+   "name": "OBJECTID",
+   "type": "esriFieldTypeOID",
+   "alias": "OBJECTID"
+  },
+  {
+   "name": "MAPUNIT",
+   "type": "esriFieldTypeString",
+   "alias": "Map Unit",
+   "length": 10
+  }
+ ],
+ "features": [
+  {
+   "attributes": {
+    "OBJECTID": 3667,
+    "MAPUNIT": "t"
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 3668,
+    "MAPUNIT": "t"
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 3669,
+    "MAPUNIT": "t"
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 6272,
+    "MAPUNIT": "sd-c"
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 24464,
+    "MAPUNIT": "t"
+   }
+  }
+ ],
+ "exceededTransferLimit": true
+}

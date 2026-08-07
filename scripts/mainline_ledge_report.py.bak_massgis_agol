@@ -296,23 +296,6 @@ def _load_agol_ledge(args, bounds, bounds_crs, cache_dir) -> tuple[gpd.GeoDataFr
     return gdf, "agol_250k", AGOL_LEDGE_DESCRIPTION
 
 
-def _bounds_for_public_arcgis_query(bounds, bounds_crs, ledge_source):
-    "Return EPSG-coded bounds for public MassGIS/ArcGIS Server URL queries."
-    if bounds is None or _source_requires_sign_in(ledge_source):
-        return bounds, bounds_crs
-    from pyproj import CRS, Transformer
-    from shapely.geometry import box
-    from shapely.ops import transform
-    source_crs = CRS.from_user_input(bounds_crs)
-    target_crs = CRS.from_epsg(26986)
-    if source_crs.to_epsg() == 26986:
-        return bounds, "EPSG:26986"
-    transformer = Transformer.from_crs(source_crs, target_crs, always_xy=True)
-    geom = transform(transformer.transform, box(*bounds))
-    query_bounds = tuple(float(v) for v in geom.bounds)
-    progress(f"Public ArcGIS bounds transformed to EPSG:26986: {query_bounds}")
-    return query_bounds, "EPSG:26986"
-
 def load_ledge(args, bounds, bounds_crs, sign_in: bool = True) -> tuple[gpd.GeoDataFrame, str, str]:
     "Load ledge polygons and describe where the definition came from."
     ledge_source = _clean_source_value(args.ledge)
@@ -336,14 +319,13 @@ def load_ledge(args, bounds, bounds_crs, sign_in: bool = True) -> tuple[gpd.GeoD
     if ledge_key in ("agol", "agol:250k", "agol250k"):
         return _load_agol_ledge(args, bounds, bounds_crs, cache_dir)
     source_sign_in = _source_requires_sign_in(ledge_source) if sign_in else False
-    query_bounds, query_bounds_crs = _bounds_for_public_arcgis_query(bounds, bounds_crs, ledge_source)
     progress(f"Loading ledge source: {ledge_source}")
     progress(f"Ledge source requires sign-in: {source_sign_in}")
     gdf = vector_source.read_source(
         ledge_source,
         layer=args.ledge_layer,
-        bounds=query_bounds,
-        bounds_crs=query_bounds_crs,
+        bounds=bounds,
+        bounds_crs=bounds_crs,
         workers=args.workers,
         batch_size=args.batch_size,
         sign_in=source_sign_in,
