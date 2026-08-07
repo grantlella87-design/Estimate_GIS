@@ -1,16 +1,17 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-  "python.analysis.extraPaths": [
-    "${workspaceFolder}/src"
-  ],
-  "python.analysis.stubPath": "${workspaceFolder}/typings",
-  "python.terminal.activateEnvironment": true,
-  "python.envFile": "${workspaceFolder}/.env",
-  "terminal.integrated.cwd": "${workspaceFolder}",
-  "terminal.integrated.splitCwd": "workspaceRoot",
-  "terminal.integrated.env.windows": {
-    "RUFF_CACHE_DIR": "${workspaceFolder}\\.ruff_cache",
-    "NO_PROXY": "gis.nationalgrid.com,.nationalgrid.com,localhost,127.0.0.1",
-    "no_proxy": "gis.nationalgrid.com,.nationalgrid.com,localhost,127.0.0.1"
-  }
+    "python.defaultInterpreterPath":  "C:\\Users\\lellag\\Downloads\\GISportal\\.venv\\Scripts\\python.exe",
+    "python.terminal.activateEnvironment":  true,
+    "terminal.integrated.cwd":  "C:\\Users\\lellag\\Downloads\\GISportal",
+    "git.enabled":  true,
+    "git.autofetch":  true,
+    "git.autoRepositoryDetection":  "subFolders",
+    "git.openRepositoryInParentFolders":  "never",
+    "git.confirmSync":  false,
+    "git.detectSubmodules":  false,
+    "git.repositoryScanIgnoredFolders":  [
+                                             "node_modules",
+                                             ".venv",
+                                             "outputs",
+                                             "__pycache__"
+                                         ]
 }

@@ -1,0 +1,25 @@
+{
+    "folders":  [
+                    {
+                        "name":  "Estimate_GIS",
+                        "path":  "C:\\Users\\lellag\\Downloads\\GISportal"
+                    }
+                ],
+    "settings":  {
+                     "python.defaultInterpreterPath":  "C:\\Users\\lellag\\Downloads\\GISportal\\.venv\\Scripts\\python.exe",
+                     "python.terminal.activateEnvironment":  true,
+                     "terminal.integrated.cwd":  "C:\\Users\\lellag\\Downloads\\GISportal",
+                     "git.enabled":  true,
+                     "git.autofetch":  true,
+                     "git.autoRepositoryDetection":  "subFolders",
+                     "git.openRepositoryInParentFolders":  "never",
+                     "git.confirmSync":  false,
+                     "git.detectSubmodules":  false,
+                     "git.repositoryScanIgnoredFolders":  [
+                                                              "node_modules",
+                                                              ".venv",
+                                                              "outputs",
+                                                              "__pycache__"
+                                                          ]
+                 }
+}
