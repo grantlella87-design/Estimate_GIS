@@ -102,6 +102,7 @@ def main(argv=None) -> int:
     else:
         progress(f"Profile: {args.profile} ({massgis_ledge.describe_profile(args.profile)})")
         progress(f"Service: {massgis_ledge.SURFICIAL_GEOLOGY_SERVICE}")
+    progress(enterprise_network.describe_proxy())
     if extent is None:
         progress("Extent: statewide. This is the slow one; --extent is much faster.")
 

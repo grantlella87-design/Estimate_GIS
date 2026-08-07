@@ -30,7 +30,6 @@ Estimate_GIS is a small GIS automation repository for querying ArcGIS REST servi
    +- output.py
    +- service_auth.py
    +- vector_source.py
-   +- winhttp_arcgis_transport.py
    +- templates
       +- leaflet_viewer.html
 ```
@@ -178,33 +177,30 @@ Two failures used to be silent and are not any more:
 
 #### Behind the Zscaler proxy
 
-```text
-src/winhttp_arcgis_transport.py
-```
+`requests` reads proxies from environment variables and nowhere else. Zscaler
+intercepts internal traffic transparently, so `gis.nationalgrid.com` works with
+no proxy set at all, and only public services fail - as
+`ConnectionResetError 10054` on the first packet, which never mentions a proxy.
+Setting the variables is the whole fix.
 
-`requests` reads proxy settings from environment variables only. Zscaler
-publishes its proxy through the Windows configuration - autodetect, a PAC URL,
-or a named proxy - which `requests` never sees. Internal hosts are reached
-directly and are unaffected, so the failure looks selective: `gis.nationalgrid.com`
-works and every public service is refused with `ConnectionResetError 10054` on
-the first packet.
+Startup does it from the first of these that has something, and prints which:
 
-When a proxy is configured, public ArcGIS traffic is sent through WinHTTP, the
-Windows HTTP stack. It resolves the proxy the way the rest of the machine does
-and validates TLS against the Windows certificate store, where the Zscaler root
-already sits. Startup prints which proxy it found.
-
-Scope is deliberately narrow: only on Windows, only when a proxy is actually
-configured, and only for hosts that are not ours - internal traffic keeps using
-`requests`, since it works today and reaches addresses a proxy may not route.
-Both `GET` and `POST` go through it, which matters because object-id lookups and
-every feature batch are POSTed.
+1. `ESTIMATE_GIS_PROXY_URL`, when the proxy is named explicitly;
+2. proxy variables already in the environment, left as they are;
+3. what Windows itself is configured with, read out of the registry.
 
 ```powershell
-$env:ESTIMATE_GIS_PROXY_URL = "http://your.zscaler.proxy:80"   # name it explicitly
-$env:ESTIMATE_GIS_FORCE_WINHTTP_TRANSPORT = "1"                # use it regardless
-$env:ESTIMATE_GIS_DISABLE_WINHTTP_TRANSPORT = "1"              # turn it off
+$env:ESTIMATE_GIS_PROXY_URL = "http://your.zscaler.proxy:80"
+python .\scripts\fetch_massgis_ledge.py --out outputs\ledge.gpkg --self-test
 ```
+
+The self-test prints the proxy in use before it does anything, so a run that is
+about to fail says why up front.
+
+National Grid hosts always go into `NO_PROXY`. They are reached directly today
+and a proxy is not guaranteed to have a route to them, so turning the proxy on
+for the half that fails cannot break the half that works.
+
 
 #### If the MassGIS host is blocked outright
 
