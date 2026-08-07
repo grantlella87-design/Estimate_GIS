@@ -30,6 +30,7 @@ Estimate_GIS is a small GIS automation repository for querying ArcGIS REST servi
    +- output.py
    +- service_auth.py
    +- vector_source.py
+   +- winhttp_arcgis_transport.py
    +- templates
       +- leaflet_viewer.html
 ```
@@ -153,39 +154,6 @@ National Grid layer, so if this works the problem is elsewhere:
 python .\scripts\fetch_massgis_ledge.py --out outputs\ledge.gpkg --self-test
 ```
 
-#### If the MassGIS host is blocked
-
-`ConnectionResetError 10054` on the first request is the network refusing the
-connection, not the service answering. National Grid hosts keep working because
-interception for them is transparent and needs no proxy, so only the public half
-fails. Two ways through, and the run now takes the second one on its own:
-
-**Point requests at the proxy Windows already uses.** `requests` reads proxies
-only from environment variables; Windows keeps its in the registry. Startup now
-bridges the two automatically and excludes National Grid hosts so the working
-half stays direct. Override it when the detection is wrong:
-
-```powershell
-$env:ESTIMATE_GIS_PROXY_URL = "http://your.zscaler.proxy:80"
-```
-
-**Or take the ledge from ArcGIS Online.** MassGIS publishes a copy on
-`services1.arcgis.com`, which corporate networks almost always allow. If the
-MassGIS server cannot be reached the report falls back to it automatically,
-says so, and labels every output with which source produced the numbers:
-
-```powershell
-python .\scripts\mainline_ledge_report.py --ledge agol      # ask for it directly
-python .\scripts\fetch_massgis_ledge.py --agol --self-test  # test it on its own
-python .\scripts\mainline_ledge_report.py --no-agol-fallback  # fail instead
-```
-
-**It is not the same data.** The AGOL copy is 1:250,000, roughly a tenth the
-detail of the 1:24,000 service, and its only relevant class is `Till or Bedrock`
-- till and rock in one polygon, where the 24k separates them. On the same test
-area it reported 59% of footage in ledge against 8.7% from the 24k data. Use it
-to keep working and to scope a job. Do not price one from it.
-
 That pulls a small area of Worcester known to have ledge and reports what came
 back. If it fails, the output names the things to check in the order they
 usually go wrong. If it works, download what you need once and hand the file to
@@ -203,10 +171,58 @@ a re-download; `--no-ledge-cache` turns it off.
 Two failures used to be silent and are not any more:
 
 * **An extent that misses Massachusetts.** Almost always a CRS that was guessed
-  rather than read. The run now prints the lookup extent every time and says so
+  rather than read. The run prints the lookup extent every time and says so
   outright when it cannot overlap the data.
 * **No ledge found.** The report stops instead of writing a page of zeros, since
   zeros read as an answer. `--allow-empty-ledge` reports them anyway.
+
+#### Behind the Zscaler proxy
+
+```text
+src/winhttp_arcgis_transport.py
+```
+
+`requests` reads proxy settings from environment variables only. Zscaler
+publishes its proxy through the Windows configuration - autodetect, a PAC URL,
+or a named proxy - which `requests` never sees. Internal hosts are reached
+directly and are unaffected, so the failure looks selective: `gis.nationalgrid.com`
+works and every public service is refused with `ConnectionResetError 10054` on
+the first packet.
+
+When a proxy is configured, public ArcGIS traffic is sent through WinHTTP, the
+Windows HTTP stack. It resolves the proxy the way the rest of the machine does
+and validates TLS against the Windows certificate store, where the Zscaler root
+already sits. Startup prints which proxy it found.
+
+Scope is deliberately narrow: only on Windows, only when a proxy is actually
+configured, and only for hosts that are not ours - internal traffic keeps using
+`requests`, since it works today and reaches addresses a proxy may not route.
+Both `GET` and `POST` go through it, which matters because object-id lookups and
+every feature batch are POSTed.
+
+```powershell
+$env:ESTIMATE_GIS_PROXY_URL = "http://your.zscaler.proxy:80"   # name it explicitly
+$env:ESTIMATE_GIS_FORCE_WINHTTP_TRANSPORT = "1"                # use it regardless
+$env:ESTIMATE_GIS_DISABLE_WINHTTP_TRANSPORT = "1"              # turn it off
+```
+
+#### If the MassGIS host is blocked outright
+
+If the proxy is handled and the host is still refused, take the ledge from
+ArcGIS Online instead. MassGIS publishes a copy on `services1.arcgis.com`, which
+corporate networks almost always allow:
+
+```powershell
+python .\scripts\mainline_ledge_report.py --ledge agol       # use it for a run
+python .\scripts\fetch_massgis_ledge.py --agol --self-test   # test it on its own
+```
+
+**It is not the same data.** The AGOL copy is 1:250,000, roughly a tenth the
+detail of the 1:24,000 service, and its only relevant class is `Till or Bedrock`
+- till and rock in one polygon, where the 24k data separates them. On the same
+test area it reported 59% of footage in ledge against 8.7% from the 24k data.
+Every output records which source produced it, and the two cache separately.
+Use it to keep working and to scope a job. Do not price one from it.
 
 ### What counts as "installed or created after"
 

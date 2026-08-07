@@ -24,10 +24,8 @@ and the date fields can all be pointed somewhere else.
 from __future__ import annotations
 
 import argparse
-import html
 import importlib
 import json
-import re
 import sys
 from pathlib import Path
 
@@ -45,7 +43,6 @@ enterprise_network.configure_enterprise_network()
 import leaflet_viewer
 import ledge_analysis
 import massgis_ledge
-import service_auth
 import vector_source
 from arcgis_rest_geopandas import progress
 
@@ -95,7 +92,6 @@ def _source_requires_sign_in(value: object) -> bool:
     host = parsed.netloc.lower()
     if not host:
         return True
-    public_hosts = ("arcgisserver.digital.mass.gov", "services.arcgis.com", "www.arcgis.com", "arcgis.com")
     if host == "arcgisserver.digital.mass.gov" or host.endswith(".arcgis.com"):
         return False
     return "nationalgrid" in host or "nagrid" in host or host.endswith(".local")
@@ -135,11 +131,6 @@ def parse_args(argv=None):
             "'massgis' for the 1:24,000 MassGIS service, 'agol' for the coarser "
             "1:250,000 copy on ArcGIS Online, or a URL or file."
         ),
-    )
-    ledge.add_argument(
-        "--no-agol-fallback",
-        action="store_true",
-        help="Fail instead of falling back to ArcGIS Online when MassGIS is unreachable.",
     )
     ledge.add_argument(
         "--ledge-profile",
