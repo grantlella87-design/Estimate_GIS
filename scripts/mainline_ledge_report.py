@@ -34,17 +34,17 @@ SRC = REPO_ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-import geopandas as gpd  # noqa: E402
-import pandas as pd  # noqa: E402
+import geopandas as gpd
+import pandas as pd
 
 enterprise_network = importlib.import_module("enterprise_network")
 enterprise_network.configure_enterprise_network()
 
-import ledge_analysis  # noqa: E402
-import leaflet_viewer  # noqa: E402
-import massgis_ledge  # noqa: E402
-import vector_source  # noqa: E402
-from arcgis_rest_geopandas import progress  # noqa: E402
+import leaflet_viewer
+import ledge_analysis
+import massgis_ledge
+import vector_source
+from arcgis_rest_geopandas import progress
 
 DEFAULT_MAINLINE_URL = (
     "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/341"
@@ -57,7 +57,6 @@ LEDGE_FILL = "#8c6d46"
 MAIN_PRE = "#4b5563"
 MAIN_POST = "#d64545"
 LEDGE_SEGMENT = "#111827"
-
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
@@ -182,7 +181,6 @@ def parse_args(argv=None):
     )
     return parser.parse_args(argv)
 
-
 def resolve_token(args) -> str | None:
     """Get an ArcGIS token, unless the source needs none."""
     if args.anonymous or not vector_source.is_service(args.mainlines):
@@ -191,7 +189,6 @@ def resolve_token(args) -> str | None:
     progress("Signing in to ArcGIS (src/auth.py).")
     return auth.get_token()
 
-
 def parse_extent(args) -> tuple[tuple[float, float, float, float] | None, str | None]:
     if not args.extent:
         return None, None
@@ -199,7 +196,6 @@ def parse_extent(args) -> tuple[tuple[float, float, float, float] | None, str | 
     if len(parts) != 4:
         raise SystemExit("--extent must be minx,miny,maxx,maxy")
     return tuple(float(part) for part in parts), args.extent_crs
-
 
 def load_ledge(args, bounds, bounds_crs) -> tuple[gpd.GeoDataFrame, str, str]:
     """Load ledge polygons and describe where the definition came from."""
@@ -227,7 +223,6 @@ def load_ledge(args, bounds, bounds_crs) -> tuple[gpd.GeoDataFrame, str, str]:
     )
     return gdf, "custom", f"Ledge polygons from {args.ledge}"
 
-
 def buffer_ledge(ledge: gpd.GeoDataFrame, buffer_ft: float) -> gpd.GeoDataFrame:
     if not buffer_ft or ledge.empty or ledge.crs is None:
         return ledge
@@ -243,7 +238,6 @@ def buffer_ledge(ledge: gpd.GeoDataFrame, buffer_ft: float) -> gpd.GeoDataFrame:
     buffered["geometry"] = buffered.geometry.buffer(buffer_ft * units_per_foot)
     return buffered
 
-
 def flat_stats_rows(stats: dict, prefix: str = "") -> list[dict]:
     """Flatten the nested summary into metric/value rows for a CSV."""
     rows = []
@@ -258,7 +252,6 @@ def flat_stats_rows(stats: dict, prefix: str = "") -> list[dict]:
         else:
             rows.append({"metric": name, "value": value})
     return rows
-
 
 def viewer_fields(lines: gpd.GeoDataFrame, result) -> list[str]:
     """Column order for the attribute table: the answer first, the source after.
@@ -286,7 +279,6 @@ def viewer_fields(lines: gpd.GeoDataFrame, result) -> list[str]:
         name for name in lines.columns if name not in dropped and name not in ordered
     ]
     return ordered
-
 
 def build_viewer(args, result, out_dir: Path, cutoff: str) -> Path | None:
     mainlines = result.mainlines
@@ -384,7 +376,6 @@ def build_viewer(args, result, out_dir: Path, cutoff: str) -> Path | None:
         inline_leaflet=args.inline_leaflet,
         external_data=args.external_data,
     )
-
 
 def main(argv=None) -> int:
     args = parse_args(argv)
@@ -487,7 +478,6 @@ def main(argv=None) -> int:
     if viewer_path:
         progress(f"Viewer:  {viewer_path}")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
