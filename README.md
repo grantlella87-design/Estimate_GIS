@@ -15,6 +15,7 @@ Estimate_GIS is a small GIS automation repository for querying ArcGIS REST servi
 |  +- export_arcgis_to_geopackage.py
 |  +- query_ma_main_lines_2022_plus.py
 |  +- mainline_ledge_report.py
+|  +- fetch_massgis_ledge.py
 |  +- network
 |     +- set_zscaler_proxy_environment.py
 +- src
@@ -142,6 +143,37 @@ The profile used is written into every output, so a number can always be traced
 back to the definition that produced it. `--ledge-buffer-ft` grows the polygons
 before intersecting, for mapping slop between the 1:24,000 geology and the pipe
 centrelines.
+
+### When the ledge is not working
+
+Prove the ledge half on its own first. It needs no sign-in, no VPN and no
+National Grid layer, so if this works the problem is elsewhere:
+
+```powershell
+python .\scripts\fetch_massgis_ledge.py --out outputs\ledge.gpkg --self-test
+```
+
+That pulls a small area of Worcester known to have ledge and reports what came
+back. If it fails, the output names the things to check in the order they
+usually go wrong. If it works, download what you need once and hand the file to
+the report, which then never touches MassGIS:
+
+```powershell
+python .\scripts\fetch_massgis_ledge.py --out outputs\ledge.gpkg
+python .\scripts\mainline_ledge_report.py --ledge outputs\ledge.gpkg
+```
+
+The report caches ledge per profile and extent under `<out-dir>/ledge_cache`, so
+only the first run of an area downloads anything. `--refresh-ledge-cache` forces
+a re-download; `--no-ledge-cache` turns it off.
+
+Two failures used to be silent and are not any more:
+
+* **An extent that misses Massachusetts.** Almost always a CRS that was guessed
+  rather than read. The run now prints the lookup extent every time and says so
+  outright when it cannot overlap the data.
+* **No ledge found.** The report stops instead of writing a page of zeros, since
+  zeros read as an answer. `--allow-empty-ledge` reports them anyway.
 
 ### What counts as "installed or created after"
 

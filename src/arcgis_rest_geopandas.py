@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 import geopandas as gpd
+import pandas as pd
 import requests
 from pyproj import CRS
 from shapely.geometry import (
@@ -396,13 +397,32 @@ def esri_geometry_to_shape(geometry: dict[str, Any] | None) -> Any | None:
 def features_to_geodataframe(
     features: list[dict[str, Any]], meta: dict[str, Any]
 ) -> gpd.GeoDataFrame:
-    """Convert ArcGIS feature JSON into a GeoDataFrame using the layer native CRS."""
+    """Convert ArcGIS feature JSON into a GeoDataFrame using the layer native CRS.
+
+    A query that matches nothing is an ordinary outcome - an extent with no ledge
+    in it, a WHERE clause that excludes everything - so it returns an empty
+    GeoDataFrame with the layer's own columns rather than raising. Building one
+    from an empty list without doing this fails with "Unknown column geometry",
+    which says nothing about the query that produced it.
+    """
+    crs = crs_from_metadata(meta)
+    if not features:
+        columns = [
+            field.get("name")
+            for field in meta.get("fields") or []
+            if field.get("name") and field.get("type") != "esriFieldTypeGeometry"
+        ]
+        empty = gpd.GeoDataFrame(
+            {name: pd.Series(dtype="object") for name in columns},
+            geometry=gpd.GeoSeries([], dtype="geometry", crs=crs),
+            crs=crs,
+        )
+        return empty
     rows = []
     for feature in features:
         attributes = dict(feature.get("attributes") or {})
         attributes["geometry"] = esri_geometry_to_shape(feature.get("geometry"))
         rows.append(attributes)
-    crs = crs_from_metadata(meta)
     return gpd.GeoDataFrame(rows, geometry="geometry", crs=crs)
 
 def fetch_objectid_batch(
