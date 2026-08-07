@@ -24,10 +24,11 @@ and the date fields can all be pointed somewhere else.
 from __future__ import annotations
 
 import argparse
+import html
 import importlib
 import json
+import re
 import sys
-from urllib.parse import urlparse
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +45,7 @@ enterprise_network.configure_enterprise_network()
 import leaflet_viewer
 import ledge_analysis
 import massgis_ledge
+import service_auth
 import vector_source
 from arcgis_rest_geopandas import progress
 
@@ -59,16 +61,12 @@ MAIN_PRE = "#4b5563"
 MAIN_POST = "#d64545"
 LEDGE_SEGMENT = "#111827"
 
-# PUBLIC AGOL AUTH ROUTING
-PUBLIC_ARCGIS_HOSTS = {"arcgisserver.digital.mass.gov"}
-
 def _clean_source_value(value: object) -> str:
     """Return a plain URL/path even if a Teams/HTML anchor was pasted into PowerShell."""
     if value is None:
         return ""
     cleaned = str(value).strip()
     if "<a " in cleaned.lower() and "href=" in cleaned.lower():
-        import html
         match = re.search(r"href=[\"']([^\"']+)", cleaned, flags=re.IGNORECASE)
         if match:
             cleaned = match.group(1)
@@ -78,15 +76,15 @@ def _clean_source_value(value: object) -> str:
     cleaned = cleaned.strip().strip('"').strip("'")
     return cleaned
 
-def _is_public_arcgis_source(value: object) -> bool:
-    source = _clean_source_value(value)
-    parsed = urlparse(source)
-    host = parsed.netloc.lower()
-    return host in PUBLIC_ARCGIS_HOSTS
-
 def _source_requires_sign_in(value: object) -> bool:
-    """Only National Grid/internal sources should receive the token from auth.py."""
-    return not _is_public_arcgis_source(value)
+    """Only National Grid/internal sources should receive the token from auth.py.
+
+    The host list lives in src/service_auth.py, which is also what decides
+    whether a token is attached to the request itself. Keeping a second list here
+    would mean a new internal host had to be added in two places, and the one
+    that was missed would fail quietly.
+    """
+    return service_auth.requires_token(_clean_source_value(value))
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
@@ -132,6 +130,29 @@ def parse_args(argv=None):
         ),
     )
     ledge.add_argument("--ledge-layer", help="Layer name, when --ledge is a GeoPackage.")
+    ledge.add_argument(
+        "--ledge-where",
+        default="1=1",
+        help="Filter for a custom --ledge source. Ignored for the MassGIS preset.",
+    )
+    ledge.add_argument(
+        "--ledge-cache-dir",
+        default="",
+        help="Cache MassGIS ledge here and reuse it. Default: <out-dir>/ledge_cache.",
+    )
+    ledge.add_argument(
+        "--no-ledge-cache", action="store_true", help="Always re-download the ledge."
+    )
+    ledge.add_argument(
+        "--refresh-ledge-cache",
+        action="store_true",
+        help="Re-download the ledge and replace what is cached.",
+    )
+    ledge.add_argument(
+        "--allow-empty-ledge",
+        action="store_true",
+        help="Carry on when no ledge is found, instead of stopping.",
+    )
     ledge.add_argument(
         "--ledge-class-field",
         default="ledge_class",
@@ -223,15 +244,20 @@ def parse_extent(args) -> tuple[tuple[float, float, float, float] | None, str | 
     return tuple(float(part) for part in parts), args.extent_crs
 
 def load_ledge(args, bounds, bounds_crs, sign_in: bool = True) -> tuple[gpd.GeoDataFrame, str, str]:
-    """Load ledge polygons and describe where the definition came from."
-    ledge_source = _clean_source_value(args.ledge)""
-    if str(ledge_source).lower() in ("massgis", "massgis:surfgeo", "default"):
+    """Load ledge polygons and describe where the definition came from."""
+    ledge_source = _clean_source_value(args.ledge)
+    if ledge_source.lower() in ("massgis", "massgis:surfgeo", "default"):
+        cache_dir = None
+        if not args.no_ledge_cache:
+            cache_dir = Path(args.ledge_cache_dir or (Path(args.out_dir) / "ledge_cache"))
         gdf = massgis_ledge.fetch_ledge_polygons(
             profile=args.ledge_profile,
             bounds=bounds,
             bounds_crs=bounds_crs,
             workers=args.workers,
             batch_size=args.batch_size,
+            cache_dir=cache_dir,
+            refresh_cache=args.refresh_ledge_cache,
         )
         return (
             gdf,
@@ -242,6 +268,7 @@ def load_ledge(args, bounds, bounds_crs, sign_in: bool = True) -> tuple[gpd.GeoD
     gdf = vector_source.read_source(
         ledge_source,
         layer=args.ledge_layer,
+        where=args.ledge_where,
         bounds=bounds,
         bounds_crs=bounds_crs,
         workers=args.workers,
@@ -410,13 +437,22 @@ def main(argv=None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     extent, extent_crs = parse_extent(args)
 
-    # Nothing here decides whether to sign in. Each source is read against its
-    # own host, so a public main line layer and an internal one take the same
-    # command, and a MassGIS-only run never opens a browser.
-    sign_in = not args.anonymous
+    # A URL copied out of Teams or a browser arrives wrapped in an HTML anchor,
+    # which reaches argparse as one long unusable string. The ledge source was
+    # already cleaned; the main line source is pasted the same way and needs it
+    # just as much.
+    args.mainlines = _clean_source_value(args.mainlines) or args.mainlines
+
+    # --anonymous is the only global switch. Beyond it, each source is judged on
+    # its own host, so a public main line layer and an internal ledge layer in
+    # the same run each get what they need and nothing more.
+    allow_sign_in = not args.anonymous
+    mainlines_sign_in = allow_sign_in and _source_requires_sign_in(args.mainlines)
 
     if args.count_only:
-        count = vector_source.count_features(args.mainlines, args.where, sign_in=sign_in)
+        count = vector_source.count_features(
+            args.mainlines, args.where, sign_in=mainlines_sign_in
+        )
         if count is None:
             progress("A local file has no server-side count; read it to count rows.")
             return 0
@@ -433,7 +469,7 @@ def main(argv=None) -> int:
         bounds_crs=extent_crs,
         workers=args.workers,
         batch_size=args.batch_size,
-        sign_in=sign_in,
+        sign_in=mainlines_sign_in,
     )
     if mainlines.empty:
         progress("No main lines matched. Nothing to analyse.")
@@ -446,7 +482,29 @@ def main(argv=None) -> int:
     if bounds is None:
         bounds = tuple(mainlines.total_bounds)
         bounds_crs = mainlines.crs
-    ledge, profile, ledge_description = load_ledge(args, bounds, bounds_crs, sign_in)
+    if mainlines.crs is None:
+        progress(
+            "The main lines have no CRS, so there is no way to look up ledge for "
+            "their extent. Set one with --analysis-crs on the source export, or "
+            "check the service metadata."
+        )
+        return 1
+    # Printed every run: an extent that disagrees with the mainline coordinates
+    # is the usual reason a ledge lookup comes back empty.
+    progress(f"Ledge lookup extent: {tuple(round(float(v), 1) for v in bounds)} in {bounds_crs}")
+    ledge, profile, ledge_description = load_ledge(args, bounds, bounds_crs, allow_sign_in)
+
+    if ledge.empty and not args.allow_empty_ledge:
+        progress("")
+        progress("=== No ledge found, stopping ===")
+        progress("Every ledge number would be zero, which reads as an answer and is not one.")
+        progress("Check the ledge source on its own:")
+        progress("  python scripts/fetch_massgis_ledge.py --out outputs/ledge.gpkg --self-test")
+        progress("Then, if that works, re-run with a wider definition or this flag:")
+        progress("  --ledge-profile broad     widen what counts as ledge")
+        progress("  --allow-empty-ledge       report zeros anyway")
+        return 1
+
     ledge = buffer_ledge(ledge, args.ledge_buffer_ft)
 
     progress("--- Analysis ---")

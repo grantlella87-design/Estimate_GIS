@@ -24,6 +24,7 @@ credentials.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from typing import Any
 
 import geopandas as gpd
@@ -158,6 +159,17 @@ def _fetch(
     return gdf[keep].set_geometry("geometry")
 
 
+# A query envelope is padded before it goes to the service. A run scoped to one
+# street can produce an extent a few metres wide, or a zero-width one if every
+# feature is on a single alignment, and an envelope like that returns no ledge
+# even where there plainly is some.
+ENVELOPE_PAD_METERS = 250.0
+
+# Massachusetts in EPSG:26986, roughly. Used only to tell a caller that their
+# extent landed nowhere near the data, which is what a CRS mix-up looks like.
+MASSACHUSETTS_EXTENT = (30000.0, 770000.0, 340000.0, 965000.0)
+
+
 def _bounds_to_massgis(
     bounds: tuple[float, float, float, float], bounds_crs: Any
 ) -> tuple[float, float, float, float]:
@@ -165,13 +177,54 @@ def _bounds_to_massgis(
     if bounds_crs is None:
         raise ValueError(
             "A bounding box needs a CRS. Pass bounds_crs, or give the mainlines "
-            "layer a CRS before deriving bounds from it."
+            "layer a CRS before deriving bounds from it. Without one there is no "
+            "way to know what the numbers mean, and querying them raw would "
+            "silently return no ledge."
+        )
+    values = [float(value) for value in bounds]
+    if any(value != value for value in values):  # NaN, from an empty layer
+        raise ValueError(
+            "The extent contains NaN, which happens when the source layer has no "
+            "features or no geometry. There is nothing to look up ledge for."
         )
     # Reproject the box itself, not its two opposite corners: between two
     # projections a rectangle does not stay a rectangle, and the corners alone
     # can sit inside the true reprojected extent.
-    envelope = gpd.GeoSeries([shapely_box(*bounds)], crs=bounds_crs).to_crs(MASSGIS_CRS)
-    return tuple(float(value) for value in envelope.total_bounds)
+    envelope = gpd.GeoSeries([shapely_box(*values)], crs=bounds_crs).to_crs(MASSGIS_CRS)
+    minx, miny, maxx, maxy = (float(value) for value in envelope.total_bounds)
+    padded = (
+        minx - ENVELOPE_PAD_METERS,
+        miny - ENVELOPE_PAD_METERS,
+        maxx + ENVELOPE_PAD_METERS,
+        maxy + ENVELOPE_PAD_METERS,
+    )
+    _warn_if_outside_massachusetts(padded, bounds, bounds_crs)
+    return padded
+
+
+def _warn_if_outside_massachusetts(
+    padded: tuple[float, float, float, float],
+    original: tuple[float, float, float, float],
+    bounds_crs: Any,
+) -> None:
+    """Say so when the extent cannot overlap the data, rather than returning nothing.
+
+    An extent that misses Massachusetts entirely is almost always a CRS that was
+    guessed rather than read - feet read as metres, or a projected extent handed
+    over as degrees. The symptom is an empty ledge layer and a report full of
+    zeros, which looks like the ledge lookup is broken.
+    """
+    state_minx, state_miny, state_maxx, state_maxy = MASSACHUSETTS_EXTENT
+    minx, miny, maxx, maxy = padded
+    if maxx < state_minx or minx > state_maxx or maxy < state_miny or miny > state_maxy:
+        progress(
+            "WARNING: the requested extent does not overlap Massachusetts, so no "
+            "ledge can be found."
+        )
+        progress(f"  extent given:      {tuple(round(v, 1) for v in original)} in {bounds_crs}")
+        progress(f"  reprojected to 26986: {tuple(round(v, 1) for v in padded)}")
+        progress(f"  Massachusetts is:  {MASSACHUSETTS_EXTENT} in EPSG:26986")
+        progress("  Check the CRS of the layer the extent came from.")
 
 
 def fetch_ledge_polygons(
@@ -181,6 +234,8 @@ def fetch_ledge_polygons(
     *,
     workers: int = 8,
     batch_size: int = 500,
+    cache_dir: str | Path | None = None,
+    refresh_cache: bool = False,
 ) -> gpd.GeoDataFrame:
     """Return the ledge polygons for a profile, in EPSG:26986.
 
@@ -188,8 +243,21 @@ def fetch_ledge_polygons(
     the mainlines being analysed. Statewide there are ~65,000 outcrop polygons
     and ~15,000 shallow-bedrock polygons, so passing the extent is the
     difference between a long download and a short one.
+
+    With `cache_dir`, the result is written to a GeoPackage keyed by profile and
+    extent and reused on the next run. Ledge does not move, and re-downloading it
+    on every attempt turns a five-second change into a two-minute one.
     """
     definition = profile_definition(profile)
+
+    cache_path = (
+        _cache_path(cache_dir, profile, bounds, bounds_crs) if cache_dir else None
+    )
+    if cache_path is not None and cache_path.exists() and not refresh_cache:
+        cached = gpd.read_file(cache_path)
+        progress(f"Ledge polygons from cache: {len(cached):,} ({cache_path})")
+        return cached.set_crs(MASSGIS_CRS, allow_override=True)
+
     frames: list[gpd.GeoDataFrame] = []
 
     if definition["map_units"]:
@@ -230,7 +298,12 @@ def fetch_ledge_polygons(
 
     frames = [frame for frame in frames if not frame.empty]
     if not frames:
-        progress("No MassGIS ledge polygons matched this extent.")
+        progress(
+            "No MassGIS ledge polygons matched this extent. That is a real answer "
+            "in parts of the state with no mapped bedrock, but check the extent "
+            "above against the coordinates the mainlines came back in before "
+            "believing it."
+        )
         return gpd.GeoDataFrame(
             {name: pd.Series(dtype="object") for name in LEDGE_COLUMNS},
             geometry=gpd.GeoSeries([], crs=MASSGIS_CRS),
@@ -248,4 +321,27 @@ def fetch_ledge_polygons(
         combined.loc[invalid, "geometry"] = combined.loc[invalid, "geometry"].buffer(0)
     combined = combined[~combined.geometry.is_empty].reset_index(drop=True)
     progress(f"Ledge polygons: {len(combined):,} ({describe_profile(profile)})")
+    if cache_path is not None and not combined.empty:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        combined.to_file(cache_path, driver="GPKG")
+        progress(f"Ledge cached for the next run: {cache_path}")
     return combined
+
+
+def _cache_path(
+    cache_dir: str | Path,
+    profile: str,
+    bounds: tuple[float, float, float, float] | None,
+    bounds_crs: Any,
+) -> Path:
+    """A cache file per profile and extent.
+
+    The extent is rounded to a kilometre so that two runs over the same area
+    share a cache even when their mainline selections differ by a few feet.
+    """
+    if bounds is None:
+        key = "statewide"
+    else:
+        in_massgis = _bounds_to_massgis(bounds, bounds_crs)
+        key = "_".join(str(int(round(value / 1000.0))) for value in in_massgis)
+    return Path(cache_dir) / f"ledge_{profile}_{key}.gpkg"
