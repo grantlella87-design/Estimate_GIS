@@ -20,6 +20,9 @@ from shapely.geometry import (
     shape,
 )
 
+# Which hosts get a token is decided from the URL, not by the caller.
+import service_auth
+
 # Estimate_GIS module defaults must exist before function signatures.
 DEFAULT_TIMEOUT_SECONDS = int(os.environ.get("ESTIMATE_GIS_TIMEOUT_SECONDS", "120"))
 DEFAULT_REQUEST_PAGE_SIZE = int(os.environ.get("ESTIMATE_GIS_REQUEST_PAGE_SIZE", "2000"))
@@ -174,6 +177,12 @@ def request_json(
                 continue
             raise RuntimeError(f"ArcGIS REST request failed after {attempts} attempts: {url}: {exc}") from exc
     if last_error is not None:
+        # A rejected token is nearly always the host policy, not a bad password:
+        # say which side of the internal/public line this URL fell on.
+        if last_error.get("code") in {498, 499}:
+            raise RuntimeError(
+                json.dumps(last_error, indent=2) + "\n" + service_auth.token_hint(url)
+            )
         raise RuntimeError(json.dumps(last_error, indent=2))
     if last_exception is not None:
         raise RuntimeError(f"ArcGIS REST request failed after {attempts} attempts: {url}: {last_exception}") from last_exception
@@ -403,17 +412,18 @@ def fetch_objectid_batch(
     token: str | None,
     *,
     out_sr: int | str | None = None,
-    allow_anonymous: bool = False,
 ) -> list[dict[str, Any]]:
     """Download a specific OBJECTID batch using the already-resolved token.
 
-    A missing token is an error by default, because a secured layer that is
-    queried anonymously returns "Token Required" for every batch and the run
-    fails late with nothing useful to show. Public services (MassGIS, for
-    example) take no token at all, so those callers pass allow_anonymous.
+    An internal layer with no token is an error here rather than a run of
+    "Token Required" responses that fail late and say nothing about the cause.
+    A public layer needs no token, so a missing one is not a problem to report.
     """
-    if not token and not allow_anonymous:
-        raise RuntimeError("Feature batch request has no ArcGIS token passed from query_layer_to_geodataframe.")
+    if not token and service_auth.requires_token(layer_url):
+        raise RuntimeError(
+            "Feature batch request has no ArcGIS token passed from "
+            f"query_layer_to_geodataframe. {service_auth.token_hint(layer_url)}"
+        )
     session = make_session(token)
     params = {
         "objectIds": ",".join(str(object_id) for object_id in object_id_batch),
@@ -447,15 +457,22 @@ def query_layer_to_geodataframe(
     bounds: Sequence[float] | None = None,
     bounds_sr: int | str | None = None,
     out_sr: int | str | None = None,
-    allow_anonymous: bool = False,
+    sign_in: bool = True,
 ) -> gpd.GeoDataFrame:
     """Fast ArcGIS REST query that returns a GeoDataFrame.
 
     `bounds` limits the query to an extent, and `out_sr` asks the service to
     project on the way out so two layers from different services arrive in one
     coordinate system.
+
+    The token is resolved from the URL rather than from the caller: our own
+    servers get one, signing in through `auth.py` if `token` was not supplied,
+    and public services get none. Passing a token for a public host does not
+    send it - see `service_auth`.
     """
     progress(f"Querying layer to GeoDataFrame: {layer_url}")
+    service_auth.report_once(layer_url)
+    token = service_auth.token_for(layer_url, token, allow_sign_in=sign_in)
     session = make_session(token)
     meta = layer_metadata(session, layer_url)
     if out_sr:
@@ -494,7 +511,6 @@ def query_layer_to_geodataframe(
                     out_fields=out_fields,
                     token=token,
                     out_sr=out_sr,
-                    allow_anonymous=allow_anonymous,
                 )
             )
     else:
@@ -507,7 +523,6 @@ def query_layer_to_geodataframe(
                     out_fields=out_fields,
                     token=token,
                     out_sr=out_sr,
-                    allow_anonymous=allow_anonymous,
                 ): object_id_batch
                 for object_id_batch in object_id_batches
             }

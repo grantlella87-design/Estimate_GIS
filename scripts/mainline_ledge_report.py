@@ -172,7 +172,10 @@ def parse_args(argv=None):
     runtime.add_argument(
         "--anonymous",
         action="store_true",
-        help="Do not sign in. Use for public services only.",
+        help=(
+            "Never sign in, even for one of our own services. Sign-in is already "
+            "skipped for public hosts, so this is only needed for an unattended run."
+        ),
     )
     runtime.add_argument(
         "--count-only",
@@ -180,14 +183,6 @@ def parse_args(argv=None):
         help="Report how many main lines match and stop, downloading nothing.",
     )
     return parser.parse_args(argv)
-
-def resolve_token(args) -> str | None:
-    """Get an ArcGIS token, unless the source needs none."""
-    if args.anonymous or not vector_source.is_service(args.mainlines):
-        return None
-    auth = importlib.import_module("auth")
-    progress("Signing in to ArcGIS (src/auth.py).")
-    return auth.get_token()
 
 def parse_extent(args) -> tuple[tuple[float, float, float, float] | None, str | None]:
     if not args.extent:
@@ -197,7 +192,7 @@ def parse_extent(args) -> tuple[tuple[float, float, float, float] | None, str | 
         raise SystemExit("--extent must be minx,miny,maxx,maxy")
     return tuple(float(part) for part in parts), args.extent_crs
 
-def load_ledge(args, bounds, bounds_crs) -> tuple[gpd.GeoDataFrame, str, str]:
+def load_ledge(args, bounds, bounds_crs, sign_in: bool = True) -> tuple[gpd.GeoDataFrame, str, str]:
     """Load ledge polygons and describe where the definition came from."""
     if str(args.ledge).lower() in ("massgis", "massgis:surfgeo", "default"):
         gdf = massgis_ledge.fetch_ledge_polygons(
@@ -220,6 +215,7 @@ def load_ledge(args, bounds, bounds_crs) -> tuple[gpd.GeoDataFrame, str, str]:
         bounds_crs=bounds_crs,
         workers=args.workers,
         batch_size=args.batch_size,
+        sign_in=sign_in,
     )
     return gdf, "custom", f"Ledge polygons from {args.ledge}"
 
@@ -383,10 +379,13 @@ def main(argv=None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     extent, extent_crs = parse_extent(args)
 
-    token = resolve_token(args)
+    # Nothing here decides whether to sign in. Each source is read against its
+    # own host, so a public main line layer and an internal one take the same
+    # command, and a MassGIS-only run never opens a browser.
+    sign_in = not args.anonymous
 
     if args.count_only:
-        count = vector_source.count_features(args.mainlines, args.where, token)
+        count = vector_source.count_features(args.mainlines, args.where, sign_in=sign_in)
         if count is None:
             progress("A local file has no server-side count; read it to count rows.")
             return 0
@@ -399,11 +398,11 @@ def main(argv=None) -> int:
         layer=args.mainlines_layer,
         where=args.where,
         out_fields=args.out_fields,
-        token=token,
         bounds=extent,
         bounds_crs=extent_crs,
         workers=args.workers,
         batch_size=args.batch_size,
+        sign_in=sign_in,
     )
     if mainlines.empty:
         progress("No main lines matched. Nothing to analyse.")
@@ -416,7 +415,7 @@ def main(argv=None) -> int:
     if bounds is None:
         bounds = tuple(mainlines.total_bounds)
         bounds_crs = mainlines.crs
-    ledge, profile, ledge_description = load_ledge(args, bounds, bounds_crs)
+    ledge, profile, ledge_description = load_ledge(args, bounds, bounds_crs, sign_in)
     ledge = buffer_ledge(ledge, args.ledge_buffer_ft)
 
     progress("--- Analysis ---")

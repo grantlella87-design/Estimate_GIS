@@ -27,6 +27,7 @@ Estimate_GIS is a small GIS automation repository for querying ArcGIS REST servi
    +- leaflet_viewer.py
    +- massgis_ledge.py
    +- output.py
+   +- service_auth.py
    +- vector_source.py
    +- templates
       +- leaflet_viewer.html
@@ -67,6 +68,40 @@ scripts/export_arcgis_to_geopackage.py
 ```
 
 The query flow mirrors the fast Leak Relocation GeoPandas approach: read layer metadata, request OBJECTIDs for the same WHERE clause, download matching OBJECTIDs in batches, convert Esri JSON geometry into Shapely geometry, and return a GeoDataFrame or GeoPackage.
+
+## Which services get a token
+
+```text
+src/service_auth.py
+```
+
+Nothing has to be told whether a layer needs signing in to. The host in the URL
+decides:
+
+| Host | Token | Sign-in |
+| --- | --- | --- |
+| `nationalgrid.com` and anything under it | the token from `src/auth.py` | on first use, cached for the run |
+| everything else | none, ever | never |
+
+A public service is sent no token even when the caller has one in hand, so our
+credentials cannot leave for a host that is not ours by accident. The other
+direction fails loudly instead: an internal layer with no token says so before
+downloading anything, rather than after a few hundred "Token Required" batches.
+
+The practical effect is that a run touching only public services - MassGIS
+ledge, for example - never loads keyring, never opens a browser and needs no
+VPN, while the same command against a National Grid layer signs in on its own.
+
+Widen the internal list with an environment variable rather than by editing
+code:
+
+```powershell
+$env:ESTIMATE_GIS_INTERNAL_HOSTS = "nationalgrid.com,gis.internal.example"
+```
+
+Host suffixes match on label boundaries, so `notnationalgrid.com` is not treated
+as ours. When a service rejects a token, the error says which side of the line
+its host fell on and what to do about it.
 
 ## Main lines versus ledge
 
@@ -180,7 +215,8 @@ src/vector_source.py
 
 `read_source` takes an ArcGIS layer URL or any file GeoPandas reads, so the same
 command works against the live service on a National Grid workstation and against
-an exported GeoPackage on a machine with no VPN.
+an exported GeoPackage on a machine with no VPN. Signing in is not the caller's
+problem either - see "Which services get a token" above.
 
 ## Local generated files
 

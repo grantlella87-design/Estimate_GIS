@@ -40,7 +40,11 @@ def main() -> int:
     parser.add_argument(
         "--token-env",
         default="ARCGIS_TOKEN",
-        help="Environment variable containing ArcGIS token.",
+        help=(
+            "Environment variable holding an ArcGIS token. Optional: one of our "
+            "own services signs in through src/auth.py when it is unset, and a "
+            "public service is sent no token either way."
+        ),
     )
     parser.add_argument(
         "--workers", type=int, default=8, help="Parallel object-id download workers."

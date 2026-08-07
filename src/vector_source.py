@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 import geopandas as gpd
+import service_auth
 from shapely.geometry import box as shapely_box
 
 from arcgis_rest_geopandas import (
@@ -28,11 +29,15 @@ def is_service(source: str) -> bool:
     return str(source).lower().startswith(("http://", "https://"))
 
 
-def count_features(source: str, where: str = "1=1", token: str | None = None) -> int | None:
+def count_features(
+    source: str, where: str = "1=1", token: str | None = None, *, sign_in: bool = True
+) -> int | None:
     """Feature count without downloading anything. Only services can answer cheaply."""
     if not is_service(source):
         return None
-    return query_count(make_session(token), str(source), where)
+    service_auth.report_once(str(source))
+    resolved = service_auth.token_for(str(source), token, allow_sign_in=sign_in)
+    return query_count(make_session(resolved), str(source), where)
 
 
 def read_source(
@@ -47,13 +52,14 @@ def read_source(
     out_sr: int | None = None,
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
     batch_size: int = DEFAULT_OBJECTID_BATCH_SIZE,
-    allow_anonymous: bool = True,
+    sign_in: bool = True,
 ) -> gpd.GeoDataFrame:
     """Return a GeoDataFrame from an ArcGIS layer URL or any file GeoPandas reads.
 
-    `token=None` means anonymous. A secured layer queried that way fails with the
-    service's own "Token Required" error, which says what went wrong; refusing to
-    send the request would break every public service instead.
+    Authentication is not the caller's problem: our own servers get a token,
+    signing in if `token` was not supplied, and public ones get none. `sign_in`
+    turns the sign-in off for an unattended run, leaving `token` as the only way
+    to authenticate.
     """
     source = str(source)
     if is_service(source):
@@ -67,7 +73,7 @@ def read_source(
             bounds=bounds,
             bounds_sr=_epsg_of(bounds_crs) if bounds is not None else None,
             out_sr=out_sr,
-            allow_anonymous=allow_anonymous,
+            sign_in=sign_in,
         )
 
     path = Path(source).expanduser()

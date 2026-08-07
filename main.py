@@ -12,7 +12,7 @@ if str(SRC) not in sys.path:
 from enterprise_network import configure_enterprise_network
 
 configure_enterprise_network()
-import auth
+import service_auth
 from arcgis_rest_geopandas import export_layer_to_geopackage
 
 # =============================================================================
@@ -34,15 +34,15 @@ def main() -> int:
     print(f"Layer URL: {LAYER_URL}")
     print(f"Where: {WHERE}")
     print(f"Output: {OUT_GPKG}")
-    token = auth.get_token()
-    print("Using ArcGIS token from src/auth.py")
+    # Whether this layer needs a token is read off its host, so pointing
+    # LAYER_URL at a public service needs no other edit here.
+    print(service_auth.describe(LAYER_URL))
     gdf = export_layer_to_geopackage(
         layer_url=LAYER_URL,
         output_gpkg=OUT_GPKG,
         layer_name=LAYER_NAME,
         where=WHERE,
         out_fields=OUT_FIELDS,
-        token=token,
         objectid_batch_size=BATCH_SIZE,
         workers=WORKERS,
     )

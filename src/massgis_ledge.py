@@ -15,9 +15,11 @@ for. Nothing here decides which profile is right for a given estimate - the
 profile is recorded in the output so a number can always be traced back to the
 definition that produced it.
 
-These services are public: no token, no portal sign-in, no VPN. That is
-deliberate, so the ledge half of the analysis keeps working when the National
-Grid half needs credentials.
+These services are public: no token, no portal sign-in, no VPN. Nothing here has
+to say so - `service_auth` reads it off the host, so no request to MassGIS
+carries our token and no MassGIS-only run triggers a sign-in. That is deliberate,
+so the ledge half of the analysis keeps working when the National Grid half needs
+credentials.
 """
 from __future__ import annotations
 
@@ -141,7 +143,6 @@ def _fetch(
         bounds=bounds_in_massgis,
         bounds_sr=MASSGIS_CRS,
         out_sr=MASSGIS_CRS,
-        allow_anonymous=True,
     )
     if gdf.empty:
         return gpd.GeoDataFrame(
