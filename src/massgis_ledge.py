@@ -42,6 +42,24 @@ SURFICIAL_GEOLOGY_SERVICE = f"{MASSGIS_REST_ROOT}/AGOL/SurfGeo24k/MapServer"
 OVERLAY_LAYER_URL = f"{SURFICIAL_GEOLOGY_SERVICE}/0"
 MAP_UNIT_LAYER_URL = f"{SURFICIAL_GEOLOGY_SERVICE}/1"
 
+# The same publisher's data on ArcGIS Online, used when the MassGIS server itself
+# cannot be reached. Corporate networks routinely allow services*.arcgis.com and
+# block arcgisserver.digital.mass.gov, which shows up as a connection reset on
+# the very first request.
+#
+# It is not the same data. This is the 1:250,000 mapping, roughly a tenth the
+# detail of the 24k, and its nearest class is "Till or Bedrock" - till and rock
+# in one polygon, where the 24k separates them. It over-reports ledge and it
+# cannot resolve a single outcrop. Good enough to keep working and to scope a
+# job; not good enough to price one. Every output says which source produced it.
+AGOL_SURFICIAL_GEOLOGY_LAYER = os.environ.get(
+    "ESTIMATE_GIS_AGOL_SURFGEO_LAYER",
+    "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services"
+    "/Surficial_Geology__1_250_000_/FeatureServer/0",
+)
+AGOL_CODE_FIELD = "CODE_DESC"
+AGOL_LEDGE_CLASSES = ("Till or Bedrock",)
+
 # Massachusetts State Plane Mainland, metres. The source data is stored in it,
 # so requesting it back costs no reprojection and keeps lengths measurable.
 MASSGIS_CRS = 26986
@@ -130,6 +148,7 @@ def _fetch(
     bounds_crs: Any,
     workers: int,
     batch_size: int,
+    out_fields: str | None = None,
 ) -> gpd.GeoDataFrame:
     bounds_in_massgis = None
     if bounds is not None:
@@ -137,7 +156,7 @@ def _fetch(
     gdf = query_layer_to_geodataframe(
         layer_url=layer_url,
         where=where,
-        out_fields=f"{code_field},LABEL,NOTES",
+        out_fields=out_fields or f"{code_field},LABEL,NOTES",
         token=None,
         objectid_batch_size=batch_size,
         workers=workers,
@@ -326,6 +345,49 @@ def fetch_ledge_polygons(
         combined.to_file(cache_path, driver="GPKG")
         progress(f"Ledge cached for the next run: {cache_path}")
     return combined
+
+
+def fetch_agol_ledge_polygons(
+    bounds: tuple[float, float, float, float] | None = None,
+    bounds_crs: Any = None,
+    *,
+    workers: int = 6,
+    batch_size: int = 500,
+) -> gpd.GeoDataFrame:
+    """Ledge from the ArcGIS Online copy of MassGIS surficial geology.
+
+    The fallback for a network that blocks arcgisserver.digital.mass.gov. Coarser
+    than the 24k mapping - see AGOL_SURFICIAL_GEOLOGY_LAYER for what that costs.
+    """
+    progress(f"Fetching ledge from ArcGIS Online: {AGOL_SURFICIAL_GEOLOGY_LAYER}")
+    gdf = _fetch(
+        layer_url=AGOL_SURFICIAL_GEOLOGY_LAYER,
+        where=_in_clause(AGOL_CODE_FIELD, AGOL_LEDGE_CLASSES),
+        code_field=AGOL_CODE_FIELD,
+        labels={value: value for value in AGOL_LEDGE_CLASSES},
+        source="agol_surficial_geology_250k",
+        bounds=bounds,
+        bounds_crs=bounds_crs,
+        workers=workers,
+        batch_size=batch_size,
+        out_fields=AGOL_CODE_FIELD,
+    )
+    if gdf.empty:
+        return gdf
+    gdf = _repair(gdf)
+    progress(f"Ledge polygons from ArcGIS Online: {len(gdf):,}")
+    return gdf
+
+
+def _repair(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """Drop empty geometry and mend self-intersections, which break every overlay."""
+    gdf = gdf[gdf.geometry.notna() & ~gdf.geometry.is_empty]
+    invalid = ~gdf.geometry.is_valid
+    if bool(invalid.any()):
+        progress(f"Repairing {int(invalid.sum()):,} invalid ledge polygons.")
+        gdf = gdf.copy()
+        gdf.loc[invalid, "geometry"] = gdf.loc[invalid, "geometry"].buffer(0)
+    return gdf[~gdf.geometry.is_empty].reset_index(drop=True)
 
 
 def _cache_path(

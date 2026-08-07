@@ -66,6 +66,14 @@ def parse_args(argv=None):
         help="Fetch a small known-good area and report whether MassGIS is reachable.",
     )
     parser.add_argument(
+        "--agol",
+        action="store_true",
+        help=(
+            "Use the 1:250,000 copy on ArcGIS Online instead of the 1:24,000 "
+            "MassGIS service. Coarser, but on a host most networks allow."
+        ),
+    )
+    parser.add_argument(
         "--workers", type=int, default=6, help="Parallel download workers. Default: 6."
     )
     parser.add_argument(
@@ -88,34 +96,49 @@ def main(argv=None) -> int:
             raise SystemExit("--extent must be minx,miny,maxx,maxy")
         extent = tuple(float(part) for part in parts)
 
-    progress(f"Profile: {args.profile} ({massgis_ledge.describe_profile(args.profile)})")
-    progress(f"Service: {massgis_ledge.SURFICIAL_GEOLOGY_SERVICE}")
+    if args.agol:
+        progress("Source: ArcGIS Online, 1:250,000 (Till or Bedrock)")
+        progress(f"Service: {massgis_ledge.AGOL_SURFICIAL_GEOLOGY_LAYER}")
+    else:
+        progress(f"Profile: {args.profile} ({massgis_ledge.describe_profile(args.profile)})")
+        progress(f"Service: {massgis_ledge.SURFICIAL_GEOLOGY_SERVICE}")
     if extent is None:
         progress("Extent: statewide. This is the slow one; --extent is much faster.")
 
     started = time.time()
     try:
-        gdf = massgis_ledge.fetch_ledge_polygons(
-            profile=args.profile,
-            bounds=extent,
-            bounds_crs=extent_crs if extent is not None else None,
-            workers=args.workers,
-            batch_size=args.batch_size,
-        )
+        if args.agol:
+            gdf = massgis_ledge.fetch_agol_ledge_polygons(
+                bounds=extent,
+                bounds_crs=extent_crs if extent is not None else None,
+                workers=args.workers,
+                batch_size=args.batch_size,
+            )
+        else:
+            gdf = massgis_ledge.fetch_ledge_polygons(
+                profile=args.profile,
+                bounds=extent,
+                bounds_crs=extent_crs if extent is not None else None,
+                workers=args.workers,
+                batch_size=args.batch_size,
+            )
     except Exception as exc:  # noqa: BLE001 - the whole point is to report the failure
         progress("")
         progress("=== MassGIS fetch FAILED ===")
         progress(f"{type(exc).__name__}: {exc}")
         progress("")
-        progress("Things worth checking, in the order they usually go wrong:")
-        progress("  1. Can this machine reach the service at all? Open in a browser:")
-        progress(f"     {massgis_ledge.MAP_UNIT_LAYER_URL}?f=json")
-        progress("  2. TLS interception. Estimate_GIS uses the Windows trust store")
-        progress("     through truststore; confirm it is installed: pip show truststore")
-        progress("  3. A proxy that is needed but not set. Set it and retry:")
-        progress("     $env:ESTIMATE_GIS_PROXY_URL = 'http://your.proxy:8080'")
-        progress("  4. Try again with one worker, which rules out rate limiting:")
-        progress("     --workers 1 --batch-size 250")
+        import service_auth
+
+        progress(service_auth.connection_hint(massgis_ledge.MAP_UNIT_LAYER_URL))
+        progress("")
+        if not args.agol:
+            progress("The quickest way round a blocked MassGIS host is the copy on")
+            progress("ArcGIS Online, which most networks allow. It is coarser:")
+            progress(f"  python {Path(__file__).name} --out {args.out} --agol --self-test")
+        progress("Other things worth checking:")
+        progress("  - TLS interception. Estimate_GIS uses the Windows trust store")
+        progress("    through truststore; confirm it is installed: pip show truststore")
+        progress("  - Rate limiting, ruled out with:  --workers 1 --batch-size 250")
         return 1
     elapsed = time.time() - started
 
