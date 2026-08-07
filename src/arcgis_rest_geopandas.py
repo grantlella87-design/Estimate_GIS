@@ -54,35 +54,36 @@ def progress_request(url: str, params: dict[str, object]) -> None:
     progress(f"GET {url} params={preview}")
 
 def progress_response(params: dict[str, object], data: dict[str, object]) -> None:
-    global PROGRESS_TOTAL_OBJECTS, PROGRESS_TOTAL_BATCHES, PROGRESS_COMPLETED_BATCHES
+    global PROGRESS_COMPLETED_BATCHES, PROGRESS_REQUESTED_OBJECTS, PROGRESS_TOTAL_BATCHES, PROGRESS_TOTAL_OBJECTS
     if not PROGRESS_ENABLED:
         return
     if isinstance(data, dict) and data.get("error"):
         return
     if _truthy(params.get("returnIdsOnly")):
         object_ids = data.get("objectIds") or []
-        PROGRESS_TOTAL_OBJECTS = len(object_ids) if isinstance(object_ids, list) else 0
-        batch_size = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "2000"))
-        PROGRESS_TOTAL_BATCHES = (PROGRESS_TOTAL_OBJECTS + batch_size - 1) // batch_size if PROGRESS_TOTAL_OBJECTS else 0
+        PROGRESS_TOTAL_OBJECTS = len(object_ids)
+        PROGRESS_TOTAL_BATCHES = 0
         PROGRESS_COMPLETED_BATCHES = 0
+        PROGRESS_REQUESTED_OBJECTS = 0
+        max_record_count = int(params.get("resultRecordCount") or DEFAULT_OBJECTID_BATCH_SIZE)
+        if max_record_count > 0:
+            PROGRESS_TOTAL_BATCHES = (PROGRESS_TOTAL_OBJECTS + max_record_count - 1) // max_record_count
         progress(
             f"Object IDs received: {PROGRESS_TOTAL_OBJECTS:,} total | "
-            f"max {batch_size:,}/request | {PROGRESS_TOTAL_BATCHES:,} feature requests"
+            f"max {max_record_count:,}/request | {PROGRESS_TOTAL_BATCHES:,} feature requests"
         )
         return
-    if "objectIds" in params:
-        PROGRESS_COMPLETED_BATCHES += 1
-        object_ids_text = str(params.get("objectIds", ""))
-        object_id_count = len([item for item in object_ids_text.split(",") if item])
-        batch_size = int(os.environ.get("ESTIMATE_GIS_OBJECTID_BATCH_SIZE", "2000"))
-        requested = min(PROGRESS_COMPLETED_BATCHES * batch_size, PROGRESS_TOTAL_OBJECTS) if PROGRESS_TOTAL_OBJECTS else PROGRESS_COMPLETED_BATCHES * object_id_count
-        if PROGRESS_TOTAL_BATCHES:
-            progress(
-                f"Feature batch {PROGRESS_COMPLETED_BATCHES:,}/{PROGRESS_TOTAL_BATCHES:,}: "
-                f"{object_id_count:,} ids | requested {requested:,}/{PROGRESS_TOTAL_OBJECTS:,} objects"
-            )
-        else:
-            progress(f"Feature batch {PROGRESS_COMPLETED_BATCHES:,}: {object_id_count:,} ids")
+    features = data.get("features") if isinstance(data, dict) else None
+    if features is None:
+        return
+    feature_count = len(features)
+    PROGRESS_COMPLETED_BATCHES += 1
+    PROGRESS_REQUESTED_OBJECTS = min(PROGRESS_TOTAL_OBJECTS, PROGRESS_REQUESTED_OBJECTS + feature_count)
+    total_batches = PROGRESS_TOTAL_BATCHES or PROGRESS_COMPLETED_BATCHES
+    progress(
+        f"Feature batch {PROGRESS_COMPLETED_BATCHES:,}/{total_batches:,}: "
+        f"{feature_count:,} ids | completed {PROGRESS_REQUESTED_OBJECTS:,}/{PROGRESS_TOTAL_OBJECTS:,} objects"
+    )
 
 def make_session(token: str | None = None) -> requests.Session:
     """Create a requests session and attach an ArcGIS token for all requests."""
