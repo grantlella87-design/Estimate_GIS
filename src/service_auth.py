@@ -133,6 +133,33 @@ def report_once(url: str) -> None:
     progress(describe(url))
 
 
+def connection_hint(url: str) -> str:
+    """What a refused connection to this host usually means here.
+
+    A reset is not the service saying no, it is the network saying no before the
+    service ever sees the request. On a Windows workstation behind Zscaler the
+    usual cause is that requests reads proxies only from environment variables
+    while Windows keeps its own in the registry, so internal hosts - reachable
+    directly - keep working and public ones are refused.
+    """
+    host = host_of(url) or url
+    if is_internal_service(url):
+        return (
+            f"{host} is one of ours and should be reachable directly. A reset "
+            "here usually means VPN is down or the service is out."
+        )
+    return (
+        f"{host} is a public host and this looks like the network refusing the "
+        "connection, not the service.\n"
+        "  - Open it in a browser to see whether the host is allowed at all:\n"
+        f"    {url}?f=json\n"
+        "  - If the browser can reach it but this cannot, the proxy is the "
+        "difference. Set it and retry:\n"
+        "    $env:ESTIMATE_GIS_PROXY_URL = 'http://your.zscaler.proxy:80'\n"
+        "  - Check nothing is wrongly bypassing the proxy for it: echo $env:NO_PROXY"
+    )
+
+
 def token_hint(url: str) -> str:
     """How this host is treated and what to do about it.
 

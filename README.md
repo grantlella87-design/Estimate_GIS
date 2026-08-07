@@ -153,6 +153,39 @@ National Grid layer, so if this works the problem is elsewhere:
 python .\scripts\fetch_massgis_ledge.py --out outputs\ledge.gpkg --self-test
 ```
 
+#### If the MassGIS host is blocked
+
+`ConnectionResetError 10054` on the first request is the network refusing the
+connection, not the service answering. National Grid hosts keep working because
+interception for them is transparent and needs no proxy, so only the public half
+fails. Two ways through, and the run now takes the second one on its own:
+
+**Point requests at the proxy Windows already uses.** `requests` reads proxies
+only from environment variables; Windows keeps its in the registry. Startup now
+bridges the two automatically and excludes National Grid hosts so the working
+half stays direct. Override it when the detection is wrong:
+
+```powershell
+$env:ESTIMATE_GIS_PROXY_URL = "http://your.zscaler.proxy:80"
+```
+
+**Or take the ledge from ArcGIS Online.** MassGIS publishes a copy on
+`services1.arcgis.com`, which corporate networks almost always allow. If the
+MassGIS server cannot be reached the report falls back to it automatically,
+says so, and labels every output with which source produced the numbers:
+
+```powershell
+python .\scripts\mainline_ledge_report.py --ledge agol      # ask for it directly
+python .\scripts\fetch_massgis_ledge.py --agol --self-test  # test it on its own
+python .\scripts\mainline_ledge_report.py --no-agol-fallback  # fail instead
+```
+
+**It is not the same data.** The AGOL copy is 1:250,000, roughly a tenth the
+detail of the 1:24,000 service, and its only relevant class is `Till or Bedrock`
+- till and rock in one polygon, where the 24k separates them. On the same test
+area it reported 59% of footage in ledge against 8.7% from the 24k data. Use it
+to keep working and to scope a job. Do not price one from it.
+
 That pulls a small area of Worcester known to have ledge and reports what came
 back. If it fails, the output names the things to check in the order they
 usually go wrong. If it works, download what you need once and hand the file to

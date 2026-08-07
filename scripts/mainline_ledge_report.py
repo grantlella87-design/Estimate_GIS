@@ -61,6 +61,11 @@ MAIN_PRE = "#4b5563"
 MAIN_POST = "#d64545"
 LEDGE_SEGMENT = "#111827"
 
+AGOL_LEDGE_DESCRIPTION = (
+    "MassGIS Surficial Geology (1:250,000) via ArcGIS Online: Till or Bedrock. "
+    "Coarser than the 1:24,000 mapping and it does not separate till from rock."
+)
+
 def _clean_source_value(value: object) -> str:
     """Return a plain URL/path even if a Teams/HTML anchor was pasted into PowerShell."""
     if value is None:
@@ -116,7 +121,15 @@ def parse_args(argv=None):
     ledge.add_argument(
         "--ledge",
         default="massgis",
-        help="'massgis' for the MassGIS surficial geology ledge polygons, or a URL or file.",
+        help=(
+            "'massgis' for the 1:24,000 MassGIS service, 'agol' for the coarser "
+            "1:250,000 copy on ArcGIS Online, or a URL or file."
+        ),
+    )
+    ledge.add_argument(
+        "--no-agol-fallback",
+        action="store_true",
+        help="Fail instead of falling back to ArcGIS Online when MassGIS is unreachable.",
     )
     ledge.add_argument(
         "--ledge-profile",
@@ -243,28 +256,73 @@ def parse_extent(args) -> tuple[tuple[float, float, float, float] | None, str | 
         raise SystemExit("--extent must be minx,miny,maxx,maxy")
     return tuple(float(part) for part in parts), args.extent_crs
 
+def _load_agol_ledge(args, bounds, bounds_crs, cache_dir) -> tuple[gpd.GeoDataFrame, str, str]:
+    """Ledge from ArcGIS Online, cached separately so it is never mistaken for 24k."""
+    cache_path = None
+    if cache_dir is not None:
+        cache_path = massgis_ledge._cache_path(cache_dir, "agol250k", bounds, bounds_crs)
+        if cache_path.exists() and not args.refresh_ledge_cache:
+            cached = gpd.read_file(cache_path)
+            progress(f"Ledge polygons from cache: {len(cached):,} ({cache_path})")
+            return cached, "agol_250k", AGOL_LEDGE_DESCRIPTION
+    gdf = massgis_ledge.fetch_agol_ledge_polygons(
+        bounds=bounds,
+        bounds_crs=bounds_crs,
+        workers=args.workers,
+        batch_size=args.batch_size,
+    )
+    if cache_path is not None and not gdf.empty:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        gdf.to_file(cache_path, driver="GPKG")
+        progress(f"Ledge cached for the next run: {cache_path}")
+    progress("")
+    progress(
+        "NOTE: this is the 1:250,000 mapping, not the 1:24,000. Its one ledge "
+        "class is 'Till or Bedrock', which lumps till in with rock, so it reports "
+        "more ledge than the 24k data would and cannot resolve a single outcrop. "
+        "Use it to scope, not to price."
+    )
+    progress("")
+    return gdf, "agol_250k", AGOL_LEDGE_DESCRIPTION
+
+
 def load_ledge(args, bounds, bounds_crs, sign_in: bool = True) -> tuple[gpd.GeoDataFrame, str, str]:
     """Load ledge polygons and describe where the definition came from."""
     ledge_source = _clean_source_value(args.ledge)
+    cache_dir = None
+    if not args.no_ledge_cache:
+        cache_dir = Path(args.ledge_cache_dir or (Path(args.out_dir) / "ledge_cache"))
+
     if ledge_source.lower() in ("massgis", "massgis:surfgeo", "default"):
-        cache_dir = None
-        if not args.no_ledge_cache:
-            cache_dir = Path(args.ledge_cache_dir or (Path(args.out_dir) / "ledge_cache"))
-        gdf = massgis_ledge.fetch_ledge_polygons(
-            profile=args.ledge_profile,
-            bounds=bounds,
-            bounds_crs=bounds_crs,
-            workers=args.workers,
-            batch_size=args.batch_size,
-            cache_dir=cache_dir,
-            refresh_cache=args.refresh_ledge_cache,
-        )
-        return (
-            gdf,
-            args.ledge_profile,
-            "MassGIS Surficial Geology (1:24,000): "
-            + massgis_ledge.describe_profile(args.ledge_profile),
-        )
+        try:
+            gdf = massgis_ledge.fetch_ledge_polygons(
+                profile=args.ledge_profile,
+                bounds=bounds,
+                bounds_crs=bounds_crs,
+                workers=args.workers,
+                batch_size=args.batch_size,
+                cache_dir=cache_dir,
+                refresh_cache=args.refresh_ledge_cache,
+            )
+            return (
+                gdf,
+                args.ledge_profile,
+                "MassGIS Surficial Geology (1:24,000): "
+                + massgis_ledge.describe_profile(args.ledge_profile),
+            )
+        except Exception as exc:  # noqa: BLE001 - any failure to reach it is worth falling back on
+            if args.no_agol_fallback:
+                raise
+            progress("")
+            progress(f"Could not reach the MassGIS server: {type(exc).__name__}: {exc}")
+            progress(service_auth.connection_hint(massgis_ledge.MAP_UNIT_LAYER_URL))
+            progress("Falling back to the ArcGIS Online copy.")
+            progress("")
+        return _load_agol_ledge(args, bounds, bounds_crs, cache_dir)
+
+    if ledge_source.lower() in ("agol", "arcgis-online", "massgis:agol"):
+        return _load_agol_ledge(args, bounds, bounds_crs, cache_dir)
+
     gdf = vector_source.read_source(
         ledge_source,
         layer=args.ledge_layer,
