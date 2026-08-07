@@ -24,3 +24,11 @@ dist/
 .venv/
 outputs/
 *.gpkg
+
+# editor and tooling backups
+*.bak
+*.bak_*
+*.before_*
+*.orig
+*.rej
+agol_test_output/

@@ -112,7 +112,31 @@ def configure_zscaler_proxy() -> None:
     os.environ["NO_PROXY"] = merged
     os.environ["no_proxy"] = merged
 
+def configure_winhttp_transport() -> None:
+    """Send public ArcGIS traffic through WinHTTP when a proxy is in play.
+
+    requests cannot see the Windows proxy configuration, which is where Zscaler
+    publishes itself. WinHTTP can, and it validates TLS against the Windows
+    certificate store where the Zscaler root already sits. It is only worth doing
+    when a proxy is actually configured, so the decision is made here rather than
+    at every call site.
+    """
+    try:
+        import requests
+
+        import winhttp_arcgis_transport as transport
+    except ImportError:
+        return
+    if not transport.available():
+        return
+    if transport.install_winhttp_transport(requests):
+        print(f"Routing public ArcGIS requests through WinHTTP ({transport.describe_proxy()}).")
+    elif transport.proxy_is_active():
+        print("WinHTTP transport is disabled; public ArcGIS requests use requests directly.")
+
+
 def configure_enterprise_network() -> None:
     """Apply enterprise TLS and proxy configuration in one place."""
     configure_enterprise_ssl()
     configure_zscaler_proxy()
+    configure_winhttp_transport()

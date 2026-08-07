@@ -11,16 +11,6 @@ from typing import Any
 import geopandas as gpd
 import pandas as pd
 import requests
-try:
-    from winhttp_arcgis_transport import install_winhttp_transport
-    install_winhttp_transport(requests)
-except Exception:
-    pass
-try:
-    from powershell_arcgis_transport import install_powershell_transport_fallback
-    install_powershell_transport_fallback(requests)
-except Exception:
-    pass
 from pyproj import CRS
 from shapely.geometry import (
     LineString,
