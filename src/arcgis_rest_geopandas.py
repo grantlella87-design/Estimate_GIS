@@ -122,46 +122,61 @@ def request_json(
     timeout: int = DEFAULT_TIMEOUT_SECONDS,
     post: bool = False,
 ) -> dict[str, Any]:
-    """Request ArcGIS JSON and retry transient Token Required responses."""
+    """Request ArcGIS JSON with retries for transient connection resets and service errors."""
     request_params = _with_token(session, params)
     progress_request(url, request_params)
-    attempts = int(os.environ.get("ESTIMATE_GIS_REQUEST_RETRIES", "3"))
+    attempts = int(os.environ.get("ESTIMATE_GIS_REQUEST_RETRIES", "5"))
     last_error: dict[str, Any] | None = None
+    last_exception: BaseException | None = None
     for attempt in range(1, attempts + 1):
-        if post:
-            response = session.post(
-                url,
-                params=_post_query_params(session, request_params),
-                data=request_params,
-                timeout=timeout,
-                verify=VERIFY_SSL,
-            )
-        else:
-            response = session.get(
-                url,
-                params=request_params,
-                timeout=timeout,
-                verify=VERIFY_SSL,
-            )
-        response.raise_for_status()
-        data = response.json()
-        error = data.get("error") if isinstance(data, dict) else None
-        if not error:
-            progress_response(request_params, data)
-            return data
-        last_error = error
-        code = error.get("code")
-        message = error.get("message", "")
-        if code in {498, 499} and attempt < attempts:
-            if attempt == 1:
-                progress(
-                    f"ArcGIS Server rejected a secured POST feature request even though a cached token is present. code={code}, message={message}. "
-                    f"Retrying up to {attempts} attempts."
+        try:
+            if post:
+                response = session.post(
+                    url,
+                    params=_post_query_params(session, request_params),
+                    data=request_params,
+                    timeout=timeout,
+                    verify=VERIFY_SSL,
                 )
-            time.sleep(min(2 * attempt, 8))
-            continue
-        break
-    raise RuntimeError(json.dumps(last_error, indent=2))
+            else:
+                response = session.get(
+                    url,
+                    params=request_params,
+                    timeout=timeout,
+                    verify=VERIFY_SSL,
+                )
+            response.raise_for_status()
+            data = response.json()
+            error = data.get("error") if isinstance(data, dict) else None
+            if not error:
+                progress_response(request_params, data)
+                return data
+            last_error = error
+            code = error.get("code")
+            message = error.get("message", "")
+            if code in {498, 499, 500, 502, 503, 504} and attempt < attempts:
+                progress(
+                    f"ArcGIS REST retry {attempt}/{attempts} for service response "
+                    f"code={code}, message={message}."
+                )
+                time.sleep(min(2 * attempt, 10))
+                continue
+            break
+        except requests.RequestException as exc:
+            last_exception = exc
+            if attempt < attempts:
+                progress(
+                    f"ArcGIS REST retry {attempt}/{attempts} after connection error: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                time.sleep(min(2 * attempt, 10))
+                continue
+            raise RuntimeError(f"ArcGIS REST request failed after {attempts} attempts: {url}: {exc}") from exc
+    if last_error is not None:
+        raise RuntimeError(json.dumps(last_error, indent=2))
+    if last_exception is not None:
+        raise RuntimeError(f"ArcGIS REST request failed after {attempts} attempts: {url}: {last_exception}") from last_exception
+    raise RuntimeError(f"ArcGIS REST request failed without JSON response: {url}")
 
 def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
     """Read layer metadata needed for fast REST querying and GeoDataFrame CRS assignment."""
@@ -460,6 +475,10 @@ def query_layer_to_geodataframe(
         progress("No object IDs returned for this query.")
         return features_to_geodataframe([], meta)
     object_id_batches = list(chunked(object_ids, objectid_batch_size))
+    global PROGRESS_TOTAL_BATCHES, PROGRESS_COMPLETED_BATCHES, PROGRESS_REQUESTED_OBJECTS
+    PROGRESS_TOTAL_BATCHES = len(object_id_batches)
+    PROGRESS_COMPLETED_BATCHES = 0
+    PROGRESS_REQUESTED_OBJECTS = 0
     progress(
         f"Downloading {len(object_ids):,} objects in {len(object_id_batches):,} "
         f"feature requests with {workers:,} workers"
