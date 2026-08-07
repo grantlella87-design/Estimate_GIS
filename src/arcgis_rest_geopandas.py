@@ -219,10 +219,42 @@ def chunked(values: Sequence[int], chunk_size: int) -> Iterable[Sequence[int]]:
     for index in range(0, len(values), chunk_size):
         yield values[index : index + chunk_size]
 
-def query_count(session: requests.Session, layer_url: str, where: str) -> int | None:
-    data = request_json(
-        session, _query_url(layer_url), {"where": where, "returnCountOnly": "true"}
-    )
+def envelope_filter(
+    bounds: Sequence[float], in_sr: int | str
+) -> dict[str, Any]:
+    """Build the ArcGIS query parameters that limit a query to a bounding box.
+
+    Fetching a statewide reference layer to intersect a handful of miles of pipe
+    wastes most of the download, so callers pass the extent they actually need.
+    `bounds` is (minx, miny, maxx, maxy) in the `in_sr` coordinate system, which
+    is the order GeoPandas `total_bounds` returns.
+    """
+    minx, miny, maxx, maxy = (float(value) for value in bounds)
+    return {
+        "geometry": json.dumps(
+            {
+                "xmin": minx,
+                "ymin": miny,
+                "xmax": maxx,
+                "ymax": maxy,
+                "spatialReference": {"wkid": int(in_sr)},
+            }
+        ),
+        "geometryType": "esriGeometryEnvelope",
+        "spatialRel": "esriSpatialRelIntersects",
+        "inSR": str(in_sr),
+    }
+
+def query_count(
+    session: requests.Session,
+    layer_url: str,
+    where: str,
+    *,
+    extra_params: dict[str, Any] | None = None,
+) -> int | None:
+    params: dict[str, Any] = {"where": where, "returnCountOnly": "true"}
+    params.update(extra_params or {})
+    data = request_json(session, _query_url(layer_url), params, post=True)
     count = data.get("count")
     return int(count) if count is not None else None
 
@@ -232,11 +264,13 @@ def query_object_ids(
     where: str,
     *,
     order_by_fields: str | None = None,
+    extra_params: dict[str, Any] | None = None,
 ) -> list[int]:
     """Ask the service for OBJECTIDs matching the exact WHERE clause that will be downloaded."""
-    params = {"where": where, "returnIdsOnly": "true"}
+    params: dict[str, Any] = {"where": where, "returnIdsOnly": "true"}
     if order_by_fields:
         params["orderByFields"] = order_by_fields
+    params.update(extra_params or {})
     data = request_json(session, _query_url(layer_url), params, post=True)
     object_ids = data.get("objectIds") or []
     return [int(object_id) for object_id in object_ids]
@@ -262,18 +296,60 @@ def esri_polyline_to_geom(geometry: dict[str, Any]) -> Any | None:
         return lines[0]
     return MultiLineString(lines)
 
+def _ring_signed_area(coords: Sequence[tuple[float, float]]) -> float:
+    """Shoelace area; negative for the clockwise winding Esri uses for outer rings."""
+    total = 0.0
+    for index in range(len(coords) - 1):
+        x1, y1 = coords[index]
+        x2, y2 = coords[index + 1]
+        total += (x2 - x1) * (y2 + y1)
+    return -total / 2.0
+
 def esri_polygon_to_geom(geometry: dict[str, Any]) -> Any | None:
+    """Rebuild an Esri polygon, honouring interior rings.
+
+    Esri puts every ring in one flat list and distinguishes them by winding:
+    clockwise is an outer ring, counter-clockwise is a hole. Treating each ring
+    as its own polygon fills the holes back in, which inflates area and makes a
+    line crossing a doughnut-shaped ledge polygon look like it runs through the
+    middle of it.
+    """
     if not geometry or "rings" not in geometry:
         return None
-    polygons = []
+    exteriors: list[list[tuple[float, float]]] = []
+    holes: list[list[tuple[float, float]]] = []
     for ring in geometry.get("rings", []):
         coords = [
             (float(point[0]), float(point[1])) for point in ring if len(point) >= 2
         ]
-        if len(coords) >= 4:
-            polygons.append(Polygon(coords))
-    if not polygons:
+        if len(coords) < 4:
+            continue
+        if coords[0] != coords[-1]:
+            coords.append(coords[0])
+        if _ring_signed_area(coords) < 0:
+            exteriors.append(coords)
+        else:
+            holes.append(coords)
+    if not exteriors:
+        # Malformed or single-ring-only winding: treat every ring as an outer ring
+        # rather than dropping the feature.
+        exteriors, holes = holes, []
+    if not exteriors:
         return None
+    shells = [Polygon(coords) for coords in exteriors]
+    assigned: list[list[list[tuple[float, float]]]] = [[] for _ in shells]
+    for hole in holes:
+        point = Polygon(hole).representative_point()
+        # Smallest containing shell, so nested rings land on the right parent.
+        candidates = [
+            index for index, shell in enumerate(shells) if shell.contains(point)
+        ]
+        if not candidates:
+            continue
+        assigned[min(candidates, key=lambda index: shells[index].area)].append(hole)
+    polygons = [
+        Polygon(exteriors[index], assigned[index]) for index in range(len(shells))
+    ]
     if len(polygons) == 1:
         return polygons[0]
     return MultiPolygon(polygons)
@@ -309,9 +385,18 @@ def fetch_objectid_batch(
     object_id_batch: Sequence[int],
     out_fields: str,
     token: str | None,
+    *,
+    out_sr: int | str | None = None,
+    allow_anonymous: bool = False,
 ) -> list[dict[str, Any]]:
-    """Download a specific OBJECTID batch using the already-resolved token."""
-    if not token:
+    """Download a specific OBJECTID batch using the already-resolved token.
+
+    A missing token is an error by default, because a secured layer that is
+    queried anonymously returns "Token Required" for every batch and the run
+    fails late with nothing useful to show. Public services (MassGIS, for
+    example) take no token at all, so those callers pass allow_anonymous.
+    """
+    if not token and not allow_anonymous:
         raise RuntimeError("Feature batch request has no ArcGIS token passed from query_layer_to_geodataframe.")
     session = make_session(token)
     params = {
@@ -321,6 +406,8 @@ def fetch_objectid_batch(
         "returnZ": "false",
         "returnM": "false",
     }
+    if out_sr:
+        params["outSR"] = str(out_sr)
     try:
         data = request_json(session, _query_url(layer_url), params, post=True)
     except RuntimeError as exc:
@@ -340,16 +427,34 @@ def query_layer_to_geodataframe(
     objectid_batch_size: int = DEFAULT_OBJECTID_BATCH_SIZE,
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
     order_by_fields: str | None = None,
+    *,
+    bounds: Sequence[float] | None = None,
+    bounds_sr: int | str | None = None,
+    out_sr: int | str | None = None,
+    allow_anonymous: bool = False,
 ) -> gpd.GeoDataFrame:
-    """Fast ArcGIS REST query that returns a GeoDataFrame."""
+    """Fast ArcGIS REST query that returns a GeoDataFrame.
+
+    `bounds` limits the query to an extent, and `out_sr` asks the service to
+    project on the way out so two layers from different services arrive in one
+    coordinate system.
+    """
     progress(f"Querying layer to GeoDataFrame: {layer_url}")
     session = make_session(token)
     meta = layer_metadata(session, layer_url)
+    if out_sr:
+        # The service projects the geometry it returns, so the GeoDataFrame CRS
+        # has to follow the request rather than the layer's own spatial reference.
+        meta = {**meta, "spatial_reference": {"wkid": int(out_sr)}, "wkid": int(out_sr)}
+    extra_params: dict[str, Any] | None = None
+    if bounds is not None:
+        extra_params = envelope_filter(bounds, bounds_sr or meta.get("wkid") or 4326)
     object_ids = query_object_ids(
         session=session,
         layer_url=layer_url,
         where=where,
         order_by_fields=order_by_fields,
+        extra_params=extra_params,
     )
     if not object_ids:
         progress("No object IDs returned for this query.")
@@ -368,6 +473,8 @@ def query_layer_to_geodataframe(
                     object_id_batch=object_id_batch,
                     out_fields=out_fields,
                     token=token,
+                    out_sr=out_sr,
+                    allow_anonymous=allow_anonymous,
                 )
             )
     else:
@@ -379,6 +486,8 @@ def query_layer_to_geodataframe(
                     object_id_batch=object_id_batch,
                     out_fields=out_fields,
                     token=token,
+                    out_sr=out_sr,
+                    allow_anonymous=allow_anonymous,
                 ): object_id_batch
                 for object_id_batch in object_id_batches
             }

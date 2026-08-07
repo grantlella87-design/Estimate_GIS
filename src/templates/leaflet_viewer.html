@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>__TITLE__</title>
+__LEAFLET_CSS__
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#15181d; --muted:#5b6472; --line:#dde1e7;
+  --accent:#1d6fd0; --accent-soft:#e8f0fb; --warn:#8a5300; --warn-soft:#fdf3e2;
+  --row:#ffffff; --row-alt:#fafbfc; --sel:#fff3cd; --shadow:0 2px 10px rgba(16,20,26,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14171c; --panel:#1c2027; --ink:#e8ebef; --muted:#9aa3b0; --line:#2c323b;
+    --accent:#5aa2f0; --accent-soft:#1e2a3a; --warn:#f0c078; --warn-soft:#2e2617;
+    --row:#1c2027; --row-alt:#20252d; --sel:#3a3320; --shadow:0 2px 10px rgba(0,0,0,.5);
+  }
+}
+html,body{height:100%;margin:0}
+body{
+  font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ink); background:var(--bg); display:flex; flex-direction:column; overflow:hidden;
+}
+header{
+  display:flex; align-items:center; gap:12px; padding:8px 14px; background:var(--panel);
+  border-bottom:1px solid var(--line); flex:0 0 auto; z-index:1200;
+}
+header h1{font-size:15px;margin:0;font-weight:600;white-space:nowrap}
+header .sub{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .spacer{flex:1}
+button,select,input[type=search],input[type=text]{
+  font:inherit; color:var(--ink); background:var(--panel); border:1px solid var(--line);
+  border-radius:6px; padding:4px 9px;
+}
+button{cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+#main{flex:1;position:relative;min-height:0}
+#map{position:absolute;inset:0;background:var(--bg)}
+#stats{
+  position:absolute; top:10px; right:10px; z-index:1000; width:330px; max-width:calc(100% - 70px);
+  max-height:calc(100% - 24px); overflow:auto; background:var(--panel); border:1px solid var(--line);
+  border-radius:9px; box-shadow:var(--shadow); padding:12px 14px;
+}
+#stats.hidden,#tablewrap.hidden{display:none}
+#stats h2{font-size:13px;margin:0 0 8px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+#stats h3{font-size:12px;margin:12px 0 5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.headline{margin:0 0 10px;padding:0;list-style:none}
+.headline li{
+  background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:4px;
+  padding:7px 9px; margin-bottom:6px; font-size:12.5px;
+}
+.kv{width:100%;border-collapse:collapse}
+.kv td{padding:2px 0;vertical-align:top;font-size:12px}
+.kv td:first-child{color:var(--muted);padding-right:10px}
+.kv td:last-child{text-align:right;font-variant-numeric:tabular-nums;word-break:break-word}
+.mini{width:100%;border-collapse:collapse;font-size:11.5px}
+.mini th,.mini td{border-bottom:1px solid var(--line);padding:3px 5px;text-align:left}
+.mini td.num,.mini th.num{text-align:right;font-variant-numeric:tabular-nums}
+.note{color:var(--warn);background:var(--warn-soft);border-radius:4px;padding:6px 8px;font-size:11.5px;margin-top:8px}
+#tablewrap{
+  flex:0 0 auto; height:300px; display:flex; flex-direction:column; background:var(--panel);
+  border-top:1px solid var(--line); min-height:120px;
+}
+#grip{height:6px;cursor:ns-resize;background:var(--line);flex:0 0 auto}
+#tabs{display:flex;gap:4px;padding:6px 10px 0;overflow-x:auto;flex:0 0 auto}
+#tabs button{border-bottom-left-radius:0;border-bottom-right-radius:0;white-space:nowrap}
+#toolbar{display:flex;gap:8px;align-items:center;padding:6px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap;flex:0 0 auto}
+#toolbar label{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+#search{min-width:200px;flex:1;max-width:420px}
+#count{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+#grid{flex:1;overflow:auto;min-height:0}
+table.data{border-collapse:separate;border-spacing:0;width:100%;font-size:12px}
+table.data th{
+  position:sticky; top:0; z-index:2; background:var(--panel); border-bottom:1px solid var(--line);
+  padding:6px 8px; text-align:left; white-space:nowrap; cursor:pointer; user-select:none;
+}
+table.data th:hover{color:var(--accent)}
+table.data th .arrow{opacity:.45;font-size:10px;margin-left:3px}
+table.data td{padding:4px 8px;border-bottom:1px solid var(--line);white-space:nowrap;max-width:340px;overflow:hidden;text-overflow:ellipsis}
+table.data td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.data tbody tr{background:var(--row);cursor:pointer}
+table.data tbody tr:nth-child(even){background:var(--row-alt)}
+table.data tbody tr:hover{background:var(--accent-soft)}
+table.data tbody tr.sel{background:var(--sel)}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+#cols{position:relative}
+#colmenu{
+  position:absolute; right:0; top:28px; z-index:1400; background:var(--panel); border:1px solid var(--line);
+  border-radius:7px; box-shadow:var(--shadow); padding:8px; max-height:260px; overflow:auto; min-width:190px;
+}
+#colmenu.hidden{display:none}
+#colmenu label{display:flex;gap:6px;align-items:center;padding:2px 4px;font-size:12px;color:var(--ink);white-space:nowrap}
+.leaflet-popup-content{margin:9px 11px;max-height:300px;overflow:auto}
+.leaflet-popup-content table{border-collapse:collapse;font-size:12px}
+.leaflet-popup-content td{padding:1px 6px 1px 0;vertical-align:top}
+.leaflet-popup-content td:first-child{color:#666;white-space:nowrap}
+.legend{background:var(--panel);padding:8px 10px;border-radius:7px;box-shadow:var(--shadow);font-size:12px;line-height:1.7}
+.legend i{display:inline-block;width:14px;height:10px;margin-right:6px;vertical-align:middle;border-radius:2px}
+</style>
+</head>
+<body>
+<header>
+  <h1>__TITLE__</h1>
+  <span class="sub">__SUBTITLE__</span>
+  <span class="spacer"></span>
+  <button id="btn-stats" class="on" title="Show or hide the summary panel">Summary</button>
+  <button id="btn-table" class="on" title="Show or hide the attribute table">Attribute table</button>
+  <button id="btn-zoom" title="Zoom to all data">Zoom to data</button>
+</header>
+
+<div id="main">
+  <div id="map"></div>
+  <div id="stats"></div>
+</div>
+
+<div id="tablewrap">
+  <div id="grip" title="Drag to resize"></div>
+  <div id="tabs"></div>
+  <div id="toolbar">
+    <input type="search" id="search" placeholder="Search all columns..."/>
+    <label><input type="checkbox" id="inview"/> Only features in the current map view</label>
+    <span id="cols">
+      <button id="btn-cols">Columns</button>
+      <div id="colmenu" class="hidden"></div>
+    </span>
+    <button id="btn-csv">Export CSV</button>
+    <span class="spacer" style="flex:1"></span>
+    <span id="count"></span>
+    <button id="page-prev" title="Previous page">&lsaquo;</button>
+    <span id="page-label" style="font-size:12px;color:var(--muted)"></span>
+    <button id="page-next" title="Next page">&rsaquo;</button>
+  </div>
+  <div id="grid"><div class="empty">No data.</div></div>
+</div>
+
+__DATA_BLOCK__
+__LEAFLET_JS__
+<script>
+(function(){
+"use strict";
+var VIEWER = window.__VIEWER_DATA__;
+if(!VIEWER){
+  document.body.innerHTML = "<p style='padding:2em'>The viewer data did not load. "+
+    "If this file was built with --external-data, keep viewer_data.js next to it.</p>";
+  return;
+}
+var PAGE_SIZE = VIEWER.page_size || 200;
+
+/* ---------- map ---------- */
+var map = L.map("map", {preferCanvas:true, zoomControl:true});
+var renderer = L.canvas({padding:0.4});
+
+var bases = {};
+(VIEWER.basemaps||[]).forEach(function(b){
+  bases[b.name] = L.tileLayer(b.url, {attribution:b.attribution||"", maxZoom:b.max_zoom||19, subdomains:b.subdomains||"abc"});
+});
+bases["No basemap"] = L.tileLayer("", {attribution:""});
+var baseNames = Object.keys(bases);
+if(baseNames.length) bases[baseNames[0]].addTo(map);
+
+/* ---------- layers ---------- */
+var tabs = [];            /* {kind:'layer'|'table', ...} */
+var overlays = {};
+var registry = {};        /* vid -> leaflet layer */
+var vidSeq = 0;
+var allBounds = null;
+
+function styleFor(spec, feature){
+  var s = Object.assign({}, spec.style||{});
+  var rules = spec.style_rules||[];
+  for(var i=0;i<rules.length;i++){
+    var r = rules[i];
+    var v = feature.properties ? feature.properties[r.field] : undefined;
+    var hit = ("value" in r) ? String(v) === String(r.value)
+            : ("min" in r || "max" in r) ? (v !== null && v !== undefined && v !== "" &&
+                  (!("min" in r) || Number(v) >= r.min) && (!("max" in r) || Number(v) < r.max))
+            : false;
+    if(hit){ Object.assign(s, r.style||{}); break; }
+  }
+  s.renderer = renderer;
+  return s;
+}
+
+function popupHtml(spec, props){
+  var fields = spec.popup_fields && spec.popup_fields.length ? spec.popup_fields : spec.fields;
+  var rows = fields.map(function(f){
+    var v = props[f];
+    if(v === null || v === undefined || v === "") return "";
+    return "<tr><td>"+esc(f)+"</td><td><b>"+esc(fmt(v))+"</b></td></tr>";
+  }).join("");
+  return "<b>"+esc(spec.name)+"</b><table>"+rows+"</table>";
+}
+
+VIEWER.layers.forEach(function(spec){
+  var lyr = L.geoJSON(spec.geojson, {
+    renderer: renderer,
+    style: function(f){ return styleFor(spec, f); },
+    pointToLayer: function(f, latlng){
+      return L.circleMarker(latlng, Object.assign({radius:5, renderer:renderer}, styleFor(spec, f)));
+    },
+    onEachFeature: function(f, l){
+      var vid = "v" + (++vidSeq);
+      f.properties = f.properties || {};
+      f.properties.__vid = vid;
+      registry[vid] = {layer:l, spec:spec};
+      l.on("click", function(){ select(vid, false); });
+      l.bindPopup(function(){ return popupHtml(spec, f.properties); }, {maxWidth:420});
+    }
+  });
+  spec._leaflet = lyr;
+  overlays[spec.name] = lyr;
+  if(spec.visible !== false) lyr.addTo(map);
+  try{
+    var b = lyr.getBounds();
+    if(b.isValid()) allBounds = allBounds ? allBounds.extend(b) : L.latLngBounds(b.getSouthWest(), b.getNorthEast());
+  }catch(e){}
+  tabs.push({kind:"layer", id:spec.id, name:spec.name, spec:spec});
+});
+
+(VIEWER.tables||[]).forEach(function(t){
+  tabs.push({kind:"table", id:t.id, name:t.name, table:t});
+});
+
+L.control.layers(bases, overlays, {collapsed:false, position:"topleft"}).addTo(map);
+
+if(allBounds && allBounds.isValid()) map.fitBounds(allBounds, {padding:[24,24]});
+else map.setView(VIEWER.center || [42.1, -71.8], VIEWER.zoom || 8);
+
+/* legend */
+var legendItems = [];
+VIEWER.layers.forEach(function(spec){
+  (spec.legend || [{label:spec.name, color:(spec.style||{}).color||"#333"}]).forEach(function(item){
+    legendItems.push(item);
+  });
+});
+if(legendItems.length){
+  var legend = L.control({position:"bottomleft"});
+  legend.onAdd = function(){
+    var div = L.DomUtil.create("div","legend");
+    div.innerHTML = legendItems.map(function(i){
+      return '<i style="background:'+esc(i.color)+'"></i>'+esc(i.label);
+    }).join("<br/>");
+    return div;
+  };
+  legend.addTo(map);
+}
+
+/* ---------- summary panel ---------- */
+function fmtNumber(n){
+  if(typeof n !== "number") return String(n);
+  if(Number.isInteger(n)) return n.toLocaleString();
+  return n.toLocaleString(undefined,{maximumFractionDigits:3});
+}
+function titleize(k){ return String(k).replace(/_/g," ").replace(/\b\w/g, function(c){return c.toUpperCase();}); }
+function esc(s){ return String(s===null||s===undefined?"":s).replace(/[&<>"']/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function fmt(v){
+  if(v === null || v === undefined) return "";
+  if(typeof v === "number") return fmtNumber(v);
+  if(typeof v === "boolean") return v ? "Yes" : "No";
+  return String(v);
+}
+
+function renderStats(){
+  var el = document.getElementById("stats");
+  var s = VIEWER.stats;
+  if(!s){ el.classList.add("hidden"); document.getElementById("btn-stats").classList.remove("on"); return; }
+  var html = "<h2>"+esc(VIEWER.stats_title || "Summary")+"</h2>";
+  if(Array.isArray(s.headline)){
+    html += "<ul class='headline'>"+s.headline.map(function(h){return "<li>"+esc(h)+"</li>";}).join("")+"</ul>";
+  }
+  Object.keys(s).forEach(function(key){
+    if(key === "headline" || key === "notes") return;
+    var v = s[key];
+    if(v === null || v === undefined || v === "") return;
+    if(Array.isArray(v)){
+      if(!v.length || typeof v[0] !== "object") return;
+      var cols = Object.keys(v[0]);
+      html += "<h3>"+esc(titleize(key))+"</h3><table class='mini'><thead><tr>"+
+        cols.map(function(c){return "<th class='"+(typeof v[0][c]==="number"?"num":"")+"'>"+esc(titleize(c))+"</th>";}).join("")+
+        "</tr></thead><tbody>"+
+        v.map(function(row){ return "<tr>"+cols.map(function(c){
+          return "<td class='"+(typeof row[c]==="number"?"num":"")+"'>"+esc(fmt(row[c]))+"</td>";}).join("")+"</tr>"; }).join("")+
+        "</tbody></table>";
+    } else if(typeof v === "object"){
+      html += "<h3>"+esc(titleize(key))+"</h3><table class='kv'>"+
+        Object.keys(v).map(function(k){
+          return "<tr><td>"+esc(titleize(k))+"</td><td>"+esc(fmt(v[k]))+"</td></tr>";}).join("")+"</table>";
+    } else {
+      html += "<table class='kv'><tr><td>"+esc(titleize(key))+"</td><td>"+esc(fmt(v))+"</td></tr></table>";
+    }
+  });
+  (s.notes||[]).forEach(function(n){ html += "<div class='note'>"+esc(n)+"</div>"; });
+  el.innerHTML = html;
+}
+renderStats();
+
+/* ---------- attribute table ---------- */
+var active = tabs.filter(function(t){ return t.id === VIEWER.active_tab; })[0] || (tabs.length ? tabs[0] : null);
+var sortKey = null, sortDir = 1, page = 0, selectedVid = null;
+var hidden = {};   /* tabId -> {col:true} */
+
+function rowsFor(tab){
+  if(tab.kind === "table") return tab.table.rows;
+  var out = [];
+  (tab.spec.geojson.features||[]).forEach(function(f){
+    var p = f.properties || {};
+    out.push(p);
+  });
+  return out;
+}
+function columnsFor(tab){
+  var cols = tab.kind === "table" ? tab.table.columns.slice() : tab.spec.fields.slice();
+  var h = hidden[tab.id] || {};
+  return cols.filter(function(c){ return !h[c]; });
+}
+function allColumnsFor(tab){
+  return tab.kind === "table" ? tab.table.columns.slice() : tab.spec.fields.slice();
+}
+
+function inView(props){
+  var entry = registry[props.__vid];
+  if(!entry) return true;
+  var b = map.getBounds(), l = entry.layer;
+  try{
+    if(l.getBounds) return b.intersects(l.getBounds());
+    if(l.getLatLng) return b.contains(l.getLatLng());
+  }catch(e){}
+  return true;
+}
+
+function currentRows(){
+  if(!active) return [];
+  var rows = rowsFor(active);
+  var q = document.getElementById("search").value.trim().toLowerCase();
+  var viewOnly = document.getElementById("inview").checked && active.kind === "layer";
+  var cols = columnsFor(active);
+  var out = rows.filter(function(p){
+    if(viewOnly && !inView(p)) return false;
+    if(!q) return true;
+    for(var i=0;i<cols.length;i++){
+      var v = p[cols[i]];
+      if(v !== null && v !== undefined && String(v).toLowerCase().indexOf(q) !== -1) return true;
+    }
+    return false;
+  });
+  if(sortKey !== null){
+    out = out.slice().sort(function(a,b){
+      var x = a[sortKey], y = b[sortKey];
+      if(x === null || x === undefined || x === "") return 1;
+      if(y === null || y === undefined || y === "") return -1;
+      var nx = Number(x), ny = Number(y);
+      if(!isNaN(nx) && !isNaN(ny) && x !== true && y !== true) return (nx-ny)*sortDir;
+      return String(x).localeCompare(String(y))*sortDir;
+    });
+  }
+  return out;
+}
+
+function renderTable(){
+  var grid = document.getElementById("grid");
+  if(!active){ grid.innerHTML = "<div class='empty'>No data.</div>"; return; }
+  var rows = currentRows();
+  var total = rows.length;
+  var pages = Math.max(1, Math.ceil(total/PAGE_SIZE));
+  if(page >= pages) page = pages-1;
+  if(page < 0) page = 0;
+  var slice = rows.slice(page*PAGE_SIZE, page*PAGE_SIZE+PAGE_SIZE);
+  var cols = columnsFor(active);
+
+  document.getElementById("count").textContent = total.toLocaleString()+" row"+(total===1?"":"s");
+  document.getElementById("page-label").textContent = "Page "+(page+1)+" / "+pages;
+
+  if(!total){ grid.innerHTML = "<div class='empty'>Nothing matches the current filter.</div>"; return; }
+
+  var head = "<tr>"+cols.map(function(c){
+    var arrow = sortKey===c ? (sortDir===1?"&#9650;":"&#9660;") : "";
+    return "<th data-col='"+esc(c)+"'>"+esc(c)+"<span class='arrow'>"+arrow+"</span></th>";
+  }).join("")+"</tr>";
+
+  var body = slice.map(function(p){
+    var vid = p.__vid || "";
+    var cls = (vid && vid === selectedVid) ? " class='sel'" : "";
+    return "<tr data-vid='"+esc(vid)+"'"+cls+">"+cols.map(function(c){
+      var v = p[c];
+      return "<td class='"+(typeof v === "number" ? "num":"")+"' title='"+esc(fmt(v))+"'>"+esc(fmt(v))+"</td>";
+    }).join("")+"</tr>";
+  }).join("");
+
+  grid.innerHTML = "<table class='data'><thead>"+head+"</thead><tbody>"+body+"</tbody></table>";
+
+  grid.querySelectorAll("th").forEach(function(th){
+    th.onclick = function(){
+      var c = th.getAttribute("data-col");
+      if(sortKey === c) sortDir = -sortDir; else { sortKey = c; sortDir = 1; }
+      renderTable();
+    };
+  });
+  grid.querySelectorAll("tbody tr").forEach(function(tr){
+    tr.onclick = function(){
+      var vid = tr.getAttribute("data-vid");
+      if(vid) select(vid, true);
+    };
+  });
+}
+
+function renderTabs(){
+  var el = document.getElementById("tabs");
+  el.innerHTML = "";
+  tabs.forEach(function(t){
+    var b = document.createElement("button");
+    b.textContent = t.name + (t.kind === "layer" ? " ("+((t.spec.geojson.features||[]).length).toLocaleString()+")" : "");
+    if(active && t.id === active.id) b.className = "on";
+    b.onclick = function(){ active = t; sortKey = null; page = 0; renderTabs(); renderColumnMenu(); renderTable(); };
+    el.appendChild(b);
+  });
+}
+
+function renderColumnMenu(){
+  var menu = document.getElementById("colmenu");
+  if(!active){ menu.innerHTML = ""; return; }
+  var h = hidden[active.id] || (hidden[active.id] = {});
+  menu.innerHTML = allColumnsFor(active).map(function(c){
+    return "<label><input type='checkbox' data-col='"+esc(c)+"' "+(h[c]?"":"checked")+"/> "+esc(c)+"</label>";
+  }).join("");
+  menu.querySelectorAll("input").forEach(function(input){
+    input.onchange = function(){
+      var c = input.getAttribute("data-col");
+      if(input.checked) delete h[c]; else h[c] = true;
+      renderTable();
+    };
+  });
+}
+
+/* ---------- selection ---------- */
+var highlight = null;
+function select(vid, zoom){
+  selectedVid = vid;
+  var entry = registry[vid];
+  if(highlight){ try{ map.removeLayer(highlight); }catch(e){} highlight = null; }
+  if(entry){
+    var l = entry.layer;
+    try{
+      if(l.getBounds){
+        var b = l.getBounds();
+        highlight = L.rectangle(b.pad(0.15), {color:"#ff7f0e", weight:2, fill:false, dashArray:"5,4", interactive:false}).addTo(map);
+        if(zoom) map.fitBounds(b.pad(0.6), {maxZoom:19});
+      } else if(l.getLatLng){
+        highlight = L.circleMarker(l.getLatLng(), {radius:12, color:"#ff7f0e", weight:2, fill:false, interactive:false}).addTo(map);
+        if(zoom) map.setView(l.getLatLng(), Math.max(map.getZoom(), 17));
+      }
+      if(zoom && l.openPopup) l.openPopup();
+    }catch(e){}
+  }
+  /* if the feature is on another tab, switch to it so the row can be shown */
+  if(entry && (!active || active.kind !== "layer" || active.spec.id !== entry.spec.id)){
+    var target = tabs.filter(function(t){ return t.kind === "layer" && t.spec.id === entry.spec.id; })[0];
+    if(target){ active = target; page = 0; renderTabs(); renderColumnMenu(); }
+  }
+  if(!zoom){
+    /* clicked on the map: page to the row so it is visible */
+    var rows = currentRows();
+    for(var i=0;i<rows.length;i++){
+      if(rows[i].__vid === vid){ page = Math.floor(i/PAGE_SIZE); break; }
+    }
+  }
+  renderTable();
+  var sel = document.querySelector("tr.sel");
+  if(sel && sel.scrollIntoView) sel.scrollIntoView({block:"nearest"});
+}
+
+/* ---------- csv ---------- */
+function csvCell(v){
+  if(v === null || v === undefined) return "";
+  var s = String(v);
+  return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+document.getElementById("btn-csv").onclick = function(){
+  if(!active) return;
+  var cols = columnsFor(active), rows = currentRows();
+  var lines = [cols.map(csvCell).join(",")];
+  rows.forEach(function(p){ lines.push(cols.map(function(c){ return csvCell(p[c]); }).join(",")); });
+  var blob = new Blob(["﻿"+lines.join("\r\n")], {type:"text/csv;charset=utf-8"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (active.name||"table").replace(/[^\w.-]+/g,"_")+".csv";
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+};
+
+/* ---------- wiring ---------- */
+document.getElementById("search").oninput = function(){ page = 0; renderTable(); };
+document.getElementById("inview").onchange = function(){ page = 0; renderTable(); };
+document.getElementById("page-prev").onclick = function(){ page--; renderTable(); };
+document.getElementById("page-next").onclick = function(){ page++; renderTable(); };
+document.getElementById("btn-cols").onclick = function(e){
+  e.stopPropagation();
+  document.getElementById("colmenu").classList.toggle("hidden");
+};
+document.addEventListener("click", function(){ document.getElementById("colmenu").classList.add("hidden"); });
+document.getElementById("colmenu").onclick = function(e){ e.stopPropagation(); };
+document.getElementById("btn-stats").onclick = function(){
+  document.getElementById("stats").classList.toggle("hidden");
+  this.classList.toggle("on");
+};
+document.getElementById("btn-table").onclick = function(){
+  document.getElementById("tablewrap").classList.toggle("hidden");
+  this.classList.toggle("on");
+  map.invalidateSize();
+};
+document.getElementById("btn-zoom").onclick = function(){
+  if(allBounds && allBounds.isValid()) map.fitBounds(allBounds, {padding:[24,24]});
+};
+map.on("moveend", function(){
+  if(document.getElementById("inview").checked){ page = 0; renderTable(); }
+});
+
+/* resizable table panel */
+(function(){
+  var grip = document.getElementById("grip"), wrap = document.getElementById("tablewrap"), dragging = false;
+  grip.addEventListener("mousedown", function(e){ dragging = true; e.preventDefault(); });
+  document.addEventListener("mousemove", function(e){
+    if(!dragging) return;
+    var h = Math.min(Math.max(window.innerHeight - e.clientY, 120), window.innerHeight - 160);
+    wrap.style.height = h + "px";
+    map.invalidateSize();
+  });
+  document.addEventListener("mouseup", function(){ dragging = false; });
+})();
+
+renderTabs();
+renderColumnMenu();
+renderTable();
+})();
+</script>
+</body>
+</html>

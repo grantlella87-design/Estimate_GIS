@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "0.2.0",
   "configurations": [
     {
@@ -10,6 +10,46 @@
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",
       "justMyCode": true
+    },
+    {
+      "name": "Main lines vs ledge report",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/mainline_ledge_report.py",
+      "args": [
+        "--where",
+        "jurisdiction = 'MA'",
+        "--out-dir",
+        "outputs"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Main lines vs ledge report (prompt for WHERE)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/mainline_ledge_report.py",
+      "args": [
+        "--where",
+        "${input:whereClause}",
+        "--out-dir",
+        "outputs"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    }
+  ],
+  "inputs": [
+    {
+      "id": "whereClause",
+      "type": "promptString",
+      "description": "ArcGIS WHERE clause to scope the main lines",
+      "default": "jurisdiction = 'MA'"
     }
   ]
 }
