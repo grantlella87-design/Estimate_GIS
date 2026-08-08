@@ -116,6 +116,14 @@ def parse_args(argv=None):
     )
     lines.add_argument("--out-fields", default="*", help="Fields to request. Default: all.")
     lines.add_argument(
+        "--domains-json",
+        help=(
+            "A saved ?f=json layer response to decode with. Needed when the main "
+            "lines come from a file export, which carries no domains of its own. "
+            "See reference/mapserver_json/."
+        ),
+    )
+    lines.add_argument(
         "--no-decode-domains",
         action="store_true",
         help=(
@@ -545,6 +553,20 @@ def main(argv=None) -> int:
         sign_in=mainlines_sign_in,
         decode_domains=not args.no_decode_domains,
     )
+    if args.domains_json and not args.no_decode_domains and not mainlines.empty:
+        # A file export carries no domains, and a service whose metadata could not
+        # be reached carries none either. A saved layer JSON covers both.
+        import arcgis_domains
+
+        saved_meta = arcgis_domains.load_meta(args.domains_json)
+        progress(f"Decoding with saved metadata: {args.domains_json}")
+        mainlines = gpd.GeoDataFrame(
+            arcgis_domains.decode(mainlines, saved_meta, progress=progress),
+            geometry=mainlines.geometry.name,
+            crs=mainlines.crs,
+        )
+        mainlines.attrs["arcgis_meta"] = saved_meta
+
     if mainlines.empty:
         progress("No main lines matched. Nothing to analyse.")
         return 1

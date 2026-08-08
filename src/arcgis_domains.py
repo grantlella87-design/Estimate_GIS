@@ -27,6 +27,18 @@ import pandas as pd
 CODE_SUFFIX = "_code"
 
 
+def load_meta(path: Any) -> dict[str, Any]:
+    """Read layer metadata from a saved `?f=json` response.
+
+    The service is not always reachable, and an export on disk carries no
+    metadata at all, so a saved copy is the only way to decode in either case.
+    """
+    import json
+    from pathlib import Path
+
+    return json.loads(Path(path).read_text(encoding="utf-8-sig"))
+
+
 def coded_values(domain: dict[str, Any] | None) -> dict[Any, str]:
     """{code: name} for a coded-value domain, empty for range or no domain."""
     if not domain or domain.get("type") != "codedValue":

@@ -36,6 +36,7 @@ enterprise_network = importlib.import_module("enterprise_network")
 enterprise_network.configure_enterprise_network()
 
 import arcgis_domains
+import pandas as pd
 import service_auth
 from arcgis_rest_geopandas import layer_metadata, make_session, progress
 
@@ -48,7 +49,19 @@ def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--layer-url", default=DEFAULT_LAYER_URL, help="ArcGIS layer URL.")
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--layer-url", default=DEFAULT_LAYER_URL, help="ArcGIS layer URL.")
+    source.add_argument(
+        "--layer-json",
+        help="A saved ?f=json layer response to read instead of querying the service.",
+    )
+    source.add_argument(
+        "--json-dir",
+        help=(
+            "A directory of saved layer JSON. Every layer in it is read and the "
+            "codebooks are combined, with a layer column added."
+        ),
+    )
     parser.add_argument("--field", help="Show only this field, case-insensitively.")
     parser.add_argument("--out", help="Also write the codebook to this CSV.")
     parser.add_argument(
@@ -63,13 +76,56 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
+def combined_codebook(directory: Path) -> pd.DataFrame:
+    """One codebook for a whole saved service directory."""
+    frames = []
+    for path in sorted(directory.glob("layer_*.json")):
+        try:
+            meta = arcgis_domains.load_meta(path)
+        except (OSError, ValueError) as exc:
+            progress(f"  skipped {path.name}: {exc}")
+            continue
+        book = arcgis_domains.codebook(meta)
+        if book.empty:
+            continue
+        book.insert(0, "layer", meta.get("name") or path.stem)
+        book.insert(1, "layer_id", meta.get("id"))
+        frames.append(book)
+        progress(f"  {path.name}: {len(book):,} coded values")
+    if not frames:
+        return pd.DataFrame(columns=["layer", "layer_id", "field", "subtype", "code", "description", "source"])
+    return pd.concat(frames, ignore_index=True)
+
+
 def main(argv=None) -> int:
     args = parse_args(argv)
-    url = args.layer_url
 
-    token = service_auth.token_for(url, allow_sign_in=not args.anonymous)
-    service_auth.report_once(url)
-    meta = layer_metadata(make_session(token), url)
+    if args.json_dir:
+        directory = Path(args.json_dir)
+        progress(f"Reading saved layer JSON from {directory}")
+        book = combined_codebook(directory)
+        if book.empty:
+            progress("No coded values found in that directory.")
+            return 1
+        progress("")
+        progress(
+            f"{len(book):,} coded values across {book['layer'].nunique():,} layers "
+            f"and {book['field'].nunique():,} fields."
+        )
+        out = Path(args.out) if args.out else Path("outputs/codebook_all_layers.csv")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        book.to_csv(out, index=False, encoding="utf-8-sig")
+        progress(f"Codebook written: {out}")
+        return 0
+
+    url = args.layer_url
+    if args.layer_json:
+        progress(f"Reading saved layer JSON: {args.layer_json}")
+        meta = arcgis_domains.load_meta(args.layer_json)
+    else:
+        token = service_auth.token_for(url, allow_sign_in=not args.anonymous)
+        service_auth.report_once(url)
+        meta = layer_metadata(make_session(token), url)
 
     plan = arcgis_domains.describe(meta)
     book = arcgis_domains.codebook(meta)

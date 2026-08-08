@@ -131,16 +131,42 @@ are confidently wrong, so decoding is done subtype by subtype. A code the
 metadata does not cover is left visible rather than blanked - a gap in the
 codebook is worth seeing, not hiding.
 
+The MA main line layer (341) is coded this way: `ASSETGROUP` is the subtype
+field with 11 subtypes, and 48 fields are domained per subtype. Some codes really
+do diverge - `material` code `PE` reads as "Polyethylene" under Transmission Pipe
+and stays `PE` under the rest - and the domains are different sizes per subtype
+(41 material codes for Distribution Pipe, 27 for Transmission, 17 for Riser).
+Worth knowing: `lifecyclestatus` 3 is In Service and 4 is Out of Service.
+
 To read the codebook itself, or hand it to someone not running Python:
 
 ```powershell
 python .\scripts\describe_layer_domains.py
-python .\scripts\describe_layer_domains.py --field assettype
+python .\scripts\describe_layer_domains.py --field material
 python .\scripts\describe_layer_domains.py --out outputs\codebook.csv
 ```
 
-The ledge report writes `<basename>_codebook.csv` next to its other outputs for
-the same reason. `--no-decode-domains` turns decoding off and leaves the codes.
+### Decoding without the service
+
+`reference/mapserver_json/` holds saved `?f=json` responses for the service's
+layers. They are the metadata, so they can stand in for it - which matters twice:
+a GeoPackage export carries no domains at all, and the service is not always
+reachable.
+
+```powershell
+# Read a codebook from a saved layer, no network at all
+python .\scripts\describe_layer_domains.py --layer-json reference\mapserver_json\MA_Material_View_MA\layer_341_Main_Lines.json
+
+# One codebook for every saved layer in a service
+python .\scripts\describe_layer_domains.py --json-dir reference\mapserver_json\MA_Material_View_MA --out outputs\codebook_all.csv
+
+# Decode a file export that has no domains of its own
+python .\scripts\mainline_ledge_report.py --mainlines outputs\mains.gpkg --mainlines-layer mains ^
+    --domains-json reference\mapserver_json\MA_Material_View_MA\layer_341_Main_Lines.json
+```
+
+The ledge report writes `<basename>_codebook.csv` next to its other outputs, so
+the mapping travels with the data. `--no-decode-domains` turns decoding off.
 
 ## Main lines versus ledge
 
