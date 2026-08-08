@@ -592,15 +592,15 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          251,
+                                                                                                                          252,
                                                                                                                           197,
-                                                                                                                          252,
+                                                                                                                          224,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        251,
+                                                                                                                        252,
                                                                                                                         197,
-                                                                                                                        252,
+                                                                                                                        224,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -608,13 +608,13 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          184,
+                                                                                                                          210,
                                                                                                                           252,
                                                                                                                           179,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        184,
+                                                                                                                        210,
                                                                                                                         252,
                                                                                                                         179,
                                                                                                                         255
@@ -624,15 +624,31 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
+                                                                                                                          184,
+                                                                                                                          252,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        184,
+                                                                                                                        252,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          221,
                                                                                                                           182,
-                                                                                                                          242,
-                                                                                                                          252,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
+                                                                                                                        252,
+                                                                                                                        221,
                                                                                                                         182,
-                                                                                                                        242,
-                                                                                                                        252,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -640,207 +656,15 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          252,
-                                                                                                                          223,
-                                                                                                                          187,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        252,
-                                                                                                                        223,
-                                                                                                                        187,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          252,
-                                                                                                                          184,
-                                                                                                                          192,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        252,
-                                                                                                                        184,
-                                                                                                                        192,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          192,
-                                                                                                                          206,
-                                                                                                                          252,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        192,
-                                                                                                                        206,
-                                                                                                                        252,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          210,
-                                                                                                                          252,
-                                                                                                                          220,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        210,
-                                                                                                                        252,
-                                                                                                                        220,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          248,
-                                                                                                                          252,
-                                                                                                                          184,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        248,
-                                                                                                                        252,
-                                                                                                                        184,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          194,
                                                                                                                           179,
-                                                                                                                          252,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        194,
-                                                                                                                        179,
-                                                                                                                        252,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          252,
-                                                                                                                          210,
-                                                                                                                          237,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        252,
-                                                                                                                        210,
-                                                                                                                        237,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          252,
-                                                                                                                          210,
-                                                                                                                          202,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        252,
-                                                                                                                        210,
-                                                                                                                        202,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          204,
-                                                                                                                          228,
-                                                                                                                          252,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        204,
-                                                                                                                        228,
-                                                                                                                        252,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          230,
-                                                                                                                          210,
-                                                                                                                          252,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        230,
-                                                                                                                        210,
-                                                                                                                        252,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          241,
-                                                                                                                          252,
-                                                                                                                          212,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        241,
-                                                                                                                        252,
-                                                                                                                        212,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          252,
-                                                                                                                          179,
-                                                                                                                          216,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        252,
-                                                                                                                        179,
-                                                                                                                        216,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
                                                                                                                           189,
                                                                                                                           252,
-                                                                                                                          242,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
+                                                                                                                        179,
                                                                                                                         189,
                                                                                                                         252,
-                                                                                                                        242,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -848,30 +672,14 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          213,
-                                                                                                                          252,
-                                                                                                                          192,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        213,
-                                                                                                                        252,
-                                                                                                                        192,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          249,
-                                                                                                                          182,
+                                                                                                                          215,
+                                                                                                                          225,
                                                                                                                           252,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        249,
-                                                                                                                        182,
+                                                                                                                        215,
+                                                                                                                        225,
                                                                                                                         252,
                                                                                                                         255
                                                                                                                     ]
@@ -880,14 +688,30 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
+                                                                                                                          250,
+                                                                                                                          179,
                                                                                                                           252,
-                                                                                                                          231,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        250,
+                                                                                                                        179,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          228,
+                                                                                                                          252,
                                                                                                                           215,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
+                                                                                                                        228,
                                                                                                                         252,
-                                                                                                                        231,
                                                                                                                         215,
                                                                                                                         255
                                                                                                                     ]
@@ -897,13 +721,13 @@
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
                                                                                                                           252,
-                                                                                                                          240,
+                                                                                                                          251,
                                                                                                                           184,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
                                                                                                                         252,
-                                                                                                                        240,
+                                                                                                                        251,
                                                                                                                         184,
                                                                                                                         255
                                                                                                                     ]
@@ -912,14 +736,46 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          223,
+                                                                                                                          252,
+                                                                                                                          194,
                                                                                                                           182,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        194,
+                                                                                                                        182,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          187,
+                                                                                                                          252,
+                                                                                                                          211,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        187,
+                                                                                                                        252,
+                                                                                                                        211,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          236,
+                                                                                                                          204,
                                                                                                                           252,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        223,
-                                                                                                                        182,
+                                                                                                                        236,
+                                                                                                                        204,
                                                                                                                         252,
                                                                                                                         255
                                                                                                                     ]
@@ -928,14 +784,78 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          184,
                                                                                                                           252,
+                                                                                                                          221,
+                                                                                                                          215,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        221,
+                                                                                                                        215,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          179,
+                                                                                                                          207,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        179,
+                                                                                                                        207,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          179,
+                                                                                                                          230,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        179,
+                                                                                                                        230,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          215,
+                                                                                                                          252,
+                                                                                                                          239,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        215,
+                                                                                                                        252,
+                                                                                                                        239,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          184,
                                                                                                                           198,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        184,
                                                                                                                         252,
+                                                                                                                        184,
                                                                                                                         198,
                                                                                                                         255
                                                                                                                     ]
@@ -945,30 +865,14 @@
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
                                                                                                                           215,
-                                                                                                                          241,
+                                                                                                                          247,
                                                                                                                           252,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
                                                                                                                         215,
-                                                                                                                        241,
+                                                                                                                        247,
                                                                                                                         252,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          252,
-                                                                                                                          199,
-                                                                                                                          207,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        252,
-                                                                                                                        199,
-                                                                                                                        207,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -977,14 +881,14 @@
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
                                                                                                                           179,
-                                                                                                                          228,
                                                                                                                           252,
+                                                                                                                          190,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
                                                                                                                         179,
-                                                                                                                        228,
                                                                                                                         252,
+                                                                                                                        190,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -992,30 +896,14 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          252,
+                                                                                                                          222,
                                                                                                                           179,
-                                                                                                                          230,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        252,
-                                                                                                                        179,
-                                                                                                                        230,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          196,
-                                                                                                                          192,
                                                                                                                           252,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        196,
-                                                                                                                        192,
+                                                                                                                        222,
+                                                                                                                        179,
                                                                                                                         252,
                                                                                                                         255
                                                                                                                     ]
@@ -1025,14 +913,14 @@
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
                                                                                                                           215,
+                                                                                                                          210,
                                                                                                                           252,
-                                                                                                                          251,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
                                                                                                                         215,
+                                                                                                                        210,
                                                                                                                         252,
-                                                                                                                        251,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -1040,15 +928,15 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          187,
                                                                                                                           252,
-                                                                                                                          217,
+                                                                                                                          249,
+                                                                                                                          202,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        187,
                                                                                                                         252,
-                                                                                                                        217,
+                                                                                                                        249,
+                                                                                                                        202,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -1056,15 +944,95 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          220,
+                                                                                                                          189,
+                                                                                                                          231,
                                                                                                                           252,
-                                                                                                                          204,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
-                                                                                                                        220,
+                                                                                                                        189,
+                                                                                                                        231,
                                                                                                                         252,
-                                                                                                                        204,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          182,
+                                                                                                                          252,
+                                                                                                                          232,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        182,
+                                                                                                                        252,
+                                                                                                                        232,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          236,
+                                                                                                                          212,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        236,
+                                                                                                                        212,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          214,
+                                                                                                                          252,
+                                                                                                                          197,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        214,
+                                                                                                                        252,
+                                                                                                                        197,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          179,
+                                                                                                                          210,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        179,
+                                                                                                                        210,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          247,
+                                                                                                                          192,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        247,
+                                                                                                                        192,
+                                                                                                                        252,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -1074,13 +1042,13 @@
                                                                                                         "fromColor":  [
                                                                                                                           252,
                                                                                                                           210,
-                                                                                                                          182,
+                                                                                                                          189,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
                                                                                                                         252,
                                                                                                                         210,
-                                                                                                                        182,
+                                                                                                                        189,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     },
@@ -1088,31 +1056,63 @@
                                                                                                         "type":  "algorithmic",
                                                                                                         "algorithm":  "esriCIELabAlgorithm",
                                                                                                         "fromColor":  [
-                                                                                                                          227,
-                                                                                                                          197,
-                                                                                                                          252,
-                                                                                                                          255
-                                                                                                                      ],
-                                                                                                        "toColor":  [
-                                                                                                                        227,
-                                                                                                                        197,
-                                                                                                                        252,
-                                                                                                                        255
-                                                                                                                    ]
-                                                                                                    },
-                                                                                                    {
-                                                                                                        "type":  "algorithmic",
-                                                                                                        "algorithm":  "esriCIELabAlgorithm",
-                                                                                                        "fromColor":  [
-                                                                                                                          252,
-                                                                                                                          197,
                                                                                                                           239,
+                                                                                                                          252,
+                                                                                                                          197,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        239,
+                                                                                                                        252,
+                                                                                                                        197,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          215,
+                                                                                                                          251,
                                                                                                                           255
                                                                                                                       ],
                                                                                                         "toColor":  [
                                                                                                                         252,
-                                                                                                                        197,
-                                                                                                                        239,
+                                                                                                                        215,
+                                                                                                                        251,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          210,
+                                                                                                                          252,
+                                                                                                                          224,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        210,
+                                                                                                                        252,
+                                                                                                                        224,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          202,
+                                                                                                                          247,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        202,
+                                                                                                                        247,
                                                                                                                         255
                                                                                                                     ]
                                                                                                     }
