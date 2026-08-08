@@ -1,0 +1,1272 @@
+{
+    "currentVersion":  11.1,
+    "cimVersion":  "3.1.0",
+    "serviceDescription":  "",
+    "mapName":  "Material_View_MA",
+    "description":  "",
+    "copyrightText":  "",
+    "supportsDynamicLayers":  true,
+    "layers":  [
+                   {
+                       "id":  21,
+                       "name":  "Dimensioning",
+                       "parentLayerId":  -1,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           23,
+                                           22,
+                                           24,
+                                           25,
+                                           26,
+                                           27
+                                       ],
+                       "minScale":  3000,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  23,
+                       "name":  "Dimensioning MA",
+                       "parentLayerId":  21,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1200,
+                       "maxScale":  0,
+                       "type":  "Dimension Layer",
+                       "geometryType":  "esriGeometryPolygon",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  22,
+                       "name":  "Drafting Anno Historic",
+                       "parentLayerId":  21,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           138,
+                                           421
+                                       ],
+                       "minScale":  3000,
+                       "maxScale":  0,
+                       "type":  "Annotation Layer",
+                       "geometryType":  "esriGeometryPolygon",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  138,
+                       "name":  "Drafting Anno",
+                       "parentLayerId":  22,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  421,
+                       "name":  "Misc Anno",
+                       "parentLayerId":  22,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  24,
+                       "name":  "Dimension Lines",
+                       "parentLayerId":  21,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1200,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  25,
+                       "name":  "Drafting Points",
+                       "parentLayerId":  21,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1200,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  26,
+                       "name":  "Drafting Lines",
+                       "parentLayerId":  21,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1200,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  27,
+                       "name":  "Drafting Areas",
+                       "parentLayerId":  21,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1200,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolygon",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  137,
+                       "name":  "GIS Misc Annotation",
+                       "parentLayerId":  -1,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           80,
+                                           4,
+                                           5,
+                                           6,
+                                           7,
+                                           8,
+                                           9,
+                                           10,
+                                           11
+                                       ],
+                       "minScale":  3000,
+                       "maxScale":  0,
+                       "type":  "Annotation Layer",
+                       "geometryType":  "esriGeometryPolygon",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  80,
+                       "name":  "Default",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  4,
+                       "name":  "Miscellaneous_Annotation_Annotation Class 1",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  5,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_Annotation Class 1_1",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  6,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_NoteAnno_Class 1",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  7,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_Class 1",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  8,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_MapText_NoStationAnno_Class 1",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  9,
+                       "name":  "GasGIS_NYC.NGOWNER.gis_misc_text_annotation_gis_misc_text_annotation_Class 1",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  10,
+                       "name":  "GasGIS_NYC.NGOWNER.gis_misc_text_annotation_gis_misc_text_annotation_annotation_point_filteredAnno_Class 1",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  11,
+                       "name":  "gis_misc_text_annotation_ARCFM_Basemap_Annotation_Default",
+                       "parentLayerId":  137,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  28,
+                       "name":  "In Service",
+                       "parentLayerId":  -1,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           81,
+                                           82,
+                                           90,
+                                           83,
+                                           412,
+                                           36,
+                                           29,
+                                           68,
+                                           69,
+                                           94,
+                                           801,
+                                           806,
+                                           37,
+                                           1,
+                                           38,
+                                           39,
+                                           141,
+                                           807,
+                                           79,
+                                           74,
+                                           42,
+                                           43,
+                                           47,
+                                           44,
+                                           45,
+                                           46,
+                                           93
+                                       ],
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  81,
+                       "name":  "Sectionalizing Valve",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  36200,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  82,
+                       "name":  "Critical Valve",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  18200,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  90,
+                       "name":  "Main Valve",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  9100,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  83,
+                       "name":  "Service Valve",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2360,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  412,
+                       "name":  "Paved Over Valve",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           418,
+                                           419,
+                                           420,
+                                           417
+                                       ],
+                       "minScale":  58001,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  418,
+                       "name":  "Critical Valve",
+                       "parentLayerId":  412,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  18200,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  419,
+                       "name":  "Main Valve",
+                       "parentLayerId":  412,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  9100,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  420,
+                       "name":  "Service Valve",
+                       "parentLayerId":  412,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2360,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  417,
+                       "name":  "Proposed/Abandoned Valve",
+                       "parentLayerId":  412,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2360,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  36,
+                       "name":  "Service Point",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  29,
+                       "name":  "Cathodic Protection",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           30,
+                                           31,
+                                           32,
+                                           33,
+                                           34,
+                                           35
+                                       ],
+                       "minScale":  2400,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  30,
+                       "name":  "Test Point",
+                       "parentLayerId":  29,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  31,
+                       "name":  "Anode",
+                       "parentLayerId":  29,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  32,
+                       "name":  "Rectifier",
+                       "parentLayerId":  29,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  33,
+                       "name":  "Bond Junction",
+                       "parentLayerId":  29,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  34,
+                       "name":  "Bond Wire",
+                       "parentLayerId":  29,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  35,
+                       "name":  "Rectifier Cable",
+                       "parentLayerId":  29,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  68,
+                       "name":  "Marker Point",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  69,
+                       "name":  "Squeeze Off",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  94,
+                       "name":  "Purge",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  801,
+                       "name":  "Flow Meter",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  806,
+                       "name":  "Rural Tap",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  37,
+                       "name":  "Network Device",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  1,
+                       "name":  "Jameson Tee",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  38,
+                       "name":  "Network Junction",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  39,
+                       "name":  "Network Assembly",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  50000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  141,
+                       "name":  "View: Material View",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           300,
+                                           342,
+                                           410,
+                                           373,
+                                           341
+                                       ],
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  300,
+                       "name":  "Customer Lines",
+                       "parentLayerId":  141,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2260,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  342,
+                       "name":  "Service Lines (Proxy)",
+                       "parentLayerId":  141,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  2260,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  410,
+                       "name":  "Service Lines (Mapped)",
+                       "parentLayerId":  141,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2260,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  373,
+                       "name":  "Transmission Pipe",
+                       "parentLayerId":  141,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  75000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  341,
+                       "name":  "Main Lines",
+                       "parentLayerId":  141,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  807,
+                       "name":  "View: Corrosion Label",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  [
+                                           92,
+                                           91,
+                                           40,
+                                           73,
+                                           41
+                                       ],
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  92,
+                       "name":  "Customer Lines",
+                       "parentLayerId":  807,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2260,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  91,
+                       "name":  "Service Lines (Proxy)",
+                       "parentLayerId":  807,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  2260,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  40,
+                       "name":  "Service Lines (Mapped)",
+                       "parentLayerId":  807,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2260,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  73,
+                       "name":  "Transmission Pipe",
+                       "parentLayerId":  807,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  75000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  41,
+                       "name":  "Main Lines",
+                       "parentLayerId":  807,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  79,
+                       "name":  "NEP Main",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  74,
+                       "name":  "Encumbered Main",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  42,
+                       "name":  "CI/DI/WI Main Lines",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  43,
+                       "name":  "Non-NG Main Lines",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  47,
+                       "name":  "Structure Line",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  44,
+                       "name":  "Critical Main Lines",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  45,
+                       "name":  "Ungassed Main Lines",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  4800,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  46,
+                       "name":  "Structure Boundary",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolygon",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  93,
+                       "name":  "Structure Junction",
+                       "parentLayerId":  28,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  2000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  49,
+                       "name":  "Proposed",
+                       "parentLayerId":  -1,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           50,
+                                           802,
+                                           808,
+                                           51,
+                                           52,
+                                           53,
+                                           54,
+                                           55,
+                                           56
+                                       ],
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  50,
+                       "name":  "Network Assembly (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  802,
+                       "name":  "Flow Meter (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  808,
+                       "name":  "Rural Tap (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  51,
+                       "name":  "Network Device (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  52,
+                       "name":  "Network Junction (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  53,
+                       "name":  "Structure Junction (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  54,
+                       "name":  "Pipeline Line (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  50000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  55,
+                       "name":  "Structure Line (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  56,
+                       "name":  "Structure Boundary (P)",
+                       "parentLayerId":  49,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolygon",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  57,
+                       "name":  "Abandoned",
+                       "parentLayerId":  -1,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  [
+                                           58,
+                                           803,
+                                           809,
+                                           59,
+                                           60,
+                                           61,
+                                           62,
+                                           63,
+                                           64
+                                       ],
+                       "minScale":  0,
+                       "maxScale":  0,
+                       "type":  "Group Layer",
+                       "supportsDynamicLegends":  false
+                   },
+                   {
+                       "id":  58,
+                       "name":  "Network Assembly (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  803,
+                       "name":  "Flow Meter (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  809,
+                       "name":  "Rural Tap (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  59,
+                       "name":  "Network Device (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  60,
+                       "name":  "Network Junction (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  61,
+                       "name":  "Structure Junction (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPoint",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  62,
+                       "name":  "Pipeline Line (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  63,
+                       "name":  "Structure Line (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  true,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolyline",
+                       "supportsDynamicLegends":  true
+                   },
+                   {
+                       "id":  64,
+                       "name":  "Structure Boundary (A)",
+                       "parentLayerId":  57,
+                       "defaultVisibility":  false,
+                       "subLayerIds":  null,
+                       "minScale":  1000,
+                       "maxScale":  0,
+                       "type":  "Feature Layer",
+                       "geometryType":  "esriGeometryPolygon",
+                       "supportsDynamicLegends":  true
+                   }
+               ],
+    "tables":  [
+                   {
+                       "id":  66,
+                       "name":  "Meter Point",
+                       "type":  "Table"
+                   }
+               ],
+    "spatialReference":  {
+                             "wkt":  "PROJCS[\"NG_Equidistant_Conic\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Equidistant_Conic\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-74.0],PARAMETER[\"Standard_Parallel_1\",42.0],PARAMETER[\"Standard_Parallel_2\",44.0],PARAMETER[\"Latitude_Of_Origin\",43.0],UNIT[\"Foot_US\",0.3048006096012192]]",
+                             "xyTolerance":  0.003280833333333333,
+                             "zTolerance":  0.001,
+                             "mTolerance":  0.001,
+                             "falseX":  -70913500,
+                             "falseY":  -48440900,
+                             "xyUnits":  3048.0060960121928,
+                             "falseZ":  -100000,
+                             "zUnits":  10000,
+                             "falseM":  -100000,
+                             "mUnits":  10000
+                         },
+    "singleFusedMapCache":  false,
+    "initialExtent":  {
+                          "xmin":  839171.1591359775,
+                          "ymin":  -259851.93477668936,
+                          "xmax":  839238.6198122278,
+                          "ymax":  -259799.41986482844,
+                          "spatialReference":  {
+                                                   "wkt":  "PROJCS[\"NG_Equidistant_Conic\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Equidistant_Conic\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-74.0],PARAMETER[\"Standard_Parallel_1\",42.0],PARAMETER[\"Standard_Parallel_2\",44.0],PARAMETER[\"Latitude_Of_Origin\",43.0],UNIT[\"Foot_US\",0.3048006096012192]]",
+                                                   "xyTolerance":  0.003280833333333333,
+                                                   "zTolerance":  0.001,
+                                                   "mTolerance":  0.001,
+                                                   "falseX":  -70913500,
+                                                   "falseY":  -48440900,
+                                                   "xyUnits":  3048.0060960121928,
+                                                   "falseZ":  -100000,
+                                                   "zUnits":  10000,
+                                                   "falseM":  -100000,
+                                                   "mUnits":  10000
+                                               }
+                      },
+    "fullExtent":  {
+                       "xmin":  -1660000,
+                       "ymin":  -770000,
+                       "xmax":  270000,
+                       "ymax":  1114000,
+                       "spatialReference":  {
+                                                "wkt":  "PROJCS[\"NG_Equidistant_Conic\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Equidistant_Conic\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-74.0],PARAMETER[\"Standard_Parallel_1\",42.0],PARAMETER[\"Standard_Parallel_2\",44.0],PARAMETER[\"Latitude_Of_Origin\",43.0],UNIT[\"Foot_US\",0.3048006096012192]]",
+                                                "xyTolerance":  0.003280833333333333,
+                                                "zTolerance":  0.001,
+                                                "mTolerance":  0.001,
+                                                "falseX":  -70913500,
+                                                "falseY":  -48440900,
+                                                "xyUnits":  3048.0060960121928,
+                                                "falseZ":  -100000,
+                                                "zUnits":  10000,
+                                                "falseM":  -100000,
+                                                "mUnits":  10000
+                                            }
+                   },
+    "datesInUnknownTimezone":  false,
+    "minScale":  75000,
+    "maxScale":  0,
+    "units":  "esriFeet",
+    "supportedImageFormatTypes":  "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo":  {
+                         "Title":  "Map",
+                         "Author":  "",
+                         "Comments":  "",
+                         "Subject":  "",
+                         "Category":  "",
+                         "Version":  "3.1.0",
+                         "AntialiasingMode":  "None",
+                         "TextAntialiasingMode":  "Force",
+                         "Keywords":  "Material View,MA"
+                     },
+    "capabilities":  "Map,Query,Data",
+    "supportedQueryFormats":  "JSON, geoJSON, PBF",
+    "hasVersionedData":  true,
+    "exportTilesAllowed":  false,
+    "referenceScale":  1130.0,
+    "datumTransformations":  [
+                                 {
+                                     "geoTransforms":  [
+                                                           {
+                                                               "wkid":  108190,
+                                                               "latestWkid":  108190,
+                                                               "transformForward":  true,
+                                                               "name":  "WGS_1984_(ITRF00)_To_NAD_1983"
+                                                           }
+                                                       ]
+                                 },
+                                 {
+                                     "geoTransforms":  [
+                                                           {
+                                                               "wkid":  108190,
+                                                               "latestWkid":  108190,
+                                                               "transformForward":  false,
+                                                               "name":  "WGS_1984_(ITRF00)_To_NAD_1983"
+                                                           }
+                                                       ]
+                                 },
+                                 {
+                                     "geoTransforms":  [
+                                                           {
+                                                               "wkid":  108354,
+                                                               "latestWkid":  108354,
+                                                               "transformForward":  false,
+                                                               "name":  "WGS_1984_(ITRF00)_To_NAD_1983_2011"
+                                                           },
+                                                           {
+                                                               "wkid":  108190,
+                                                               "latestWkid":  108190,
+                                                               "transformForward":  true,
+                                                               "name":  "WGS_1984_(ITRF00)_To_NAD_1983"
+                                                           }
+                                                       ]
+                                 },
+                                 {
+                                     "geoTransforms":  [
+                                                           {
+                                                               "wkid":  108190,
+                                                               "latestWkid":  108190,
+                                                               "transformForward":  false,
+                                                               "name":  "WGS_1984_(ITRF00)_To_NAD_1983"
+                                                           },
+                                                           {
+                                                               "wkid":  108354,
+                                                               "latestWkid":  108354,
+                                                               "transformForward":  true,
+                                                               "name":  "WGS_1984_(ITRF00)_To_NAD_1983_2011"
+                                                           }
+                                                       ]
+                                 }
+                             ],
+    "supportsDatumTransformation":  true,
+    "floorAwareMapProperties":  {
+                                    "defaultFloorFilterSettings":  {
+                                                                       "isEnabled":  true
+                                                                   }
+                                },
+    "archivingInfo":  {
+                          "supportsHistoricMoment":  true
+                      },
+    "supportsClipping":  true,
+    "supportsSpatialFilter":  true,
+    "supportsTimeRelation":  true,
+    "supportsQueryDataElements":  true,
+    "mapUnits":  {
+                     "uwkid":  9003
+                 },
+    "maxRecordCount":  2000,
+    "maxImageHeight":  4096,
+    "maxImageWidth":  4096,
+    "supportedExtensions":  "",
+    "serviceItemId":  "296b0d0bba844f99ae825ec9a75c34eb"
+}

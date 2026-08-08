@@ -1,0 +1,123 @@
+{
+    "currentVersion":  11.1,
+    "cimVersion":  "3.1.0",
+    "id":  412,
+    "name":  "Paved Over Valve",
+    "type":  "Group Layer",
+    "description":  "",
+    "geometryType":  null,
+    "copyrightText":  "",
+    "parentLayer":  {
+                        "id":  28,
+                        "name":  "In Service"
+                    },
+    "subLayers":  [
+                      {
+                          "id":  418,
+                          "name":  "Critical Valve"
+                      },
+                      {
+                          "id":  419,
+                          "name":  "Main Valve"
+                      },
+                      {
+                          "id":  420,
+                          "name":  "Service Valve"
+                      },
+                      {
+                          "id":  417,
+                          "name":  "Proposed/Abandoned Valve"
+                      }
+                  ],
+    "minScale":  58001,
+    "maxScale":  0,
+    "defaultVisibility":  true,
+    "extent":  {
+                   "xmin":  -743170.4272259325,
+                   "ymin":  -911529.4436316822,
+                   "xmax":  1107222.6034426831,
+                   "ymax":  403153.4847869715,
+                   "spatialReference":  {
+                                            "wkt":  "PROJCS[\"NG_Equidistant_Conic\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Equidistant_Conic\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-74.0],PARAMETER[\"Standard_Parallel_1\",42.0],PARAMETER[\"Standard_Parallel_2\",44.0],PARAMETER[\"Latitude_Of_Origin\",43.0],UNIT[\"Foot_US\",0.3048006096012192]]",
+                                            "xyTolerance":  0.003280833333333333,
+                                            "zTolerance":  0.001,
+                                            "mTolerance":  0.001,
+                                            "falseX":  -70913500,
+                                            "falseY":  -48440900,
+                                            "xyUnits":  3048.0060960121928,
+                                            "falseZ":  -100000,
+                                            "zUnits":  10000,
+                                            "falseM":  -100000,
+                                            "mUnits":  10000
+                                        }
+               },
+    "hasAttachments":  false,
+    "htmlPopupType":  "esriServerHTMLPopupTypeNone",
+    "displayField":  "",
+    "typeIdField":  null,
+    "subtypeFieldName":  null,
+    "subtypeField":  null,
+    "defaultSubtypeCode":  null,
+    "fields":  null,
+    "geometryField":  {
+
+                      },
+    "indexes":  [
+
+                ],
+    "subtypes":  [
+
+                 ],
+    "relationships":  [
+
+                      ],
+    "canModifyLayer":  false,
+    "canScaleSymbols":  true,
+    "hasLabels":  false,
+    "capabilities":  "Map,Query",
+    "supportsStatistics":  false,
+    "supportsExceedsLimitStatistics":  false,
+    "supportsAdvancedQueries":  false,
+    "supportedQueryFormats":  "JSON, geoJSON, PBF",
+    "isDataVersioned":  false,
+    "ownershipBasedAccessControlForFeatures":  {
+                                                   "allowOthersToQuery":  true
+                                               },
+    "useStandardizedQueries":  true,
+    "advancedQueryCapabilities":  {
+                                      "useStandardizedQueries":  true,
+                                      "supportsStatistics":  false,
+                                      "supportsPercentileStatistics":  false,
+                                      "supportsHavingClause":  false,
+                                      "supportsOrderBy":  false,
+                                      "supportsDistinct":  false,
+                                      "supportsCountDistinct":  false,
+                                      "supportsPagination":  false,
+                                      "supportsLod":  false,
+                                      "supportsQueryWithLodSR":  false,
+                                      "supportsTrueCurve":  true,
+                                      "supportsQueryWithDatumTransformation":  true,
+                                      "supportsReturningQueryExtent":  true,
+                                      "supportsQueryWithDistance":  true,
+                                      "supportsSqlExpression":  false,
+                                      "supportsTimeRelation":  true,
+                                      "supportsSqlFormat":  false,
+                                      "supportsQueryAnalytic":  false
+                                  },
+    "supportsDatumTransformation":  true,
+    "dateFieldsTimeReference":  {
+                                    "timeZone":  "Eastern Standard Time",
+                                    "respectsDaylightSaving":  true
+                                },
+    "preferredTimeReference":  null,
+    "datesInUnknownTimezone":  false,
+    "hasMetadata":  true,
+    "isDataArchived":  false,
+    "archivingInfo":  {
+                          "supportsQueryWithHistoricMoment":  false,
+                          "startArchivingMoment":  -1
+                      },
+    "supportsCoordinatesQuantization":  true,
+    "supportsDynamicLegends":  false,
+    "serviceItemId":  "296b0d0bba844f99ae825ec9a75c34eb"
+}

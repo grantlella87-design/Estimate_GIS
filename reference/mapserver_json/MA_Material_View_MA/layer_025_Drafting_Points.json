@@ -1,0 +1,1368 @@
+{
+    "currentVersion":  11.1,
+    "cimVersion":  "3.1.0",
+    "id":  25,
+    "name":  "Drafting Points",
+    "type":  "Feature Layer",
+    "description":  "",
+    "geometryType":  "esriGeometryPoint",
+    "sourceSpatialReference":  {
+                                   "wkt":  "PROJCS[\"NG_Equidistant_Conic_USft\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Equidistant_Conic\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-74.0],PARAMETER[\"Standard_Parallel_1\",42.0],PARAMETER[\"Standard_Parallel_2\",44.0],PARAMETER[\"Latitude_Of_Origin\",43.0],UNIT[\"Foot_US\",0.3048006096012192]],VERTCS[\"WGS 1984 (US Feet)\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PARAMETER[\"Vertical_Shift\",0.0],PARAMETER[\"Direction\",1.0],UNIT[\"US Survey Feet\",0.3048006096012192]]",
+                                   "xyTolerance":  0.003280833333333333,
+                                   "zTolerance":  0.0032808333333333335,
+                                   "mTolerance":  0.001,
+                                   "falseX":  -70913500,
+                                   "falseY":  -48440900,
+                                   "xyUnits":  3048.0060960121928,
+                                   "falseZ":  0,
+                                   "zUnits":  1,
+                                   "falseM":  0,
+                                   "mUnits":  1
+                               },
+    "sourceHeightModelInfo":  {
+                                  "heightModel":  "ellipsoidal",
+                                  "vertCRS":  "WGS 1984 (US Feet)",
+                                  "heightUnit":  "us-foot"
+                              },
+    "copyrightText":  "",
+    "parentLayer":  {
+                        "id":  21,
+                        "name":  "Dimensioning"
+                    },
+    "subLayers":  [
+
+                  ],
+    "minScale":  1200,
+    "maxScale":  0,
+    "drawingInfo":  {
+                        "renderer":  {
+                                         "type":  "uniqueValue",
+                                         "field1":  "name",
+                                         "defaultSymbol":  {
+                                                               "type":  "esriPMS",
+                                                               "url":  "756cfd38a75dca450cae4cc5a6dd56cd",
+                                                               "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABIAAAATCAYAAACdkl3yAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA70lEQVQ4ja2U4RGCMAyFXziWkC0IjIFr4BjiGLKGa5SwhU7BxatWD2oLKL5fvab9+pomTfEnpUsL8jzP+r6/bgYRUcXMEJF2K6gGkAH4HcTMFlK8xnOu0hVuxuPvQcxcvNw4FXZORDp8AyKiJjB3BlCuBjk3VSBUxFwFQUmS1KqKWAzAYRFkT1TVd5J9udgyyEtwUKFSSP12GD95TPRMehxk22GNo5ArH7ToxiuPT9CoHW5EdDHGfCQUbp272o6Z9yJymYCsGyJqh2E4zX0b7jptWZbW0RHAFKSqh67rguUfkjGmYeYHZAKK9dCcxnvuEeleqazkB9gAAAAASUVORK5CYII=",
+                                                               "contentType":  "image/png",
+                                                               "width":  13,
+                                                               "height":  14,
+                                                               "angle":  0,
+                                                               "xoffset":  -3.6739403974420594E-16,
+                                                               "yoffset":  -6
+                                                           },
+                                         "defaultLabel":  "\u003call other values\u003e",
+                                         "uniqueValueInfos":  [
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "ad6200c60d69d156d63e4724b86bde7e",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAAA4AAAAXCAYAAAA7kX6CAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABT0lEQVQ4je2SvUoDQRSF78wECy0sxUKQWNiLjdj5BD6ApLD0CdaEnZzMkLiQxkZRURubvES6QEobJa2VIGm02rDsnZGFFEl2418hFp5mhuF8c+eeuSX6oUp/B2w0GlG21uv14HcqfqZ/8LvhGGN2iWh7vN/RWvc/BAEsSik7Qog151xXCCGI6MZa+8DMFQCjQlApdeW9v2fmfQBufNmxUupCKXVORIc5EEDZe1/WWh/MvCIBcCSlfASwDuBpClRKbTnnekU9AxhZa7uZh4imQSJKhRAr81J0zjkpZb5HKWWfmU+jKFoOguBtEmq320txHO8xc5ADa7Xai7X2MkmSTqvVqlSr1WF23mw2V+M4viOicwCvhamGYXhijBmmadozxjwTkWDmDSFEFIbh2aQ3NwBa62sAt0qpTe/9gnNukCU76yucnPEfDuYFNRf8it4BWSyNIuy+ivoAAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  10,
+                                                                                     "height":  17,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Anode",
+                                                                      "label":  "Anode"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "5a552e99cf2599972a859dcbbb4f2586",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACQUlEQVQ4jb2UwYvTQBTG30wmyRR76c31IuyxKh6Kd++7HvUki7IXEVkvQklpk0noNqZYtrAgKoh7UBDEkyKI/gkW1EPpqf/CgqSNJc2MvJKUdNeudRG/05vMzI833/taBv9Y7L8Cfd8vxXG8jjUhpJQkyVAIMTwVsNVqbVNKtzjnawCQpFDZ7XajMAyDer3+ZiWgEGK9UCjsAsCF6XT6PI7jd6ZpHlqWdeh5XiWKogrnfDcIgmtSyvv4/UQgwnRdj8MwvG3bdi+/l657QojPnPPHAPAUAG4sBeIzsbPJZLItpfwmhJjtl8tl1e/3lRBCpq9AL+8Vi8WPzWbzev75LD8AwzC2RqPRMwC4QgjZIIRsKqXeDwYDSQg5BwB3svOEkAfj8XiPc14FgONAnKamaWtSyg/ZJF3XPes4jkjrJ0ftwbMAsIO+Z3eOepgsiwXGRghxMVtTSlmj0Ri22+1E0zSM1iIwzdnMoyUqUUrnQLyLNgHAKH9oDsTQmqap59vPSyk1dBzndbZ2Xfcq2sQYK+DdY0CEdDqdH4yxStb+n8QYO6+UovkGFjwMwxCn9lAI0UsPfcpt52u06LumaQLD/9snoxzHeRUEwaZpmvu+79+0LOttbm9eoy26rl8GgK+1Wu3RUiBKSnkXAF5SSr94nreXjxGCGGOXNE1rUUp7URTNInUiMP1tbnied8swjBqldAejIaX8SSk9kyRJrJR6Ua1WFzqDZcBMtm0fAMABdpXmbJaEU/99ZUoBK019JeDf6hcLGhA0h68RbQAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Bag Hole",
+                                                                      "label":  "Bag Hole"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "86c06818f4228d7bff5af8f298f57c8d",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABjklEQVQ4jd2UsUvDQBTGX3rvmqGd/A8EJzf/AVdFxMWhiAhFRIcOLlqUNvE1aZpJoWNRQZcubg7iqC4FwUnH/g0iJYVyTe4kYkuoxlbbyW98Bz++d993hzBh4f8AVqvVQqvVejIM43ZsoG3bi+12O4uIm0S0QETNsYCc820pZR0AMoi4AwD7fwaWSqVVpdSsECLPGGsg4jkR1X5yiXEHRDTDGNuTUl5+ApqO49xxzksAsP5roK7rGaXUmxCi1pt1u90jXdfvw3uNCwjj3AHARhAEeSJ6jcyb5XK5joiHADA6MJlM7gLAi2EY14Nnvu+7jLFny7KypmleDAWG62iathQEwVqM+1fLso4RsUBE19ENvgUi4pZS6qZYLD5CjEzTPHFdN8c5D2vkxgJt214BgDkhxAEMke/7OcbYKRFdRWvUBxLRVCKRKEgpz4a9hlBhypVKpTFYoz4wnU7Pa5o23el0dhzHCVcZKqUUpFIpHraiZ6IP9DzvARGXRwFF5XneR52+OPxMKzaIUTXx//AdphuqoYWpnf0AAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  14,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Compressor Station",
+                                                                      "label":  "Compressor Station"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "7f8a32ff3f8133554e03d2bf34398583",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAdklEQVQ4je2S0QnAIAwFn+BGncM17BaGZqXuZMdQUkRKRaXqZw8kP+YRktOYRC8LYGYLQF6XEMJBROd7AgvgAuA7/UYpRQCKAME753Y0YGYp2/odjKKHO/+A6hJNunML85QtB4ieybAsSQUvf4uA5Pat5xemPYgL6B72VKFW3wAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  12,
+                                                                                     "height":  12,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Control Tee",
+                                                                      "label":  "Control Tee"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "9889337c08370ec8d06c0240849f64db",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAl0lEQVQ4je2TzQkCQQxGX2C2B3+a8G4BHr3ZgmVMMh1YgTUoiNiBR8vYKiYyssiuXkYUL/ogED7yCDkk8CLhLUFVZ6p6ecyAVlXbgZBS2gBrM1vGGE8lM7OFiOxEZA+sBoKIjN29AUa9BaVv3H3ymRtqCFVTPf5CDeGnhZzzEZi6++0XCl1/Bg5PQoxxC5S6033Z/Ls3XAGOLivp9Yu03AAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  9,
+                                                                                     "height":  17,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Coupling",
+                                                                      "label":  "Coupling"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "ceb3e1a48532d30e285bfbe80b24d2e3",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAAA4AAAAXCAYAAAA7kX6CAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA2klEQVQ4je2TP6oCQQyHf5ldmOahCFaCFnsNr6A2HkSsZJu4pJlLeADB1tIrWFoJ9lZbr1l2ZGFt/K/oe837qmTIRzKBhHiT8O9EEekCGD+o3zDz9LxjG8AQwBbA4YrUAdC8OWpRFANr7T6O47TMnXONMhaRJYCfmyKAmqrORGTkvW+p6sQ511fV6388QUR1AJExJipF732UZVnDGHNffJbwFDDzHMA8SZKIiC4Kmbn32Y6vEr5sVPyLv7Ica22qqos8z9dBEKREtCrfHorVOY2qdAdg9d1Rn+UIvEZE5N51bwQAAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  10,
+                                                                                     "height":  17,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Coupling Bonded",
+                                                                      "label":  "Coupling Bonded"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "ace167e226e4495b823caf21af5cf73a",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAAAsAAAAUCAYAAABbLMdoAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAaklEQVQokWNhIAGwkKW4oaFBAon9AsYHsTEUMzIy1jAyMqaA2I2NjbMYGRnToOw59fX1OeiKPRkYGNih3GQYGypOgZuJAaOKB3NoMDIynv7//78UlDsfmj5A4mcxFNfW1kagGQROafRxMwAJWxjAdfDzWgAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  8,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Coupling Insulated",
+                                                                      "label":  "Coupling Insulated"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "2cf395888291464abb4f21f02f53855c",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAArElEQVQ4jeWTMQoCMRBF/0gqD6BewwuIXkQL75EhKT3BtnZ21tt4nr2EfhlJQMRAIlrIviZhyDz+JMThS7ifiGKMWwDT2mbvfVdKdAAwbwjSlUSZi4hsSAqAW6pNRIQkewCr1+Ql0ZnkGoCJrllkFpInEVnWippxIxF57xe2hhB2InbP78nn/mi0cYgGAEz/bAAwS3ur1YtUtQ8h7J+kxuPJVfXYkqjY0JToE+5DnTCWU4myzQAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  13,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Coupling Insulated Bonded",
+                                                                      "label":  "Coupling Insulated Bonded"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "fe107ef54cedc9523e133a075ea582af",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB9klEQVQ4jbWUvWsUURTFz3mTYgtBESRBOyun8gMLBW3tLCxcC7EwgUQQ7YRFmPcxs7v/gAhBQoKgzRYWiohRUNFOJIrNLBaiYEir3S4z78qDXZnduLqIuTDFnAe/d8+5d2YG/6lmdhTUbrf39fv9nrX2R1W31u6t1Wplo9H4PhWoKIrLSqnDAC5WdaXUeq/XuwHgxVSgKIrulmXZTdP0pIgcArAJYBeAPVrrl8aY6awVRXGMpAfwimSA7A98kt/SND0D4OlfQc1m86b3XovIc5Khg1OdTifK8/yLiDwj+cg5t2SMWZsIstYeGUDOxXG8nuf551arNdvtdo8CeKe1XnDOvSG5Yq3dsNa+/y2I5G0RWTHGPAnvaZreL8vyAskTQQ9a6MQ5N0/yFoDT20DW2jmSx733VyvgVe/9PQC74zi+NNRF5JpS6u0kawHE6mGSJJ+yLPsA4GO9Xi/H4pRwubV2a5s1ERnPHkmSLI5rJGcBhKnOARgFheCyLPMkQ7C/QpxQYR22Jobtvb9DMmzbyGjHJ0tySUQeVvURkDHmunPurHPutYicH/qvQqIoSkIEItL+40KGHVJKPSD51Tm3DOBxsELyAIBFEdkUETN+yTbQwPfBNE3nASyQvDL41jYALGutRzqZCBqW1noVQHimqp39sf1L/QSs6N8Rw6vvxQAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  13,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Drip",
+                                                                      "label":  "Drip"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriSMS",
+                                                                                     "style":  "esriSMSCircle",
+                                                                                     "color":  [
+                                                                                                   130,
+                                                                                                   130,
+                                                                                                   130,
+                                                                                                   255
+                                                                                               ],
+                                                                                     "size":  11,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0,
+                                                                                     "outline":  {
+                                                                                                     "color":  [
+                                                                                                                   130,
+                                                                                                                   130,
+                                                                                                                   130,
+                                                                                                                   255
+                                                                                                               ],
+                                                                                                     "width":  0.7
+                                                                                                 }
+                                                                                 },
+                                                                      "value":  "Elevation",
+                                                                      "label":  "Elevation"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "dc3a37c10e235098e10da077aa32b4a7",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAUCAYAAAC58NwRAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA50lEQVQokZ2TQWoCQRBFf5VCIBeIC1cKroUQCGRvIOBdPMFMTd8ieAPXgTA3ELKIlxD0CCF0f+mBER116PFB96peV1d1dR8d6d8tmNnUzDZJQlEU7yLy6ZwbANiKyI/3fmFmu7YrDQH0AIxIjlR1bmZvzaxtNTyq6trMXk+lSiC5F5Fr0oOqrgBMUjLUjGONeZ6XqYKKyAeAZCHyXO0dhKemcNHvU0h+d8kQVHWbLJBchxDKMyGOgHPuWvw/AHfxcDf4I1nU/b8lhHgqyS8Ay2ZwU3gRkZn3vmwb86OQZdkvgLha6fzjDqO3VSYt72W7AAAAAElFTkSuQmCC",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  9,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "End Cap",
+                                                                      "label":  "End Cap"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "20100abff3064d7e81de94c70d037876",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACPUlEQVQ4jb2UvYsTQRjG3/nIzoZgcZ3XphLEKqW9CHqlVnKIdhZnYRET1s1+5BI3GC7lKdx5gtoINqJ/gJWgAUsRvObsLA5kk92wOzPyHruySUy8O8Snmp2Z/e37PvPMcvjH4v8V2O12V5IkqeKYELIipdx3HGf/VMBOp3ObUrpumuYqAMgMqgaDQRSGYWBZ1qtjAR3HqZbL5U0AOJ+m6U6SJG+EEIeNRuPQ87xaFEU10zQ3gyBYU0rdxfmlQIQRQsw4jrcJIV8ZY9U0TfFDX2zbHgLA0HXdb0KI+wDwGACuLwRim1hZHMcfAWBVaz0uLH8vjNcmk0mvUqlst9vta8X2efEADMNYH41GT7TWZxljby3L+rDIY631wXg83jJNsw4A80A8TcbYqlLqHSHkFhxDuBcANtD3/PRnPZS44Loubn7g+/4PnCSE7FqW9X4WiHt7vZ5EnwFgGpjlTOXPlFJ/Wcu5TQAwKs79BmJohRAlLP9vrRJCCKVUo02c8zK+OwfE8vv9/k/OeU3Koxwv0zkp5YFhGJe11rR4e6Y8DMMQT+2hUmpHKXXP9/1JYfm1UuoMIeSS1volAGASHAz/H1tGtVqtF0EQXC2VShcB4MbsLcj0DG0RQmBcPjebzUcLgSil1B0AeE4p/eR53hZGI28JQZzzC4yxDqV0GEWRM/v+HDCr6orneTcNw2hSSjcwGkqpmFJakVImWuun9Xp9qjJYBMxl2/YeAOxhVVnOjpJw6t9XrgywFHIi4En1C3ZTFDXHblXnAAAAAElFTkSuQmCC",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Expansion Joint",
+                                                                      "label":  "Expansion Joint"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "9f2702972767d2497ed9208bb2fbd23e",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACT0lEQVQ4jb2UTWsTQRjHn3l2ujtBeygIUtBLQBDEU05+BhUKongoteBFBPVQMUSSfU1TNxoSvFgFaQ+1CB4Fbx7Eq3oSD4L9CgXZOEl2Z0am7MJ207S2SP+nedn5zf95maXwn0WPFbiysjITx3FZjwkhM0KILdd1t44EbLVatxFxgTE2CwAihcper8ejKArr9fq7fwK6rlsulUrLAHAhSZLXcRy/tyxru1arbfu+X+GcVxhjy2EYXpVSPtDr+wI1DBGnOeerhJCfhmGUkyTRjodCCEtK+YtzvsQYuwcALwHgxkSgDlM745yPAOCPUupMtpckySIA6Ev09NRwODzJGDvfbDav58On+QKYprnQ7/dfAcCcbdvr+ct8379p2/bbbB4EwY/BYPCIMVYFgHGgrqZhGLNSyg+IOAcH6xwh5DMA3NJ5z6pfzKHQG57nTQVBsJEtIuKSzp/neat6Tgg5q5T6JqX0AGBe5xkAdgPTPpPpOG40GvOFkIeO49xJxy8IIZuWZU0DQH/PouimtSxrSts/KFYp5VNEdOI4fk4pLemzY0AdaqfT+U0prUi5Y3Si9LdBEChCyCWlFOZfz64cRlHUZYw9GY1Gn4oQpdT3wtImIq4lSdLdM2Qtx3HehGF4hVJ6WrdR/hU4jvMw57BMKb2GiB+r1eqzicA0P3cBYAMRv/i+39VtlIWUgi4ahtFCxK+cc7d4fgyYurrs+/6iaZqPEfF+u90WUsoBIp4QQsRKqbWiM5gEzJS+lHXtKu2znU448u8rUwrYF3Io4GH1Fy3JG+jRjifpAAAAAElFTkSuQmCC",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Field Regulator",
+                                                                      "label":  "Field Regulator"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriSMS",
+                                                                                     "style":  "esriSMSCircle",
+                                                                                     "color":  [
+                                                                                                   130,
+                                                                                                   130,
+                                                                                                   130,
+                                                                                                   255
+                                                                                               ],
+                                                                                     "size":  4,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0,
+                                                                                     "outline":  {
+                                                                                                     "color":  [
+                                                                                                                   0,
+                                                                                                                   0,
+                                                                                                                   0,
+                                                                                                                   255
+                                                                                                               ],
+                                                                                                     "width":  0.7
+                                                                                                 }
+                                                                                 },
+                                                                      "value":  "Gas Dimension",
+                                                                      "label":  "Gas Dimension"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriSMS",
+                                                                                     "style":  "esriSMSCircle",
+                                                                                     "color":  [
+                                                                                                   130,
+                                                                                                   130,
+                                                                                                   130,
+                                                                                                   255
+                                                                                               ],
+                                                                                     "size":  4,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0,
+                                                                                     "outline":  {
+                                                                                                     "color":  [
+                                                                                                                   0,
+                                                                                                                   0,
+                                                                                                                   0,
+                                                                                                                   255
+                                                                                                               ],
+                                                                                                     "width":  0.7
+                                                                                                 }
+                                                                                 },
+                                                                      "value":  "Gas Symbol",
+                                                                      "label":  "Gas Symbol"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "413f74fab3299fd391d7a296708892be",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAAA4AAAAXCAYAAAA7kX6CAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA40lEQVQ4jeWSLW8CQRCG551schrJb0BikdS1FolpAg5kc2KSyZw4XcvvQGIxTZBY/sJZ0iY7ZJPDbK8tV0XCa+YrTx6xG+ifCfcDmtkYwEBEdr1AAG/uPlLVF1U93QRWVTV193HqmXlKRJtbjQsAeyI6uPtaVXe5Nfxim8UYG2ZedVnDTzYROaTBzLZE9M0aumwAltddjPGdmZ9za25ctHVuZq8AvtLg7k1uzcEzgHQYEtHE3T8BfABIYFMURdNpFJH5tTezY7t7uvO/+ggggGP78P1AEZnVdT3oDaaUZdnf+FcuInRicaLg378AAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  10,
+                                                                                     "height":  17,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Gauge Station",
+                                                                      "label":  "Gauge Station"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "88e22d983d0489bfa6eb597dcd5b10e2",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABYAAAAXCAYAAAAP6L+eAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAw0lEQVQ4je2UvQ3CMBCF30XJDvwsQZ8BKOlYgSY7nC8b0CMxA0gIMQASJWNkCh8ysqwQnFRJKn+SZetsP59f8XJMRD6bsDFmY4x5R+oLPzexOwCa9t6PcF3XRwAHEdkx86MtmmXZ06/LtoCIbInoQkRXAPuoMBEtVbUA8O2uw7rn1+5soaqrQSvGIgkHkhWBZEUgWTGzFdbau4tHVQ1Z7HD5KyInF5HdoPdnXwBuvcLMfAbgxh/MXMXq/qFysOMxmUz4AyDiP3rHMY8VAAAAAElFTkSuQmCC",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  16,
+                                                                                     "height":  17,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Insulated Flange",
+                                                                      "label":  "Insulated Flange"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "45947cc5a0b8bc2ba3a75a4dc979fa79",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAADwAAAATCAYAAADMBm6RAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAu0lEQVRYhe3XsQ0CMQyF4d+HC0ZAooMFGICCjoYlWIAR7pwbgoIdGIAFqGEIJKa40FBQ3IEiJCBnvtaxlCdZUaw4ozijrw6Y2YzMmNkpOXAIYS0iW2BAZuq6PpZluUgKLCIrYEie5iGEZVVVh5SRzm6UHwgwaiv8H62+U5xRnFGcUZxRnFGc0Se1CzAhTzHGeE4K3DTNpiiKPTAmMzHGXdcCoV1N94apmbV+0X6ZmV3fWQ+v9Ih++wKfdgO/Sih7FYzzpwAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  45,
+                                                                                     "height":  14,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Leak Clamp",
+                                                                      "label":  "Leak Clamp"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "edb139db85affa3b7ebe2a3db538518c",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABYAAAAUCAYAAACJfM0wAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABQklEQVQ4jb2TQU7DMBBF/3d6iLQbEBcAxAZxgrLkBKyQUBfcIPI4Oy7RG7Bk0StUqtReAgJXADzIqiMFlOCkBb4UObI1z99/NCP8kUb/BhaRPMuy6yGQoijuk2CSD6p6MQTsnDuw1s5S4HwINNaM+2S8BnA0BKyqeRKsqi8ksa/awCXJGwArVV3W+ySr5uVxrwDwQXKWBJO8BPDmvb8VkRBLp0RkZYxZeu+f+4DHqrpJQSN4XZZlqDkGUP0IVtVJiAH99QTAJB0D8ADO+hDDMAGYxJpusIjkJF8BnDvnktNHMtsunIpIiK9qBXPbOAlPIznv4zrGcGeMOQRw1QoGcAogaxT0lYm16HJcYXflnWBV3ewxdYvQozrnL2Br7aNzbmqMOfHeN92H//Dc8L3Xk/ftPDS/vXkRvgi372q7E/xb+gRxyG8E/D0UQgAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  16,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Line Stopper Fitting",
+                                                                      "label":  "Line Stopper Fitting"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "151bffffc25da559ff340a6eaaf6281d",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACMklEQVQ4jb2Uz4vTQBTHX2emnVQruMc9KXuseOrV/0DFkz3Jonjbw3oMLW36ErKNqRZLhQUFcQ/ryZMIXvRPsKC3npY9eC/R1AhJJvJKAumvtf7Ad5pMJh/e9/u+EwH/uMR/BTqOsxWG4Q6tC4XCVhzHJ4h48kfAbrd7nzG2q2naNgDEKVQNBoPA93231Wq93giIiDvlcvkAAK5EUfQiDMO3UspJo9GYWJZVC4Kgpmnageu6N5VSD2j/TCDBisVi6Pv+PcMwRvl36fMIET9omnYIAM8AoL4WSDKps0UYIopqtZrU6/WZdPIREfcqlcp727Zv5+WL/ABKpdLudDp9nofZtn2NpI3H48+maZ5jjE3a7fYjglqW9UTTNB0AloE0Tc75tlLq3Qqv3xiGcUwL0zQPXde9oOv6t/TsPvmeTX/Rw/isWAyHQ+l53sUgCKaZ9F6vF3POKVrzwDRnag3rlmVZlz3PSwCgg4gqswkAZvAlyRRaKWUx3/4qyfkim4QQZfp2CUiQfr//VQhRy9r/VQkhLiVJwvINzHno+z5N7SEijrJDURR9AYDvizBSwjlHCv9KyVSdTueV67o3pJRPHce5Q7cAEU8B4HQRJqWkuHxqNpuP1wKplFJ7AHDMGPtIOaNoZN0SSAhxlXPeZYyNgiDAJRsWN9K7ed2yrLulUqnJGNunaCilfjDGzsdxHCZJ8lLX9bnOYB0wK8MwjgDgKPVq9gv7q99XVilgo6lvBPzd+gn31iLVrot3uwAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Metameter",
+                                                                      "label":  "Metameter"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "47e7dc09724747fc9cebf1ab4fbebfc2",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACbUlEQVQ4jb2Uv2sUQRTH33szd7uHQQg2plLSitU1WoqlBm28SoJilyJidexl2Z3b3A83GHIgCApiCm1OKyNaaBGxsMlFG+FAOPEvCMgeG9jsjEyYlb1cEoyKr5qd2fnw/b733eXwj4v/V2C73Z5MkmRarxFxMk3TgRBi8EfAVqt1i4hmbdueAoDUQGWn04mjKApd133+W0AhxHSpVGoCwJmdnZ3HSZKsWZa15TjOVhAE5TiOy7ZtN8MwnJFS3tb7hwI1rFAoJFEU3fQ8r5c/M889IcQ727YfAMBDAKgcCNQ2tbIM1u12WaVSSfc4IN/3v9Xr9bmJiYm3jUbjWt4+zw+gWCzODofDR5myfr//PQiCGc/zPmUwxliv0WjcEUKsB0GwYtt2FQDGgXqajLEpKeXrbE8p9RIArgDALhARL0gpPxDR7rl5d173PZv+3h6m+Vgg4lApdVwphYioAOAiALzP2R8sLS2ljDEdrVGgyZnM0zUIAD42m83zQogNREwQMc23CQCG+w5Fh9ayrEJevoGuSSkXEPEEEb1RSp3Mt4lzXtJ3x4Aasry8/INzXs7km/3ter3OEPGc67oLi4uLV39d5vyUUoryAkZ6GEWRntpdIYTO2oCI1o3KF0R02qy/IuK2dsIYEzr8+1rW5fv+szAML1uWdb/dbl93HOeVUbkJAJsm3F80zLIsHZfPtVrt3oFAXVLKOQB4SkQbOmc6GpklDeKcn2WMtYioF8ex2Ht/DGi+zUtBENwoFos1IprX0ZBSbhPRsTRNE6XUk2q1OqIMDgJm5XneKgCsml7t/sL+6veVlQEcCjkS8Kj1E6mCOlu85uP6AAAAAElFTkSuQmCC",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Meter",
+                                                                      "label":  "Meter"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "d63fe38d30fba5f7f8deb103640569d4",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACX0lEQVQ4jb2UMWsUQRTH387M7c5qLIJVsBDSWIhVSr+AoBYiWklQBIsUsTzuvLt9mb3cuSHBg0hAQQyilVgFbPQjeJAPoOm0EgLnnivu7Rt5siubuyQYFV+1b3bmx3vv/59R8I9D/Vdgt9udTtN0lr8dx5nOsmwHEXf+CNjpdG4LIea11jMAkOVQ6vV6SRzHUaPRePlbQESc9X1/GQDOjkajJ2mabnmet1ur1XaNMXNJksxprZejKLpMRHd5/VAgwyqVShrH8a1Wq9Uv/8vzPiK+1VpvAMAjALh+IJDb5MrGYYioAUAg4tc851kuTE1NvWm329fK7auyAK7rzg+Hw8dlWBiGVSI6IYQYGmOOEVGAiMRQY8wDrXUVACaBrKaUcoaIXhdrxpjz1tovQRBEnC8tLV11HOcKALziPN+7yHMv1B+fYTZmiwtSyodFYq3dEkKsF0Deu7Kykkkp2Vp7gbnPqEy31p70fX9QmuV3Y8yeMQHAcF9R2LSe51XK5TuO834wGJwBgG3O2+32KSL6VB6TUsrnsxNAhqytrQ2UUnNF+UT0TEq5ioh3AGCUZdk9KeXyr8NKnbbWsvqTQI44jlm1+4jYz63xOQzDUEpZtda6RLTRaDQ+5gWwiMjm37dljiAIXkRRdMnzvPVut3uDb0Gz2fzA7invY5jneWyX7Xq9vnogMG9zAQCeCyHesc/YGkVLDFJKnZNSdoQQ/SRJcPz8BDC/mxeNMTdd160LIRbZGkT0TQhxPMuy1Fr7tFqt7qkMDgIW0Wq1NgFgM5/Vzyfsr56vInLAoZAjAY8aPwDOYjvY+T01lwAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Odorizer",
+                                                                      "label":  "Odorizer"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "21d29fe8d78e338101861a5ab11c5f92",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB2UlEQVQ4jb2UT4vaQBjGX2fGzEi9ePS0sNelJz9G22N7KrJLbx7sURSJw6CmkUqFQqELy3poTz0W9tJ+hAr7CfwKwjKShTiT8pakjLH+2Vb6nDKT5Jfnfd8nw+DIYv8VGARBJY7jU7wuFAoVY8xcSjn/K+BwOHxFCKkLIaoAYFKonUwmkdY67Ha7Xw4CSilPS6XSAADOVqvVVRzHXznni3a7vVBK1aIoqgkhBmEYPrPWvsb9nUCEFYvFWGt94fv+zL2XrmdSyu9CiA8A8BEAXmwFYpno7E+wXBXYy0a5XP7W7/efu+UzdwCe59WXy+XlLpgLVUq9E0K0AGATiNOklFattTdwoNJnm9j3bPr5Hpp9sci7HI1GhlKK0VoHpjmz8ABhmwBg6e79BmJoOedF1/4+YZsYYyV8dwOIkPF4fMcYq2X294kxdpIkCXENrPVQa41TeyOlxKzthGIllFKJ4V/7iLvo9XqfwzB8yjl/HwTBy/xf4MI45xiX206n83YrEGWtbQDAJ0LID8wZRiNziyDG2GNK6ZAQMouiSG60Ib+RunqilDr3PK9DCGliNKy194SQR8aYOEmS61arteYMtgEz+b4/BYBp2qtfR9g/HV+ZUsDBYT/6if0T9dfrtZ9TrYcAAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Other",
+                                                                      "label":  "Other"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "7da056529a6d1d3b903424652a653403",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACS0lEQVQ4jb2Uz2sTQRTH385OshuaS489qJCj4in0r7Ae9VRCxVsP9RgSsrsvQ5p1E0MLgqJQ2kMFwYti6UX/ALENePJY0H+gIBt3YTMz8soubH4Vq+L3tDsz++H7vu/tcPjH4v8V6Pv+cpIkFXo2DGNZSnmGiGd/BOx2uw8ZYzXbtlcAQKZQtbu7G4VhGLRarTe/BUTESqlU2gaAW+PxeC9JkveWZZ03Go1zIUQ1iqKqbdvbQRDcVUo9ovVLgQQrFApJGIYPXNcd5vfS9yEifrRt+xkAvACA+wuBVCY5y8MQ8SYifp2qgrLcLJfLHzqdzr18+TzfgGKxWBuNRi/zzkzTrLTb7Q3G2Ccp5VtEVBlUCLFj23YdAGaB1E3TNFeUUsd5N47jHAHAkRBi1TAMIYT4rpQ6RMSf6dktyj3r/nSGctFYuK57AgAniHidMbbX6XR2Wq3W516vJ6kKAJgEpnN2Uc48ISIzTXNNa72qtX49Ho9PKSYAGM1tCg2tZVmFvH1Sv99fiuN4XSl1TWv9znVdJ9sTQlQ45yX6dgZIkMFg8INzXs3sk+I4rhmGcex53rdp15zzG1prljcwkWEYhtS1x4g4zA45jvN8QQTURKThn1syyfO8V0EQrFmW9dT3/fXpvyAPsyyLxuVLs9l8shBIUkptAsAhY+yU5oxGI3NLIM75bdM0u4yxYRRFOBPD9ELq6o4QYqNYLDYZY1s0GkqpmDG2JKVMtNb79Xp9whksAmZyXfcAAA7SrC6usL+6vjKlgEshVwJeVb8AxwQuxm41zBQAAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Overpressure Protection Device",
+                                                                      "label":  "Overpressure Protection Device"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "596816fd72643d4573446f7dc1fd73bd",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABMAAAAQCAYAAAD0xERiAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABBklEQVQ4ja2TMUoDQRiF3z8zaXIBU4por41CirTBTgTBLp1XEIR13rCVnYikT50T5BY5hncQ9peJs0HW7E42+nU7M3y8+feNwz/icgdInhtjllVV3ZFc/0lmrX1S1VNjzBuAycGyEMJMVW/S5ziEMPXer3rLSI4APAAY1CFF5B3AWW+ZiFyLyFVj+SSm9d4v9pbFoacUtrFlRGROckXyYy9ZGvqwJfTQWvsK4D4ri6l+DH0nqnobzzWr4lpS1UNvY7CrKq6jCjnGzZ/hOqqQw4rIM4DfspYq5Dguy/KxKIqXrayjCjmMqjJVZb2RichRut5nT1kkXvcCwLcsvjeSlweIajYF/gKzRVzDCRKwNQAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  14,
+                                                                                     "height":  12,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Reducer",
+                                                                      "label":  "Reducer"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "b040cb6fc57c82dbae61121db59bf50b",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACY0lEQVQ4jb2Uz2sTQRTH376Z7E6wgvWWk1AQD+Ipf4MiWI96KqXirYd6kiUhmx0228QtBiOKoCD2oJcIIhR6sTcPXox6sRSEFv8BC7phpZudkVd2YZr+wKr4YGFmZ+bDe9/3neHwj4P/V2Cn05lM03SKxpZlTWZZtiml3PwjYLvdvomIs0KICgBkOVT1er0kjuOo0Wi8/C2glHKqXC4vAsD50Wj0NE3TFcdxtmu12nYQBNUkSapCiMUoiq4qpW7R/yOBBCuVSmkcxzeazebAXMvnAynlmhDiEQA8BoDrhwKpTMrMhPX7fba+vm5JKUdGFaTl/MTExJswDK+Z5XOzAbZtzw6HwydmZhsbG28RcbXVajGlVEUIcdt13R8EDYLgnhDCBYD9QOomY6yilFo1s9Zaf/B9P6Rxq9Wa3tnZuQgAr2ie710g3Yvuj2uYjdsCEW0p5SnO+cksyy4j4n2z9KWlpYwxRtbaC8x9psabpLU+i4gzSqlLlmX5nud9MWUCgOGBTSHTOo5TMtPPgZ99338YhuGK1noOAD6aMnHOy3R2H5Ag3W73O+e8WqRvRqPR+BoEwWkpJX3fdg9zfkZrjWYCezSM45i6dkdKOSg2IeKaIUsPEc8BwDuqhDEmyfwHlkzh+/6LKIqmHcd50Ol0ZugWeJ73ulj3PG8LALYI5jgO2eVTvV6/eyiQQik1DwDPEfE9+YysUWRLIM75BcZYGxEHSZLI8fP7gPndvBIEwZxt23VEXCBrKKV+IuKJLMtSrfUz13X3ZAaHAYtoNpvLALCca7X7hP3V81VEDjgScizgceMX6Xg01P1elmsAAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Regulator Station",
+                                                                      "label":  "Regulator Station"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "39f830d7f129eccafaa9b28b562b646e",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAACAAAAAUCAYAAADskT9PAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACAElEQVRIic2WzWoUQRSFz6m0P4gPkJ3gA4jgXzAkLiULcaW4U4gKLhR3LqS7uro1MFsFFxGELLMTdJB5AIOgC30DXSjzBkFI7pGCGhg6M5me6BAPNMPM3Kr73Vv3dHeGQ1b23wHUdf1klgnzPO+MBQgh3Ja0lr5qBvlZ1/W5PM9vjgRoaJvkMzP7ir8QyTsAzgM4DcA1/8/GrIuBJyU9J7kVP733vWkSx26SvAfgIoAjACxdEwFEclPSBQCnACyR7FZV9Ynku+YZDqssy3mSVwHcJ3kJwByAXQAfAXwG8KBVB8zsg/f+VqriaWrfoqSFqqoKAOtm1inLsj+UeAXA3WZiSa+99xsxxjnXDmCguBBAXHzWOfcCwGUAJwA8jpuFENZJRogIeSwl/g2g9bFlaKGyLOMgLg+BLMSEJB8Ohe1IegmgO828ZJhSsWJptENJnjGzN9Psl7UJSrOwGiuXNJjoH5Lek/yVjuA4gCvOuS9VVW2Z2aPUuYMDhL1W2pX0neRbM9sYSrCWYl8lkKUByKRZyEb96JxbCSHssVK0YVEUnf0GNoEUTQsnG7YCoKQbJF3TSvt1awzIanLOYhrcuVYdSNoGEG8+PZLzB3xIdSX9BHA9HeHOJIB+qjpWfzRaT9Iy/qHMrD8WwHvfCyFcwwwl6dtYACSIWQI0dehvRH8AC1fnZbrIu78AAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  24,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Repair Sleeve",
+                                                                      "label":  "Repair Sleeve"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "2293045106d0dd4ba5506f7863346235",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAADAAAAAUCAYAAADLP76nAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB+klEQVRIid2Vv4sTQRTHvzOzqAcpoghiY2UTwUL0D7giiIWtQeQEOzVFvIvYxMzyMhPBiNUWBj2O08pWrAQVsRX7wKm1qEeyRUCUOE8GRljvByfkMKPfZt93Zpjh8/bNvAT/uBL8bwBZlu3N8/wG4tMkTdPbOwIMh8M5KaVFfPoGYGcATwrg9ZSHHQBwvOA/Alibcs/vWw1uAiCiMYD5aU4yxjzbALA/SZJzrVbrC2K/xER0DMDpQtb2ANg3mUyuerboAZRSi8wsgr0O4A6AOQD1LMt6jUbD13KcAER0kJkXgl0vl8vLeZ6fBHAJwKHRaHQBwGq0AFLKKyHbXg99trvdbt855wEghFiKFoCIfK3Xg2UhxAMftNvtN51O560Q4pS/2Nbaqtb6RXQAUsrzAA4H+0pr/e7XnBCiD2DFx8zcBBAfAIDFQny/OFEqlR6Px+O7/jkFcMZaW9FaD6IBsNbOM/OJYD87554U55vN5ldjzKMAKZjZfy9HA8DMS4V4lYg2dU3nXF9Kec0DALhIRDeJaH3mAER0FMDZYFlKubzNujVjzEsAVf9SKaV8Y7MzBwhZlcE+11p/2G4tM98TQlRDXCei3lZ/62+X0Cdm7vlAKfVb7W9UpVJ5OhgMbhXOPQLg/UwB0jTt/unaWq32w7cG7KKS3dxsFvoJ866s+ze39VQAAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  36,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Standpipe",
+                                                                      "label":  "Standpipe"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "41be1b864d338967a7175a83f4125ced",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAACYAAAAPCAYAAACInr1QAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB1UlEQVRIidWVP4vVQBTFz5l9oh/hoYUia+3C1msrYqGNup2df7BYW5FMZm4E3dJuLSxeJ2qliPgNVFDcT2ChLOo3WNbkyPgSiCHZ9xRx11Mk5OZm5jf33MmMsE81wv8OFmO8DOAwyXF6JrlVluUkhPBlT8BqoCskjwI40sQlwTkXzextVVUX/zbgrmBFUTyWdB7AgYGUgwBWnHMfY4zX8jyfzDtxjPFWWrBz7k2WZatzg80B1dYhkg+LojjTN0kfFMmYxpZ0zMy+eu/XZoL1QJUAvpN8BuCdpLMAlhMQAFfnLEi6ZGbLVVWtDFkbYzzdQDUxSezmjfp6qgtF8mlZlvdCCB/q2Hq6mNl9ADcSVGuIxWStmW1UVTVpvgkhjEkmqI2OC9sAXswEc86NJf0CNWSP934txvie5IO63xqlSt50zl03s0+SvpFcqnPai9iRdC7P81czwbIsWzezn1ZJuuO9v4tdlOd5qsqmc+5JqlbndQJZJNmNJ21LutoH1QuW5L0/hd9QmNp1oiiKR5IutPquT6lfX0sqhqAGwf5UWZatxhhfkrwN4HgdZg2zBeAzyefJlX9+JOXTf1myd4nkyRSTtJnurc2zd2dlmELMDdLVvj3EfwAXasyccUiuyAAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  28,
+                                                                                     "height":  11,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Symbol Break",
+                                                                      "label":  "Symbol Break"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "6a24b4bd811b5a653edb6763c10b15af",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABMAAAAfCAYAAAAFkva3AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABGElEQVRIie3TP06EQBTH8R/D7BmovYDbeAFvYGGIG11jViMX8E+zDI8BC//EC1hrMXexsGOOwBlYfWaMBVFW/mgn34SG5H1IZh4Sf5gcsd7J/iPrG7FfnpnWeglgp8f8vVLqqRELguC6LMspgN0O0F0d+oZFUVQR0UwIsQKw1wKdt64GEa2MMQfW2oqZ512htXsWhuErER0JISoAiy7Qj0tLRG/MfKK13vI8bxPASxzHF0qpYX9AlmU3n5Brmuf5AxGdug/1wrTWtwDO6u+Y+VgIMTHGLNxRdMKaoFqH1loHzr+Csif0ETPPiqKYuDVyt9+IpWm6D2AbwDPa2/B9/xLAVSOWJMkjAPcMSg4dbGrE+icHzOCfY+8HqWazRgTCPwAAAABJRU5ErkJggg==",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  14,
+                                                                                     "height":  23,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Valve Closed",
+                                                                      "label":  "Valve Closed"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "ab9224e2353deab3d0efaca560a4413d",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABcAAAAfCAYAAAAMeVbNAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACbUlEQVRIie2VS2sTURTHz71pfKBB6aYgbvwCdiOIO5WCH0AtrdoqtTYLX1BfTcncOTkToSRdaHc+Vr4WARXElYvuu3CRXWYjdGdEHIWYSFLPkQsJpGkmD4sLIf/VnfP4nTvnnrkzBP9QQwN4Ow3a0n9bEHGH1vocABwEgF/WppQSmyciP5n5BSJ+7xvued5JZh5j5qeI+KnVv7S0tK9arV5JpVJF13Wf9wwnogkR2eW67mJY8YWFhR8AsExEx4jorjEm0xVOREcBwLbiABFdgx4kIu+JaNoY86zbzidGRkZOF4vFVwBwpgf2suu6SESLiLi/+Qw2wT3PO87MH+LxeA0RJ7XWG7ZYJ7Ax5o5dMPPjSCRyEQAetoWLyAkRuW/XiLiRy+Uu+L5fE5GpTuB6/FciGm4OaIVHEbHaeB4fH/+NiJe01jUAmAkDN6SU4lA4AOjWBERkEZkloiNKqcMAkHccx07HlldhZhUKV0ptcjbkeV6mDrYaTafTTxBxzhbulN8KLyHiMCJ+a9iIKAsAt5vjROSy1jqay+VmbOua7LtD4SLyLhKJnAWAR2HgJk37vm8LTNkCRDQKAIVQuDEmT0Rz2Wx2T6VSwQ7gxmYmC4WCHYJJAJhl5luhcCutdaZcLr9VStmx+gjddUhr/UYp9aB50trCk8nkOhE5InI+Fovdm5+fr3Qie553k5m/GGNWe7q4jDFr6XT6c6lUyhBRPhqNvk4kEkHDv7KysjMIgjEAOCUiL13XXevryk0mk+sAcN0eVK1Wu5pKpfbWXRwEwYbWetVxnBvb+ocaY/L2w+kW91fw7WgAb6v/ty1/ALufHUm4vg/BAAAAAElFTkSuQmCC",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  17,
+                                                                                     "height":  23,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Valve Closed Insulated",
+                                                                      "label":  "Valve Closed Insulated"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "ff34517f4dc27649fd759e989db4280c",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABIklEQVQ4jc3UsU0FMQwAUMdkiF/+ESiRGICOAnYACQagusT+V7EAEnQMAP3fgPLYgPKW+DayuEghP3fhSxTfXRzryUl85+Gfwx8dSEQrIhr3QNtAxA8ROcsLlqLv+wcRuQSA8xo4MnM0lIiaaMJU9X72yDHGV2YGRPya0KHR2aas2bvDDE2dDiWmqjcAcBdj3P7pUXKUmW9tnWFBVa9q2OIrJ9Q59zzhqxbWHJscVdWdc24TQpjFDpnDHQCciEhznPzSJjNfOOeerDPD0vHTnR4E8g/2bljXdY9TDlqoryWJ6LTELAwhos/p9auor2GI+FZi2f5g8zmH+hnspYYV6LqG+rwQEbsWlqFj6pSItunb/wWGEK5bUIkCwDrPHd8Ptoxv1T7GcktSKloAAAAASUVORK5CYII=",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  15,
+                                                                                     "height":  15,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Valve Open",
+                                                                      "label":  "Valve Open"
+                                                                  },
+                                                                  {
+                                                                      "symbol":  {
+                                                                                     "type":  "esriPMS",
+                                                                                     "url":  "dc58e9a545cf64835ff516b9ffc788c8",
+                                                                                     "imageData":  "iVBORw0KGgoAAAANSUhEUgAAACAAAAAYCAYAAACbU/80AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAClElEQVRIie2WPWhUQRDHZ/buQMTSSkU7wcLexq+QkICIFmKwUEEULExjYpW3d7O7rwimExHEQkECElEiIiIENWKRFAqCcrlOCVEQDSnEaMybv6xGiOflYi4naZzuzX8+fu+92Y88rbLl/wPQMs17v5OZW4hoDkDGzADAzJxj5pEkSZ7+k18gIhuYuQfAiKoGEdGFeoTw3nc45/oAXBCRt00D8N5vB9AN4LSIfKkVE78EEd3v7+9/MjMzc09EzojIyxUDiMh6IjppjNlKRB1ENLRY7ODgYG58fPwaM69j5mMicl5EPqwIgJnPqmrJGDMce4QQDltrh2o1r1Qq14noEIBnALwx5hwRlRoGSNN0I4CP1tpp7310FQD8ASEiplKpXAVwZIHvUwhhKtZIkmSyIQAAB7Msu1Xl/g0iDl8I4QqAo9X5zHxbVQ8Q0aWGAFR1i4i8riH9gEjTtNN7387MJ2rlJ0ky4ZzbVK9Hvp4YF3cduaCqN+P6X0ENWmoITT0xDhsRjTFzV6M18ksAzIrIWhH5XC0w83NVbReRaefcLDN3V8eIyBoA3xoGAPCQmduI6E6V9CLLsrbYPD6USqUe5xxVQ+RyuVYierwSgEfGmMtVAK9UtVVEphbG1oIAsE9VuxoGEJG5EMJd59zxeVdZVVsW290WQOxxznUy84NYo2GAaHGte++DMWaamfcXi8X3VMciRAhBAGyz1go14zCy1hbTNC2qaqeIXFzsrebPglNE9LVYLPaVSnV34b8H4J8nnUvTdAeAiyGENwCGVXWiUCggy7K42ewtl8ubmXnAWjtmrW3+lSxJklEiGo13A2PMLmPMblWNcJO5XG6gt7f33XLqLRvgl81fNm40ktsUAGqirTrAd+hBXLPqBQFSAAAAAElFTkSuQmCC",
+                                                                                     "contentType":  "image/png",
+                                                                                     "width":  24,
+                                                                                     "height":  18,
+                                                                                     "angle":  0,
+                                                                                     "xoffset":  0,
+                                                                                     "yoffset":  0
+                                                                                 },
+                                                                      "value":  "Valve Open Insulated",
+                                                                      "label":  "Valve Open Insulated"
+                                                                  }
+                                                              ],
+                                         "fieldDelimiter":  ",",
+                                         "authoringInfo":  {
+                                                               "colorRamp":  {
+                                                                                 "type":  "multipart",
+                                                                                 "colorRamps":  [
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          251,
+                                                                                                                          197,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        251,
+                                                                                                                        197,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          184,
+                                                                                                                          252,
+                                                                                                                          179,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        184,
+                                                                                                                        252,
+                                                                                                                        179,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          182,
+                                                                                                                          242,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        182,
+                                                                                                                        242,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          223,
+                                                                                                                          187,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        223,
+                                                                                                                        187,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          184,
+                                                                                                                          192,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        184,
+                                                                                                                        192,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          192,
+                                                                                                                          206,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        192,
+                                                                                                                        206,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          210,
+                                                                                                                          252,
+                                                                                                                          220,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        210,
+                                                                                                                        252,
+                                                                                                                        220,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          248,
+                                                                                                                          252,
+                                                                                                                          184,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        248,
+                                                                                                                        252,
+                                                                                                                        184,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          194,
+                                                                                                                          179,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        194,
+                                                                                                                        179,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          210,
+                                                                                                                          237,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        210,
+                                                                                                                        237,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          210,
+                                                                                                                          202,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        210,
+                                                                                                                        202,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          204,
+                                                                                                                          228,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        204,
+                                                                                                                        228,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          230,
+                                                                                                                          210,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        230,
+                                                                                                                        210,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          241,
+                                                                                                                          252,
+                                                                                                                          212,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        241,
+                                                                                                                        252,
+                                                                                                                        212,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          179,
+                                                                                                                          216,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        179,
+                                                                                                                        216,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          189,
+                                                                                                                          252,
+                                                                                                                          242,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        189,
+                                                                                                                        252,
+                                                                                                                        242,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          213,
+                                                                                                                          252,
+                                                                                                                          192,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        213,
+                                                                                                                        252,
+                                                                                                                        192,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          249,
+                                                                                                                          182,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        249,
+                                                                                                                        182,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          231,
+                                                                                                                          215,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        231,
+                                                                                                                        215,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          240,
+                                                                                                                          184,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        240,
+                                                                                                                        184,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          223,
+                                                                                                                          182,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        223,
+                                                                                                                        182,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          184,
+                                                                                                                          252,
+                                                                                                                          198,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        184,
+                                                                                                                        252,
+                                                                                                                        198,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          215,
+                                                                                                                          241,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        215,
+                                                                                                                        241,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          199,
+                                                                                                                          207,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        199,
+                                                                                                                        207,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          179,
+                                                                                                                          228,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        179,
+                                                                                                                        228,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          179,
+                                                                                                                          230,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        179,
+                                                                                                                        230,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          196,
+                                                                                                                          192,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        196,
+                                                                                                                        192,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          215,
+                                                                                                                          252,
+                                                                                                                          251,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        215,
+                                                                                                                        252,
+                                                                                                                        251,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          187,
+                                                                                                                          252,
+                                                                                                                          217,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        187,
+                                                                                                                        252,
+                                                                                                                        217,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          220,
+                                                                                                                          252,
+                                                                                                                          204,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        220,
+                                                                                                                        252,
+                                                                                                                        204,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          210,
+                                                                                                                          182,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        210,
+                                                                                                                        182,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          227,
+                                                                                                                          197,
+                                                                                                                          252,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        227,
+                                                                                                                        197,
+                                                                                                                        252,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type":  "algorithmic",
+                                                                                                        "algorithm":  "esriCIELabAlgorithm",
+                                                                                                        "fromColor":  [
+                                                                                                                          252,
+                                                                                                                          197,
+                                                                                                                          239,
+                                                                                                                          255
+                                                                                                                      ],
+                                                                                                        "toColor":  [
+                                                                                                                        252,
+                                                                                                                        197,
+                                                                                                                        239,
+                                                                                                                        255
+                                                                                                                    ]
+                                                                                                    }
+                                                                                                ]
+                                                                             }
+                                                           },
+                                         "visualVariables":  [
+                                                                 {
+                                                                     "type":  "rotationInfo",
+                                                                     "valueExpressionTitle":  "Custom",
+                                                                     "valueExpression":  "$feature.rotation",
+                                                                     "rotationType":  "arithmetic"
+                                                                 }
+                                                             ]
+                                     },
+                        "scaleSymbols":  false,
+                        "transparency":  0,
+                        "labelingInfo":  null
+                    },
+    "defaultVisibility":  true,
+    "extent":  {
+                   "xmin":  -686279.493435848,
+                   "ymin":  -521423.9277265165,
+                   "xmax":  1107236.118344651,
+                   "ymax":  671768.5802406557,
+                   "spatialReference":  {
+                                            "wkt":  "PROJCS[\"NG_Equidistant_Conic\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Equidistant_Conic\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-74.0],PARAMETER[\"Standard_Parallel_1\",42.0],PARAMETER[\"Standard_Parallel_2\",44.0],PARAMETER[\"Latitude_Of_Origin\",43.0],UNIT[\"Foot_US\",0.3048006096012192]]",
+                                            "xyTolerance":  0.003280833333333333,
+                                            "zTolerance":  0.001,
+                                            "mTolerance":  0.001,
+                                            "falseX":  -70913500,
+                                            "falseY":  -48440900,
+                                            "xyUnits":  3048.0060960121928,
+                                            "falseZ":  -100000,
+                                            "zUnits":  10000,
+                                            "falseM":  -100000,
+                                            "mUnits":  10000
+                                        }
+               },
+    "hasAttachments":  false,
+    "htmlPopupType":  "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField":  "NAME",
+    "typeIdField":  null,
+    "subtypeFieldName":  null,
+    "subtypeField":  null,
+    "defaultSubtypeCode":  null,
+    "fields":  [
+                   {
+                       "name":  "OBJECTID",
+                       "type":  "esriFieldTypeOID",
+                       "alias":  "OBJECTID",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "rwo_id",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "rwo_id",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "name",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "NAME",
+                       "length":  254,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "shape",
+                       "type":  "esriFieldTypeGeometry",
+                       "alias":  "SHAPE",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "creator",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "CREATOR",
+                       "length":  255,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "creationdate",
+                       "type":  "esriFieldTypeDate",
+                       "alias":  "CREATIONDATE",
+                       "length":  8,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "updatedby",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "UPDATEDBY",
+                       "length":  255,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "lastupdate",
+                       "type":  "esriFieldTypeDate",
+                       "alias":  "LASTUPDATE",
+                       "length":  8,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "globalid",
+                       "type":  "esriFieldTypeGlobalID",
+                       "alias":  "GlobalID",
+                       "length":  38,
+                       "domain":  null
+                   },
+                   {
+                       "name":  "rotation",
+                       "type":  "esriFieldTypeDouble",
+                       "alias":  "rotation",
+                       "domain":  null
+                   },
+                   {
+                       "name":  "jurisdiction",
+                       "type":  "esriFieldTypeString",
+                       "alias":  "jurisdiction",
+                       "length":  3,
+                       "domain":  {
+                                      "type":  "codedValue",
+                                      "name":  "7_NG_Jurisdictions",
+                                      "description":  "",
+                                      "codedValues":  [
+                                                          {
+                                                              "name":  "Massachusetts",
+                                                              "code":  "MA"
+                                                          },
+                                                          {
+                                                              "name":  "Rhode Island",
+                                                              "code":  "RI"
+                                                          },
+                                                          {
+                                                              "name":  "Upstate New York",
+                                                              "code":  "UNY"
+                                                          },
+                                                          {
+                                                              "name":  "Long Island",
+                                                              "code":  "LI"
+                                                          },
+                                                          {
+                                                              "name":  "New York City",
+                                                              "code":  "NYC"
+                                                          }
+                                                      ],
+                                      "mergePolicy":  "esriMPTDefaultValue",
+                                      "splitPolicy":  "esriSPTDuplicate"
+                                  }
+                   }
+               ],
+    "geometryField":  {
+                          "name":  "shape",
+                          "type":  "esriFieldTypeGeometry",
+                          "alias":  "SHAPE"
+                      },
+    "indexes":  [
+                    {
+                        "name":  "UUID_168",
+                        "fields":  "globalid",
+                        "isAscending":  true,
+                        "isUnique":  true,
+                        "description":  ""
+                    },
+                    {
+                        "name":  "R100_SDE_ROWID_UK",
+                        "fields":  "OBJECTID",
+                        "isAscending":  true,
+                        "isUnique":  false,
+                        "description":  ""
+                    },
+                    {
+                        "name":  "UUID_100",
+                        "fields":  "globalid",
+                        "isAscending":  true,
+                        "isUnique":  true,
+                        "description":  ""
+                    },
+                    {
+                        "name":  "S127_idx",
+                        "fields":  "shape",
+                        "isAscending":  true,
+                        "isUnique":  true,
+                        "description":  ""
+                    }
+                ],
+    "subtypes":  [
+
+                 ],
+    "relationships":  [
+
+                      ],
+    "canModifyLayer":  true,
+    "canScaleSymbols":  false,
+    "hasLabels":  false,
+    "capabilities":  "Map,Query,Data",
+    "maxRecordCount":  2000,
+    "supportsStatistics":  true,
+    "supportsExceedsLimitStatistics":  true,
+    "supportsAdvancedQueries":  true,
+    "supportedQueryFormats":  "JSON, geoJSON, PBF",
+    "isDataVersioned":  true,
+    "ownershipBasedAccessControlForFeatures":  {
+                                                   "allowOthersToQuery":  true
+                                               },
+    "useStandardizedQueries":  true,
+    "supportedSpatialRelationships":  [
+                                          "esriSpatialRelIntersects",
+                                          "esriSpatialRelContains",
+                                          "esriSpatialRelCrosses",
+                                          "esriSpatialRelEnvelopeIntersects",
+                                          "esriSpatialRelIndexIntersects",
+                                          "esriSpatialRelOverlaps",
+                                          "esriSpatialRelTouches",
+                                          "esriSpatialRelWithin",
+                                          "esriSpatialRelRelation"
+                                      ],
+    "advancedQueryCapabilities":  {
+                                      "useStandardizedQueries":  true,
+                                      "supportsStatistics":  true,
+                                      "supportsPercentileStatistics":  true,
+                                      "supportsHavingClause":  true,
+                                      "supportsOrderBy":  true,
+                                      "supportsDistinct":  true,
+                                      "supportsCountDistinct":  true,
+                                      "supportsPagination":  true,
+                                      "supportsLod":  false,
+                                      "supportsQueryWithLodSR":  false,
+                                      "supportsTrueCurve":  true,
+                                      "supportsQueryWithDatumTransformation":  true,
+                                      "supportsReturningQueryExtent":  true,
+                                      "supportsQueryWithDistance":  true,
+                                      "supportsSqlExpression":  true,
+                                      "supportsTimeRelation":  true,
+                                      "supportsSqlFormat":  false,
+                                      "supportsQueryAnalytic":  false
+                                  },
+    "supportsDatumTransformation":  true,
+    "dateFieldsTimeReference":  {
+                                    "timeZone":  "Eastern Standard Time",
+                                    "respectsDaylightSaving":  true
+                                },
+    "preferredTimeReference":  null,
+    "datesInUnknownTimezone":  false,
+    "hasMetadata":  true,
+    "isDataArchived":  true,
+    "archivingInfo":  {
+                          "supportsQueryWithHistoricMoment":  true,
+                          "startArchivingMoment":  1654418423000
+                      },
+    "supportsCoordinatesQuantization":  true,
+    "supportsDynamicLegends":  true,
+    "serviceItemId":  "296b0d0bba844f99ae825ec9a75c34eb"
+}

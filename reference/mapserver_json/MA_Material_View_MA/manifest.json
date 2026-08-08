@@ -1,0 +1,531 @@
+{
+    "copiedAtLocal":  "2026-08-07 23:17:54 -04:00",
+    "sourceInputUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer",
+    "sourceServiceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer?f=pjson",
+    "layerCount":  87,
+    "outputFolder":  "reference\\mapserver_json\\MA_Material_View_MA",
+    "layers":  [
+                   {
+                       "id":  1,
+                       "name":  "Jameson Tee",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/1?f=pjson",
+                       "file":  "layer_001_Jameson_Tee.json"
+                   },
+                   {
+                       "id":  4,
+                       "name":  "Miscellaneous_Annotation_Annotation Class 1",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/4?f=pjson",
+                       "file":  "layer_004_Miscellaneous_Annotation_Annotation_Class_1.json"
+                   },
+                   {
+                       "id":  5,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_Annotation Class 1_1",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/5?f=pjson",
+                       "file":  "layer_005_GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_Annotation_Class_1_1.json"
+                   },
+                   {
+                       "id":  6,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_NoteAnno_Class 1",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/6?f=pjson",
+                       "file":  "layer_006_GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_NoteAnno_Class_1.json"
+                   },
+                   {
+                       "id":  7,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_Class 1",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/7?f=pjson",
+                       "file":  "layer_007_GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_Class_1.json"
+                   },
+                   {
+                       "id":  8,
+                       "name":  "GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_MapText_NoStationAnno_Class 1",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/8?f=pjson",
+                       "file":  "layer_008_GasGIS_LI.NGOWNER.gis_misc_text_annotation_Miscellaneous_Annotation_MapText_NoStationAnno_Class_1.json"
+                   },
+                   {
+                       "id":  9,
+                       "name":  "GasGIS_NYC.NGOWNER.gis_misc_text_annotation_gis_misc_text_annotation_Class 1",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/9?f=pjson",
+                       "file":  "layer_009_GasGIS_NYC.NGOWNER.gis_misc_text_annotation_gis_misc_text_annotation_Class_1.json"
+                   },
+                   {
+                       "id":  10,
+                       "name":  "GasGIS_NYC.NGOWNER.gis_misc_text_annotation_gis_misc_text_annotation_annotation_point_filteredAnno_Class 1",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/10?f=pjson",
+                       "file":  "layer_010_GasGIS_NYC.NGOWNER.gis_misc_text_annotation_gis_misc_text_annotation_annotation_point_filteredAnno_Class_1.json"
+                   },
+                   {
+                       "id":  11,
+                       "name":  "gis_misc_text_annotation_ARCFM_Basemap_Annotation_Default",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/11?f=pjson",
+                       "file":  "layer_011_gis_misc_text_annotation_ARCFM_Basemap_Annotation_Default.json"
+                   },
+                   {
+                       "id":  21,
+                       "name":  "Dimensioning",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/21?f=pjson",
+                       "file":  "layer_021_Dimensioning.json"
+                   },
+                   {
+                       "id":  22,
+                       "name":  "Drafting Anno Historic",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/22?f=pjson",
+                       "file":  "layer_022_Drafting_Anno_Historic.json"
+                   },
+                   {
+                       "id":  23,
+                       "name":  "Dimensioning MA",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/23?f=pjson",
+                       "file":  "layer_023_Dimensioning_MA.json"
+                   },
+                   {
+                       "id":  24,
+                       "name":  "Dimension Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/24?f=pjson",
+                       "file":  "layer_024_Dimension_Lines.json"
+                   },
+                   {
+                       "id":  25,
+                       "name":  "Drafting Points",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/25?f=pjson",
+                       "file":  "layer_025_Drafting_Points.json"
+                   },
+                   {
+                       "id":  26,
+                       "name":  "Drafting Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/26?f=pjson",
+                       "file":  "layer_026_Drafting_Lines.json"
+                   },
+                   {
+                       "id":  27,
+                       "name":  "Drafting Areas",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/27?f=pjson",
+                       "file":  "layer_027_Drafting_Areas.json"
+                   },
+                   {
+                       "id":  28,
+                       "name":  "In Service",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/28?f=pjson",
+                       "file":  "layer_028_In_Service.json"
+                   },
+                   {
+                       "id":  29,
+                       "name":  "Cathodic Protection",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/29?f=pjson",
+                       "file":  "layer_029_Cathodic_Protection.json"
+                   },
+                   {
+                       "id":  30,
+                       "name":  "Test Point",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/30?f=pjson",
+                       "file":  "layer_030_Test_Point.json"
+                   },
+                   {
+                       "id":  31,
+                       "name":  "Anode",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/31?f=pjson",
+                       "file":  "layer_031_Anode.json"
+                   },
+                   {
+                       "id":  32,
+                       "name":  "Rectifier",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/32?f=pjson",
+                       "file":  "layer_032_Rectifier.json"
+                   },
+                   {
+                       "id":  33,
+                       "name":  "Bond Junction",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/33?f=pjson",
+                       "file":  "layer_033_Bond_Junction.json"
+                   },
+                   {
+                       "id":  34,
+                       "name":  "Bond Wire",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/34?f=pjson",
+                       "file":  "layer_034_Bond_Wire.json"
+                   },
+                   {
+                       "id":  35,
+                       "name":  "Rectifier Cable",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/35?f=pjson",
+                       "file":  "layer_035_Rectifier_Cable.json"
+                   },
+                   {
+                       "id":  36,
+                       "name":  "Service Point",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/36?f=pjson",
+                       "file":  "layer_036_Service_Point.json"
+                   },
+                   {
+                       "id":  37,
+                       "name":  "Network Device",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/37?f=pjson",
+                       "file":  "layer_037_Network_Device.json"
+                   },
+                   {
+                       "id":  38,
+                       "name":  "Network Junction",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/38?f=pjson",
+                       "file":  "layer_038_Network_Junction.json"
+                   },
+                   {
+                       "id":  39,
+                       "name":  "Network Assembly",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/39?f=pjson",
+                       "file":  "layer_039_Network_Assembly.json"
+                   },
+                   {
+                       "id":  40,
+                       "name":  "Service Lines (Mapped)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/40?f=pjson",
+                       "file":  "layer_040_Service_Lines_Mapped.json"
+                   },
+                   {
+                       "id":  41,
+                       "name":  "Main Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/41?f=pjson",
+                       "file":  "layer_041_Main_Lines.json"
+                   },
+                   {
+                       "id":  42,
+                       "name":  "CI/DI/WI Main Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/42?f=pjson",
+                       "file":  "layer_042_CI_DI_WI_Main_Lines.json"
+                   },
+                   {
+                       "id":  43,
+                       "name":  "Non-NG Main Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/43?f=pjson",
+                       "file":  "layer_043_Non-NG_Main_Lines.json"
+                   },
+                   {
+                       "id":  44,
+                       "name":  "Critical Main Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/44?f=pjson",
+                       "file":  "layer_044_Critical_Main_Lines.json"
+                   },
+                   {
+                       "id":  45,
+                       "name":  "Ungassed Main Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/45?f=pjson",
+                       "file":  "layer_045_Ungassed_Main_Lines.json"
+                   },
+                   {
+                       "id":  46,
+                       "name":  "Structure Boundary",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/46?f=pjson",
+                       "file":  "layer_046_Structure_Boundary.json"
+                   },
+                   {
+                       "id":  47,
+                       "name":  "Structure Line",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/47?f=pjson",
+                       "file":  "layer_047_Structure_Line.json"
+                   },
+                   {
+                       "id":  49,
+                       "name":  "Proposed",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/49?f=pjson",
+                       "file":  "layer_049_Proposed.json"
+                   },
+                   {
+                       "id":  50,
+                       "name":  "Network Assembly (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/50?f=pjson",
+                       "file":  "layer_050_Network_Assembly_P.json"
+                   },
+                   {
+                       "id":  51,
+                       "name":  "Network Device (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/51?f=pjson",
+                       "file":  "layer_051_Network_Device_P.json"
+                   },
+                   {
+                       "id":  52,
+                       "name":  "Network Junction (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/52?f=pjson",
+                       "file":  "layer_052_Network_Junction_P.json"
+                   },
+                   {
+                       "id":  53,
+                       "name":  "Structure Junction (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/53?f=pjson",
+                       "file":  "layer_053_Structure_Junction_P.json"
+                   },
+                   {
+                       "id":  54,
+                       "name":  "Pipeline Line (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/54?f=pjson",
+                       "file":  "layer_054_Pipeline_Line_P.json"
+                   },
+                   {
+                       "id":  55,
+                       "name":  "Structure Line (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/55?f=pjson",
+                       "file":  "layer_055_Structure_Line_P.json"
+                   },
+                   {
+                       "id":  56,
+                       "name":  "Structure Boundary (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/56?f=pjson",
+                       "file":  "layer_056_Structure_Boundary_P.json"
+                   },
+                   {
+                       "id":  57,
+                       "name":  "Abandoned",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/57?f=pjson",
+                       "file":  "layer_057_Abandoned.json"
+                   },
+                   {
+                       "id":  58,
+                       "name":  "Network Assembly (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/58?f=pjson",
+                       "file":  "layer_058_Network_Assembly_A.json"
+                   },
+                   {
+                       "id":  59,
+                       "name":  "Network Device (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/59?f=pjson",
+                       "file":  "layer_059_Network_Device_A.json"
+                   },
+                   {
+                       "id":  60,
+                       "name":  "Network Junction (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/60?f=pjson",
+                       "file":  "layer_060_Network_Junction_A.json"
+                   },
+                   {
+                       "id":  61,
+                       "name":  "Structure Junction (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/61?f=pjson",
+                       "file":  "layer_061_Structure_Junction_A.json"
+                   },
+                   {
+                       "id":  62,
+                       "name":  "Pipeline Line (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/62?f=pjson",
+                       "file":  "layer_062_Pipeline_Line_A.json"
+                   },
+                   {
+                       "id":  63,
+                       "name":  "Structure Line (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/63?f=pjson",
+                       "file":  "layer_063_Structure_Line_A.json"
+                   },
+                   {
+                       "id":  64,
+                       "name":  "Structure Boundary (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/64?f=pjson",
+                       "file":  "layer_064_Structure_Boundary_A.json"
+                   },
+                   {
+                       "id":  68,
+                       "name":  "Marker Point",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/68?f=pjson",
+                       "file":  "layer_068_Marker_Point.json"
+                   },
+                   {
+                       "id":  69,
+                       "name":  "Squeeze Off",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/69?f=pjson",
+                       "file":  "layer_069_Squeeze_Off.json"
+                   },
+                   {
+                       "id":  73,
+                       "name":  "Transmission Pipe",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/73?f=pjson",
+                       "file":  "layer_073_Transmission_Pipe.json"
+                   },
+                   {
+                       "id":  74,
+                       "name":  "Encumbered Main",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/74?f=pjson",
+                       "file":  "layer_074_Encumbered_Main.json"
+                   },
+                   {
+                       "id":  79,
+                       "name":  "NEP Main",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/79?f=pjson",
+                       "file":  "layer_079_NEP_Main.json"
+                   },
+                   {
+                       "id":  80,
+                       "name":  "Default",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/80?f=pjson",
+                       "file":  "layer_080_Default.json"
+                   },
+                   {
+                       "id":  81,
+                       "name":  "Sectionalizing Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/81?f=pjson",
+                       "file":  "layer_081_Sectionalizing_Valve.json"
+                   },
+                   {
+                       "id":  82,
+                       "name":  "Critical Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/82?f=pjson",
+                       "file":  "layer_082_Critical_Valve.json"
+                   },
+                   {
+                       "id":  83,
+                       "name":  "Service Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/83?f=pjson",
+                       "file":  "layer_083_Service_Valve.json"
+                   },
+                   {
+                       "id":  90,
+                       "name":  "Main Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/90?f=pjson",
+                       "file":  "layer_090_Main_Valve.json"
+                   },
+                   {
+                       "id":  91,
+                       "name":  "Service Lines (Proxy)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/91?f=pjson",
+                       "file":  "layer_091_Service_Lines_Proxy.json"
+                   },
+                   {
+                       "id":  92,
+                       "name":  "Customer Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/92?f=pjson",
+                       "file":  "layer_092_Customer_Lines.json"
+                   },
+                   {
+                       "id":  93,
+                       "name":  "Structure Junction",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/93?f=pjson",
+                       "file":  "layer_093_Structure_Junction.json"
+                   },
+                   {
+                       "id":  94,
+                       "name":  "Purge",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/94?f=pjson",
+                       "file":  "layer_094_Purge.json"
+                   },
+                   {
+                       "id":  137,
+                       "name":  "GIS Misc Annotation",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/137?f=pjson",
+                       "file":  "layer_137_GIS_Misc_Annotation.json"
+                   },
+                   {
+                       "id":  138,
+                       "name":  "Drafting Anno",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/138?f=pjson",
+                       "file":  "layer_138_Drafting_Anno.json"
+                   },
+                   {
+                       "id":  141,
+                       "name":  "View: Material View",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/141?f=pjson",
+                       "file":  "layer_141_View_Material_View.json"
+                   },
+                   {
+                       "id":  300,
+                       "name":  "Customer Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/300?f=pjson",
+                       "file":  "layer_300_Customer_Lines.json"
+                   },
+                   {
+                       "id":  341,
+                       "name":  "Main Lines",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/341?f=pjson",
+                       "file":  "layer_341_Main_Lines.json"
+                   },
+                   {
+                       "id":  342,
+                       "name":  "Service Lines (Proxy)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/342?f=pjson",
+                       "file":  "layer_342_Service_Lines_Proxy.json"
+                   },
+                   {
+                       "id":  373,
+                       "name":  "Transmission Pipe",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/373?f=pjson",
+                       "file":  "layer_373_Transmission_Pipe.json"
+                   },
+                   {
+                       "id":  410,
+                       "name":  "Service Lines (Mapped)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/410?f=pjson",
+                       "file":  "layer_410_Service_Lines_Mapped.json"
+                   },
+                   {
+                       "id":  412,
+                       "name":  "Paved Over Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/412?f=pjson",
+                       "file":  "layer_412_Paved_Over_Valve.json"
+                   },
+                   {
+                       "id":  417,
+                       "name":  "Proposed/Abandoned Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/417?f=pjson",
+                       "file":  "layer_417_Proposed_Abandoned_Valve.json"
+                   },
+                   {
+                       "id":  418,
+                       "name":  "Critical Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/418?f=pjson",
+                       "file":  "layer_418_Critical_Valve.json"
+                   },
+                   {
+                       "id":  419,
+                       "name":  "Main Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/419?f=pjson",
+                       "file":  "layer_419_Main_Valve.json"
+                   },
+                   {
+                       "id":  420,
+                       "name":  "Service Valve",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/420?f=pjson",
+                       "file":  "layer_420_Service_Valve.json"
+                   },
+                   {
+                       "id":  421,
+                       "name":  "Misc Anno",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/421?f=pjson",
+                       "file":  "layer_421_Misc_Anno.json"
+                   },
+                   {
+                       "id":  801,
+                       "name":  "Flow Meter",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/801?f=pjson",
+                       "file":  "layer_801_Flow_Meter.json"
+                   },
+                   {
+                       "id":  802,
+                       "name":  "Flow Meter (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/802?f=pjson",
+                       "file":  "layer_802_Flow_Meter_P.json"
+                   },
+                   {
+                       "id":  803,
+                       "name":  "Flow Meter (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/803?f=pjson",
+                       "file":  "layer_803_Flow_Meter_A.json"
+                   },
+                   {
+                       "id":  806,
+                       "name":  "Rural Tap",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/806?f=pjson",
+                       "file":  "layer_806_Rural_Tap.json"
+                   },
+                   {
+                       "id":  807,
+                       "name":  "View: Corrosion Label",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/807?f=pjson",
+                       "file":  "layer_807_View_Corrosion_Label.json"
+                   },
+                   {
+                       "id":  808,
+                       "name":  "Rural Tap (P)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/808?f=pjson",
+                       "file":  "layer_808_Rural_Tap_P.json"
+                   },
+                   {
+                       "id":  809,
+                       "name":  "Rural Tap (A)",
+                       "sourceUrl":  "https://gis.nationalgrid.com/arcgis/rest/services/MA/Material_View_MA/MapServer/809?f=pjson",
+                       "file":  "layer_809_Rural_Tap_A.json"
+                   }
+               ]
+}
