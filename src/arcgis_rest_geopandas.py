@@ -216,6 +216,11 @@ def layer_metadata(session: requests.Session, layer_url: str) -> dict[str, Any]:
     return {
         "object_id_field": object_id_field,
         "fields": fields,
+        # Coded-value domains and subtypes live here. They are the only place the
+        # words behind the codes exist, so they are carried through rather than
+        # read and dropped.
+        "subtype_field": data.get("subtypeField"),
+        "subtypes": data.get("subtypes") or [],
         "spatial_reference": spatial_reference,
         "wkid": wkid,
         "max_record_count": max_record_count,
@@ -478,6 +483,7 @@ def query_layer_to_geodataframe(
     bounds_sr: int | str | None = None,
     out_sr: int | str | None = None,
     sign_in: bool = True,
+    decode_domains: bool = True,
 ) -> gpd.GeoDataFrame:
     """Fast ArcGIS REST query that returns a GeoDataFrame.
 
@@ -548,7 +554,19 @@ def query_layer_to_geodataframe(
             }
             for future in futures.as_completed(future_to_batch):
                 features.extend(future.result())
-    return features_to_geodataframe(features, meta)
+    gdf = features_to_geodataframe(features, meta)
+    if decode_domains and not gdf.empty:
+        import arcgis_domains
+
+        gdf = gpd.GeoDataFrame(
+            arcgis_domains.decode(gdf, meta, progress=progress),
+            geometry=gdf.geometry.name,
+            crs=gdf.crs,
+        )
+    # Kept on the frame so a caller can still write the codebook or decode later,
+    # without a second round trip for metadata it has already paid for.
+    gdf.attrs["arcgis_meta"] = meta
+    return gdf
 
 def export_layer_to_geopackage(
     layer_url: str,

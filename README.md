@@ -16,10 +16,12 @@ Estimate_GIS is a small GIS automation repository for querying ArcGIS REST servi
 |  +- query_ma_main_lines_2022_plus.py
 |  +- mainline_ledge_report.py
 |  +- fetch_massgis_ledge.py
+|  +- describe_layer_domains.py
 |  +- network
 |     +- set_zscaler_proxy_environment.py
 +- src
    +- __init__.py
+   +- arcgis_domains.py
    +- arcgis_rest_geopandas.py
    +- auth.py
    +- config.py
@@ -30,7 +32,6 @@ Estimate_GIS is a small GIS automation repository for querying ArcGIS REST servi
    +- output.py
    +- service_auth.py
    +- vector_source.py
-   +- winhttp_arcgis_transport.py
    +- templates
       +- leaflet_viewer.html
 ```
@@ -105,6 +106,68 @@ Host suffixes match on label boundaries, so `notnationalgrid.com` is not treated
 as ours. When a service rejects a token, the error says which side of the line
 its host fell on and what to do about it.
 
+## Coded attributes
+
+```text
+src/arcgis_domains.py
+scripts/describe_layer_domains.py
+```
+
+An ArcGIS layer stores codes, not words: `material` arrives as `3`,
+`lifecyclestatus` as `4`, `assettype` as `41`. The words live in the layer's
+metadata, and every query already reads that metadata, so the codes are decoded
+on the way out. The raw value is kept alongside as `<field>_code`, because that
+is what other systems key on and what a WHERE clause has to be written against.
+
+There are two kinds of coding, and the difference matters:
+
+| | What it is | Example |
+| --- | --- | --- |
+| **Domain** | one code list for the whole layer | `material` 3 = Plastic, everywhere |
+| **Subtype domain** | a code list that applies only to one subtype | `assettype` 41 = Main under one `assetgroup`, Service Line under another |
+
+Decoding `assettype` without checking that row's subtype produces labels that
+are confidently wrong, so decoding is done subtype by subtype. A code the
+metadata does not cover is left visible rather than blanked - a gap in the
+codebook is worth seeing, not hiding.
+
+The MA main line layer (341) is coded this way: `ASSETGROUP` is the subtype
+field with 11 subtypes, and 48 fields are domained per subtype. Some codes really
+do diverge - `material` code `PE` reads as "Polyethylene" under Transmission Pipe
+and stays `PE` under the rest - and the domains are different sizes per subtype
+(41 material codes for Distribution Pipe, 27 for Transmission, 17 for Riser).
+Worth knowing: `lifecyclestatus` 3 is In Service and 4 is Out of Service.
+
+To read the codebook itself, or hand it to someone not running Python:
+
+```powershell
+python .\scripts\describe_layer_domains.py
+python .\scripts\describe_layer_domains.py --field material
+python .\scripts\describe_layer_domains.py --out outputs\codebook.csv
+```
+
+### Decoding without the service
+
+`reference/mapserver_json/` holds saved `?f=json` responses for the service's
+layers. They are the metadata, so they can stand in for it - which matters twice:
+a GeoPackage export carries no domains at all, and the service is not always
+reachable.
+
+```powershell
+# Read a codebook from a saved layer, no network at all
+python .\scripts\describe_layer_domains.py --layer-json reference\mapserver_json\MA_Material_View_MA\layer_341_Main_Lines.json
+
+# One codebook for every saved layer in a service
+python .\scripts\describe_layer_domains.py --json-dir reference\mapserver_json\MA_Material_View_MA --out outputs\codebook_all.csv
+
+# Decode a file export that has no domains of its own
+python .\scripts\mainline_ledge_report.py --mainlines outputs\mains.gpkg --mainlines-layer mains ^
+    --domains-json reference\mapserver_json\MA_Material_View_MA\layer_341_Main_Lines.json
+```
+
+The ledge report writes `<basename>_codebook.csv` next to its other outputs, so
+the mapping travels with the data. `--no-decode-domains` turns decoding off.
+
 ## Main lines versus ledge
 
 ```text
@@ -178,33 +241,30 @@ Two failures used to be silent and are not any more:
 
 #### Behind the Zscaler proxy
 
-```text
-src/winhttp_arcgis_transport.py
-```
+`requests` reads proxies from environment variables and nowhere else. Zscaler
+intercepts internal traffic transparently, so `gis.nationalgrid.com` works with
+no proxy set at all, and only public services fail - as
+`ConnectionResetError 10054` on the first packet, which never mentions a proxy.
+Setting the variables is the whole fix.
 
-`requests` reads proxy settings from environment variables only. Zscaler
-publishes its proxy through the Windows configuration - autodetect, a PAC URL,
-or a named proxy - which `requests` never sees. Internal hosts are reached
-directly and are unaffected, so the failure looks selective: `gis.nationalgrid.com`
-works and every public service is refused with `ConnectionResetError 10054` on
-the first packet.
+Startup does it from the first of these that has something, and prints which:
 
-When a proxy is configured, public ArcGIS traffic is sent through WinHTTP, the
-Windows HTTP stack. It resolves the proxy the way the rest of the machine does
-and validates TLS against the Windows certificate store, where the Zscaler root
-already sits. Startup prints which proxy it found.
-
-Scope is deliberately narrow: only on Windows, only when a proxy is actually
-configured, and only for hosts that are not ours - internal traffic keeps using
-`requests`, since it works today and reaches addresses a proxy may not route.
-Both `GET` and `POST` go through it, which matters because object-id lookups and
-every feature batch are POSTed.
+1. `ESTIMATE_GIS_PROXY_URL`, when the proxy is named explicitly;
+2. proxy variables already in the environment, left as they are;
+3. what Windows itself is configured with, read out of the registry.
 
 ```powershell
-$env:ESTIMATE_GIS_PROXY_URL = "http://your.zscaler.proxy:80"   # name it explicitly
-$env:ESTIMATE_GIS_FORCE_WINHTTP_TRANSPORT = "1"                # use it regardless
-$env:ESTIMATE_GIS_DISABLE_WINHTTP_TRANSPORT = "1"              # turn it off
+$env:ESTIMATE_GIS_PROXY_URL = "http://your.zscaler.proxy:80"
+python .\scripts\fetch_massgis_ledge.py --out outputs\ledge.gpkg --self-test
 ```
+
+The self-test prints the proxy in use before it does anything, so a run that is
+about to fail says why up front.
+
+National Grid hosts always go into `NO_PROXY`. They are reached directly today
+and a proxy is not guaranteed to have a route to them, so turning the proxy on
+for the half that fails cannot break the half that works.
+
 
 #### If the MassGIS host is blocked outright
 

@@ -68,14 +68,20 @@ def make_session():
         detail("Injected Windows certificate store through truststore.")
     except Exception as ex:
         warn(f"truststore injection failed: {ex}")
-    for proxy_var in ["HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"]:
-        if proxy_var in os.environ:
-            os.environ.pop(proxy_var, None)
-            detail(f"Removed runtime proxy environment variable: {proxy_var}")
-    os.environ["NO_PROXY"] = (
-        "gis.nationalgrid.com,.nationalgrid.com,localhost,127.0.0.1"
-    )
+    # The portal is reached directly, so it goes in NO_PROXY. It used to be done
+    # by deleting the proxy variables outright, which worked for the portal and
+    # silently disabled the proxy for the rest of the process - so any public
+    # service used later in the same run lost its only route out. Bypassing the
+    # hosts that need bypassing gets the same result without that.
+    bypass = "gis.nationalgrid.com,.nationalgrid.com,localhost,127.0.0.1"
+    existing = os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or ""
+    merged = [value for value in existing.split(",") if value]
+    for value in bypass.split(","):
+        if value not in merged:
+            merged.append(value)
+    os.environ["NO_PROXY"] = ",".join(merged)
     os.environ["no_proxy"] = os.environ["NO_PROXY"]
+    detail(f"Proxy bypass for portal sign-in: {os.environ['NO_PROXY']}")
     session = requests.Session()
     session.trust_env = True
     session.headers.update({"User-Agent": "HistoricLeakRelocationGeoPandas/1.0"})

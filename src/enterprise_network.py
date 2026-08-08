@@ -61,45 +61,53 @@ def detect_system_proxy() -> str:
     return (proxies.get("https") or proxies.get("http") or "").strip()
 
 
-def configure_zscaler_proxy() -> None:
-    """Centralize proxy environment setup for National Grid/Zscaler network use.
+def _set_proxy(url: str) -> None:
+    """Set every spelling requests looks at, so nothing depends on which it reads."""
+    for name in PROXY_ENV_NAMES:
+        os.environ[name] = url
 
-    Zscaler at National Grid normally performs transparent TLS interception, so this function
-    does not invent a proxy host. If an explicit proxy is needed, set ESTIMATE_GIS_PROXY_URL
-    before running, and this function will map it to HTTP_PROXY and HTTPS_PROXY.
+
+def configure_zscaler_proxy() -> None:
+    """Turn the proxy on for requests, and keep our own hosts off it.
+
+    requests reads proxies from environment variables and nowhere else. Zscaler
+    intercepts internal traffic transparently, so gis.nationalgrid.com works with
+    no proxy set at all, and only public services fail - as a connection reset on
+    the first packet, which never mentions a proxy. Setting the variables here is
+    the whole fix.
+
+    Three sources, in order of how deliberate they are:
+
+    1. ESTIMATE_GIS_PROXY_URL, when someone has named the proxy explicitly;
+    2. proxy variables already in the environment, left alone;
+    3. what Windows itself is configured with, read out of the registry.
+
+    Our own hosts go into NO_PROXY either way. They are reached directly today,
+    and a proxy is not guaranteed to have a route to them, so turning the proxy
+    on for the half that fails must not break the half that works.
     """
     explicit_proxy = os.environ.get(ZSCALER_PROXY_ENV, "").strip()
+    inherited_proxy = next(
+        (os.environ.get(name, "").strip() for name in PROXY_ENV_NAMES if os.environ.get(name, "").strip()),
+        "",
+    )
     if explicit_proxy:
-        os.environ["HTTP_PROXY"] = explicit_proxy
-        os.environ["HTTPS_PROXY"] = explicit_proxy
-        os.environ["http_proxy"] = explicit_proxy
-        os.environ["https_proxy"] = explicit_proxy
-        print(f"Configured proxy variables from {ZSCALER_PROXY_ENV}.")
+        _set_proxy(explicit_proxy)
+        print(f"Proxy set from {ZSCALER_PROXY_ENV}: {explicit_proxy}")
+    elif inherited_proxy:
+        _set_proxy(inherited_proxy)
+        print(f"Proxy already in the environment: {inherited_proxy}")
     else:
-        inherited_proxy = next((os.environ.get(name, "").strip() for name in PROXY_ENV_NAMES if os.environ.get(name, "").strip()), "")
-        if inherited_proxy:
-            os.environ.setdefault("HTTP_PROXY", inherited_proxy)
-            os.environ.setdefault("HTTPS_PROXY", inherited_proxy)
-            os.environ.setdefault("http_proxy", inherited_proxy)
-            os.environ.setdefault("https_proxy", inherited_proxy)
-            print("Using existing proxy environment variables.")
+        system_proxy = detect_system_proxy()
+        if system_proxy:
+            _set_proxy(system_proxy)
+            print(f"Proxy read from the Windows configuration: {system_proxy}")
         else:
-            # Nothing in the environment, so ask Windows. Interception is
-            # transparent for internal hosts, which is why this went unnoticed:
-            # gis.nationalgrid.com works without a proxy and the public services
-            # do not, so only the public half fails and it fails as a reset.
-            system_proxy = detect_system_proxy()
-            if system_proxy:
-                os.environ["HTTP_PROXY"] = system_proxy
-                os.environ["HTTPS_PROXY"] = system_proxy
-                os.environ["http_proxy"] = system_proxy
-                os.environ["https_proxy"] = system_proxy
-                print(f"Using the proxy Windows is configured with: {system_proxy}")
-            else:
-                print(
-                    "No proxy configured. If public services are refused with "
-                    "ConnectionResetError 10054, set ESTIMATE_GIS_PROXY_URL."
-                )
+            print(
+                "No proxy set, so public services will be reached directly. If they "
+                "are refused with ConnectionResetError 10054, that is the network "
+                f"requiring a proxy: set {ZSCALER_PROXY_ENV} to it and run again."
+            )
     bypass = f"{NO_PROXY_DEFAULT},{_internal_no_proxy_hosts()}"
     existing_no_proxy = os.environ.get("NO_PROXY") or os.environ.get("no_proxy")
     if existing_no_proxy:
@@ -112,31 +120,16 @@ def configure_zscaler_proxy() -> None:
     os.environ["NO_PROXY"] = merged
     os.environ["no_proxy"] = merged
 
-def configure_winhttp_transport() -> None:
-    """Send public ArcGIS traffic through WinHTTP when a proxy is in play.
-
-    requests cannot see the Windows proxy configuration, which is where Zscaler
-    publishes itself. WinHTTP can, and it validates TLS against the Windows
-    certificate store where the Zscaler root already sits. It is only worth doing
-    when a proxy is actually configured, so the decision is made here rather than
-    at every call site.
-    """
-    try:
-        import requests
-
-        import winhttp_arcgis_transport as transport
-    except ImportError:
-        return
-    if not transport.available():
-        return
-    if transport.install_winhttp_transport(requests):
-        print(f"Routing public ArcGIS requests through WinHTTP ({transport.describe_proxy()}).")
-    elif transport.proxy_is_active():
-        print("WinHTTP transport is disabled; public ArcGIS requests use requests directly.")
+def describe_proxy() -> str:
+    """What requests will actually do, in one line, for the startup log."""
+    proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy") or ""
+    if not proxy:
+        return "No proxy set. Public services will be reached directly."
+    bypass = os.environ.get("NO_PROXY", "")
+    return f"Proxy for public hosts: {proxy} (bypassed for {bypass})"
 
 
 def configure_enterprise_network() -> None:
     """Apply enterprise TLS and proxy configuration in one place."""
     configure_enterprise_ssl()
     configure_zscaler_proxy()
-    configure_winhttp_transport()

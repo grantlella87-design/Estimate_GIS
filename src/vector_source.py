@@ -53,6 +53,7 @@ def read_source(
     workers: int = DEFAULT_DOWNLOAD_WORKERS,
     batch_size: int = DEFAULT_OBJECTID_BATCH_SIZE,
     sign_in: bool = True,
+    decode_domains: bool = True,
 ) -> gpd.GeoDataFrame:
     """Return a GeoDataFrame from an ArcGIS layer URL or any file GeoPandas reads.
 
@@ -74,6 +75,7 @@ def read_source(
             bounds_sr=_epsg_of(bounds_crs) if bounds is not None else None,
             out_sr=out_sr,
             sign_in=sign_in,
+            decode_domains=decode_domains,
         )
 
     path = Path(source).expanduser()

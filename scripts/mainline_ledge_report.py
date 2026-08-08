@@ -116,6 +116,22 @@ def parse_args(argv=None):
     )
     lines.add_argument("--out-fields", default="*", help="Fields to request. Default: all.")
     lines.add_argument(
+        "--domains-json",
+        help=(
+            "A saved ?f=json layer response to decode with. Needed when the main "
+            "lines come from a file export, which carries no domains of its own. "
+            "See reference/mapserver_json/."
+        ),
+    )
+    lines.add_argument(
+        "--no-decode-domains",
+        action="store_true",
+        help=(
+            "Leave coded values as codes. By default the layer's domains and "
+            "subtypes are used to decode them, keeping each raw code as <field>_code."
+        ),
+    )
+    lines.add_argument(
         "--extent",
         help="Limit the run to minx,miny,maxx,maxy. Applies to both layers.",
     )
@@ -535,7 +551,22 @@ def main(argv=None) -> int:
         workers=args.workers,
         batch_size=args.batch_size,
         sign_in=mainlines_sign_in,
+        decode_domains=not args.no_decode_domains,
     )
+    if args.domains_json and not args.no_decode_domains and not mainlines.empty:
+        # A file export carries no domains, and a service whose metadata could not
+        # be reached carries none either. A saved layer JSON covers both.
+        import arcgis_domains
+
+        saved_meta = arcgis_domains.load_meta(args.domains_json)
+        progress(f"Decoding with saved metadata: {args.domains_json}")
+        mainlines = gpd.GeoDataFrame(
+            arcgis_domains.decode(mainlines, saved_meta, progress=progress),
+            geometry=mainlines.geometry.name,
+            crs=mainlines.crs,
+        )
+        mainlines.attrs["arcgis_meta"] = saved_meta
+
     if mainlines.empty:
         progress("No main lines matched. Nothing to analyse.")
         return 1
@@ -587,6 +618,19 @@ def main(argv=None) -> int:
 
     for warning in result.warnings:
         progress(f"NOTE: {warning}")
+
+    # The codebook travels with the data. Decoded columns answer most questions,
+    # but the raw codes are still there as <field>_code and are what other
+    # systems key on, so what they mean has to be written down somewhere.
+    meta = mainlines.attrs.get("arcgis_meta")
+    if meta:
+        import arcgis_domains
+
+        book = arcgis_domains.codebook(meta)
+        if not book.empty:
+            book_path = out_dir / f"{args.basename}_codebook.csv"
+            book.to_csv(book_path, index=False, encoding="utf-8-sig")
+            progress(f"Codebook: {book_path} ({len(book):,} coded values)")
 
     summary_json = out_dir / f"{args.basename}_summary.json"
     summary_json.write_text(json.dumps(result.stats, indent=2), encoding="utf-8")
