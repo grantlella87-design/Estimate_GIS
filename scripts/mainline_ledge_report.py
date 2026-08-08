@@ -116,6 +116,14 @@ def parse_args(argv=None):
     )
     lines.add_argument("--out-fields", default="*", help="Fields to request. Default: all.")
     lines.add_argument(
+        "--no-decode-domains",
+        action="store_true",
+        help=(
+            "Leave coded values as codes. By default the layer's domains and "
+            "subtypes are used to decode them, keeping each raw code as <field>_code."
+        ),
+    )
+    lines.add_argument(
         "--extent",
         help="Limit the run to minx,miny,maxx,maxy. Applies to both layers.",
     )
@@ -535,6 +543,7 @@ def main(argv=None) -> int:
         workers=args.workers,
         batch_size=args.batch_size,
         sign_in=mainlines_sign_in,
+        decode_domains=not args.no_decode_domains,
     )
     if mainlines.empty:
         progress("No main lines matched. Nothing to analyse.")
@@ -587,6 +596,19 @@ def main(argv=None) -> int:
 
     for warning in result.warnings:
         progress(f"NOTE: {warning}")
+
+    # The codebook travels with the data. Decoded columns answer most questions,
+    # but the raw codes are still there as <field>_code and are what other
+    # systems key on, so what they mean has to be written down somewhere.
+    meta = mainlines.attrs.get("arcgis_meta")
+    if meta:
+        import arcgis_domains
+
+        book = arcgis_domains.codebook(meta)
+        if not book.empty:
+            book_path = out_dir / f"{args.basename}_codebook.csv"
+            book.to_csv(book_path, index=False, encoding="utf-8-sig")
+            progress(f"Codebook: {book_path} ({len(book):,} coded values)")
 
     summary_json = out_dir / f"{args.basename}_summary.json"
     summary_json.write_text(json.dumps(result.stats, indent=2), encoding="utf-8")

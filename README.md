@@ -16,10 +16,12 @@ Estimate_GIS is a small GIS automation repository for querying ArcGIS REST servi
 |  +- query_ma_main_lines_2022_plus.py
 |  +- mainline_ledge_report.py
 |  +- fetch_massgis_ledge.py
+|  +- describe_layer_domains.py
 |  +- network
 |     +- set_zscaler_proxy_environment.py
 +- src
    +- __init__.py
+   +- arcgis_domains.py
    +- arcgis_rest_geopandas.py
    +- auth.py
    +- config.py
@@ -103,6 +105,42 @@ $env:ESTIMATE_GIS_INTERNAL_HOSTS = "nationalgrid.com,gis.internal.example"
 Host suffixes match on label boundaries, so `notnationalgrid.com` is not treated
 as ours. When a service rejects a token, the error says which side of the line
 its host fell on and what to do about it.
+
+## Coded attributes
+
+```text
+src/arcgis_domains.py
+scripts/describe_layer_domains.py
+```
+
+An ArcGIS layer stores codes, not words: `material` arrives as `3`,
+`lifecyclestatus` as `4`, `assettype` as `41`. The words live in the layer's
+metadata, and every query already reads that metadata, so the codes are decoded
+on the way out. The raw value is kept alongside as `<field>_code`, because that
+is what other systems key on and what a WHERE clause has to be written against.
+
+There are two kinds of coding, and the difference matters:
+
+| | What it is | Example |
+| --- | --- | --- |
+| **Domain** | one code list for the whole layer | `material` 3 = Plastic, everywhere |
+| **Subtype domain** | a code list that applies only to one subtype | `assettype` 41 = Main under one `assetgroup`, Service Line under another |
+
+Decoding `assettype` without checking that row's subtype produces labels that
+are confidently wrong, so decoding is done subtype by subtype. A code the
+metadata does not cover is left visible rather than blanked - a gap in the
+codebook is worth seeing, not hiding.
+
+To read the codebook itself, or hand it to someone not running Python:
+
+```powershell
+python .\scripts\describe_layer_domains.py
+python .\scripts\describe_layer_domains.py --field assettype
+python .\scripts\describe_layer_domains.py --out outputs\codebook.csv
+```
+
+The ledge report writes `<basename>_codebook.csv` next to its other outputs for
+the same reason. `--no-decode-domains` turns decoding off and leaves the codes.
 
 ## Main lines versus ledge
 
